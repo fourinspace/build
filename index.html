@@ -80,31 +80,39 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout */
+        /* Main Content Layout - Redesigned for DTA_layout4 */
         main {
             position: absolute;
-            top: 115px; /* top-bar + header */
+            top: 115px; 
             left: 0;
             width: 100%;
             height: calc(100% - 115px);
             background-color: #f05a44;
-            overflow-y: auto;
-            padding: 20px 40px 100px 40px;
+            display: flex;
+            align-items: flex-end; /* Aligns images to the bottom baseline */
+            justify-content: center;
+            padding-bottom: 80px; /* Space for bottom nav */
+            overflow: hidden;
         }
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr; /* Matches the narrow left / wide right layout */
+        .image-container {
+            display: flex;
+            align-items: flex-end;
             gap: 20px;
-            align-items: start;
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 95%;
+            height: 80vh; /* Scalable height based on viewport */
         }
 
-        .feature-img {
-            width: 100%;
-            height: auto;
-            display: block;
+        .img-train {
+            height: 100%; /* Full height of container */
+            width: auto;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .img-ruins {
+            height: 75%; /* Slightly shorter than the train to match layout 4 */
+            width: auto;
             border-radius: 4px;
             object-fit: cover;
         }
@@ -123,7 +131,7 @@
             align-items: center;
             justify-content: center;
             padding: 60px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: "Helvetica", Arial, sans-serif;
             font-weight: bold;
         }
 
@@ -140,7 +148,6 @@
         .map-menu {
             width: 30%;
             color: #bf5399;
-            z-index: 2;
         }
 
         .map-menu ul { list-style: none; }
@@ -152,17 +159,9 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: 0.3s;
         }
 
-        .map-menu li span.count {
-            font-size: 16px;
-            vertical-align: super;
-            font-weight: normal;
-            opacity: 0.7;
-        }
-
-        .map-menu li.active-region {
+        .active-region {
             color: #ffdaeb;
             background: #bf5399;
             padding: 8px 20px;
@@ -184,19 +183,10 @@
 
         .map-visual {
             width: 70%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             transition: transform 0.8s ease-in-out;
         }
 
-        .world-svg {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 10px 15px rgba(191, 83, 153, 0.1));
-        }
-
+        .world-svg { width: 100%; height: auto; }
         .land { fill: #bf5399; }
         .highlight { fill: #ffc2e7; }
 
@@ -209,6 +199,7 @@
             color: #bf5399;
         }
 
+        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
             bottom: 30px;
@@ -235,13 +226,9 @@
 
         .icon { width: 24px; height: 24px; stroke: #ffdaeb; }
 
-        /* Responsive adjustments */
-        @media (max-width: 900px) {
-            .content-grid { grid-template-columns: 1fr; }
-            header { padding: 0 20px; }
-            .map-container { flex-direction: column; }
-            .map-menu { width: 100%; margin-bottom: 30px; }
-            .map-visual { width: 100%; }
+        @media (max-width: 768px) {
+            .image-container { flex-direction: column; align-items: center; height: auto; }
+            .img-train, .img-ruins { width: 90%; height: auto; }
         }
     </style>
 </head>
@@ -266,69 +253,51 @@
         </nav>
     </header>
 
+    <main>
+        <div class="image-container">
+            <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+            <img class="img-ruins" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
+        </div>
+    </main>
+
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
         <div class="map-container">
             <div class="map-menu">
                 <ul>
-                    <li onclick="zoomMap('africa')">Africa <span class="count">52</span></li>
-                    <li class="active-region" onclick="zoomMap('arab')">
-                        <div class="arrow-circle">›</div> Arab States <span class="count">37</span>
+                    <li>Africa <span style="font-size: 14px; opacity: 0.7;">52</span></li>
+                    <li class="active-region">
+                        <div class="arrow-circle">›</div> Arab States <span style="font-size: 14px;">37</span>
                     </li>
-                    <li onclick="zoomMap('asia')">Asia & the Pacific <span class="count">38</span></li>
-                    <li onclick="zoomMap('europe')">Europe & North America <span class="count">96</span></li>
-                    <li onclick="zoomMap('latin')">Latin America & the Caribbean <span class="count">59</span></li>
+                    <li>Asia & the Pacific <span style="font-size: 14px; opacity: 0.7;">38</span></li>
+                    <li>Europe & North America <span style="font-size: 14px; opacity: 0.7;">96</span></li>
+                    <li>Latin America & the Caribbean <span style="font-size: 14px; opacity: 0.7;">59</span></li>
                 </ul>
             </div>
-            
-            <div class="map-visual" id="zoom-target">
-                <svg class="world-svg" viewBox="0 0 1146 419" xmlns="http://www.w3.org/2000/svg">
+            <div class="map-visual">
+                <svg class="world-svg" viewBox="0 0 1146 419">
                     <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M100 220 L180 220 L140 300 Z" />
-                    <path class="land" d="M220 230 L320 220 L350 300 L280 400 L210 320 Z" />
                     <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="land" d="M460 30 L600 20 L800 50 L850 150 L650 140 L480 130 Z" />
-                    <path class="land" d="M810 55 L1050 80 L1100 250 L900 270 L860 160 Z" />
-                    <path class="land" d="M950 300 L1080 300 L1120 380 L980 400 Z" />
-                    <g class="highlight">
-                        <path d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                        <path d="M550 140 L620 140 L620 160 L500 160 Z" />
-                    </g>
+                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
                 </svg>
             </div>
         </div>
     </div>
 
-    <main>
-        <div class="content-grid">
-            <img class="feature-img" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train Journey">
-            <img class="feature-img" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Historic Ruins">
-        </div>
-    </main>
-
     <nav class="bottom-nav">
         <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </div>
-        <a href="#">My Page <span style="font-size:10px; margin-left:4px;">︾</span></a>
-        <a href="#">Community <span style="font-size:10px; margin-left:4px;">︾</span></a>
+        <a href="#">My Page ︾</a>
+        <a href="#">Community ︾</a>
         <div class="nav-item" onclick="toggleMap()">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </div>
     </nav>
 
     <script>
         function toggleMap() {
             document.getElementById('map-overlay').classList.toggle('active');
-        }
-
-        function zoomMap(region) {
-            const target = document.getElementById('zoom-target');
-            if(region === 'arab') {
-                target.style.transform = "scale(2.2) translate(-10%, 0%)";
-            } else {
-                target.style.transform = "scale(1.1)";
-            }
         }
     </script>
 </body>
