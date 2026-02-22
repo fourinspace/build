@@ -91,18 +91,19 @@
         /* Map Section (Slide Up) */
         #map-overlay {
             position: fixed;
-            bottom: -100%; /* Hidden by default */
+            bottom: -100%; 
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffdaeb; /* Light pink from your design */
+            background-color: #ffeef4; /* Pale pink background from image */
             z-index: 150;
-            transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
-            font-family: 'Helvetica', 'Arial', sans-serif;
+            padding: 60px;
+            /* Using Helvetica Bold as requested */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-weight: bold;
         }
 
@@ -113,14 +114,17 @@
         .map-container {
             display: flex;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             align-items: center;
             justify-content: space-between;
+            position: relative;
         }
 
+        /* Map Menu Styling */
         .map-menu {
-            width: 40%;
+            width: 35%;
             color: #c94091;
+            z-index: 2;
         }
 
         .map-menu ul {
@@ -128,49 +132,88 @@
         }
 
         .map-menu li {
-            font-size: 28px;
-            margin-bottom: 20px;
+            font-size: 32px;
+            margin-bottom: 15px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: opacity 0.3s;
+            gap: 12px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .map-menu li span.count {
-            font-size: 14px;
+            font-size: 16px;
+            margin-left: 5px;
             vertical-align: super;
-            opacity: 0.7;
+            font-weight: normal;
         }
 
-        .map-menu li:hover {
-            opacity: 0.6;
+        .map-menu li.active-region {
+            color: #ffdaeb;
+            background: #c94091;
+            padding: 5px 15px;
+            border-radius: 50px;
+            width: fit-content;
         }
 
+        .arrow-circle {
+            width: 32px;
+            height: 32px;
+            background: #c94091;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Map Visual with Geometric World */
         .map-visual {
-            width: 55%;
+            width: 65%;
             position: relative;
-            transition: transform 0.8s ease-in-out;
+            transition: transform 1s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .map-visual svg {
+        .concentric-circles {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border: 1px dashed rgba(201, 64, 145, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .circle-2 { width: 90%; height: 90%; }
+        .circle-3 { width: 60%; height: 60%; }
+
+        .world-svg {
             width: 100%;
             height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
+        }
+
+        .land-mass {
             fill: #c94091;
+            transition: fill 0.4s ease;
         }
 
-        .highlight-region {
-            fill: #ff9dcf !important;
+        .highlighted {
+            fill: #ffdaeb !important;
         }
 
-        /* Close button for Map */
         .close-map {
             position: absolute;
-            top: 50px;
-            right: 50px;
-            font-size: 30px;
+            top: 40px;
+            right: 40px;
+            font-size: 32px;
             cursor: pointer;
             color: #c94091;
+            z-index: 10;
         }
 
         /* Bottom Floating Menu */
@@ -211,7 +254,6 @@
             stroke: #ffdaeb;
         }
 
-        /* Scrollable Content */
         main {
             position: absolute;
             top: 35px; 
@@ -258,20 +300,28 @@
             <div class="map-menu">
                 <ul>
                     <li onclick="zoomMap('africa')">Africa <span class="count">52</span></li>
-                    <li onclick="zoomMap('arab')" style="color: #ff9dcf;">› Arab States <span class="count">37</span></li>
+                    <li class="active-region" onclick="zoomMap('arab')">
+                        <div class="arrow-circle">›</div> Arab States <span class="count">37</span>
+                    </li>
                     <li onclick="zoomMap('asia')">Asia & the Pacific <span class="count">38</span></li>
                     <li onclick="zoomMap('europe')">Europe & North America <span class="count">96</span></li>
                     <li onclick="zoomMap('latin')">Latin America & the Caribbean <span class="count">59</span></li>
                 </ul>
             </div>
-            <div class="map-visual" id="world-map">
-                <svg viewBox="0 0 1000 500">
-                    <path d="M150,150 L200,100 L250,150 L220,250 L150,220 Z" title="North America" />
-                    <path d="M220,260 L280,300 L250,450 L180,350 Z" title="South America" />
-                    <path d="M450,150 L550,100 L650,120 L600,250 L480,250 Z" title="Europe/Asia" />
-                    <path id="africa-svg" d="M480,260 L580,260 L600,400 L500,450 L450,350 Z" title="Africa" />
-                    <path id="arab-svg" class="highlight-region" d="M500,230 L580,230 L600,280 L520,280 Z" title="Arab States" />
-                    <path d="M700,350 L800,320 L850,400 L750,450 Z" title="Australia" />
+            
+            <div class="map-visual" id="zoom-target">
+                <div class="concentric-circles"></div>
+                <div class="concentric-circles circle-2"></div>
+                <div class="concentric-circles circle-3"></div>
+                
+                <svg class="world-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <path class="land-mass" d="M80,80 L180,60 L240,100 L200,180 L120,160 Z" />
+                    <path class="land-mass" d="M190,190 L260,220 L230,350 L160,280 Z" />
+                    <path class="land-mass" d="M380,80 L480,70 L500,130 L400,140 Z" />
+                    <path class="land-mass" d="M380,160 L500,160 L520,320 L440,340 L380,260 Z" />
+                    <path id="arab-states" class="land-mass highlighted" d="M420,145 L540,145 L570,200 L500,210 L450,190 Z" />
+                    <path class="land-mass" d="M510,60 L720,80 L740,240 L600,250 Z" />
+                    <path class="land-mass" d="M650,280 L750,270 L780,350 L680,360 Z" />
                 </svg>
             </div>
         </div>
@@ -298,11 +348,11 @@
         }
 
         function zoomMap(region) {
-            const map = document.getElementById('world-map');
+            const target = document.getElementById('zoom-target');
             if(region === 'arab') {
-                map.style.transform = "scale(2.5) translate(-15%, -10%)";
+                target.style.transform = "scale(2.2) translate(-10%, -5%)";
             } else {
-                map.style.transform = "scale(1.5)";
+                target.style.transform = "scale(1.2)";
             }
         }
     </script>
