@@ -20,7 +20,7 @@
             overflow: hidden; 
         }
 
-        /* Top Blue Bar */
+        /* Top Blue Bar with Marquee */
         .top-bar {
             position: fixed;
             top: 0;
@@ -29,6 +29,24 @@
             height: 35px;
             background-color: #83b0e1;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            overflow: hidden; /* Hide the text when it goes off-screen */
+            white-space: nowrap;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%; /* Initial offset */
+            animation: marquee 25s linear infinite;
+            color: white;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
         }
 
         /* Header Section */
@@ -118,8 +136,8 @@
         .v-arrow {
             font-size: 16px; 
             display: inline-flex;
-            align-self: center; /* Forces vertical centering with text */
-            margin-top: 4px;    /* Subtle manual nudge for visual balance */
+            align-self: center;
+            margin-top: 4px;    
             user-select: none;
         }
 
@@ -150,7 +168,14 @@
 </head>
 <body>
 
-    <div class="top-bar"></div>
+    <div class="top-bar">
+        <div class="marquee-content">
+            + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
+            + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
+            + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
+            + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+    </div>
 
     <header>
         <div class="logo">
