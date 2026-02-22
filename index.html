@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout - Redesigned for DTA_layout4 */
+        /* Main Content Layout */
         main {
             position: absolute;
             top: 115px; 
@@ -89,9 +89,9 @@
             height: calc(100% - 115px);
             background-color: #f05a44;
             display: flex;
-            align-items: flex-end; /* Aligns images to the bottom baseline */
+            align-items: flex-end; 
             justify-content: center;
-            padding-bottom: 80px; /* Space for bottom nav */
+            padding-bottom: 80px; 
             overflow: hidden;
         }
 
@@ -100,18 +100,19 @@
             align-items: flex-end;
             gap: 20px;
             max-width: 95%;
-            height: 80vh; /* Scalable height based on viewport */
+            height: 80vh; 
         }
 
-        .img-train {
-            height: 100%; /* Full height of container */
+        /* Swapped: Ruins now left (smaller), Train now right (larger) */
+        .img-ruins-left {
+            height: 75%; 
             width: auto;
             border-radius: 4px;
             object-fit: cover;
         }
 
-        .img-ruins {
-            height: 75%; /* Slightly shorter than the train to match layout 4 */
+        .img-train-right {
+            height: 100%; 
             width: auto;
             border-radius: 4px;
             object-fit: cover;
@@ -224,11 +225,11 @@
             cursor: pointer;
         }
 
-        .icon { width: 24px; height: 24px; stroke: #ffdaeb; }
+        .icon { width: 24px; height: 24px; stroke: currentColor; }
 
         @media (max-width: 768px) {
-            .image-container { flex-direction: column; align-items: center; height: auto; }
-            .img-train, .img-ruins { width: 90%; height: auto; }
+            .image-container { flex-direction: column-reverse; align-items: center; height: auto; }
+            .img-train-right, .img-ruins-left { width: 90%; height: auto; }
         }
     </style>
 </head>
@@ -255,8 +256,8 @@
 
     <main>
         <div class="image-container">
-            <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
-            <img class="img-ruins" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
+            <img class="img-ruins-left" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
+            <img class="img-train-right" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
         </div>
     </main>
 
