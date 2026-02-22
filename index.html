@@ -15,7 +15,6 @@
         body, html {
             height: 100%;
             width: 100%;
-            /* Using Andale Mono with monospace fallback */
             font-family: 'Andale Mono', 'Courier New', monospace;
             background-color: #f05a44; 
             overflow: hidden; 
@@ -88,7 +87,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px;
-            min-height: 120vh; /* Test scroll */
+            min-height: 120vh;
         }
 
         /* Bottom Floating Menu */
@@ -115,12 +114,12 @@
             gap: 6px;
         }
 
-        /* Updated Chevron Style */
+        /* Center-aligned Chevron Style */
         .v-arrow {
-            font-size: 18px; /* Slightly larger than text for clarity */
-            line-height: 1;
-            display: inline-block;
-            margin-top: 2px; /* Fine-tune vertical position */
+            font-size: 16px; 
+            display: inline-flex;
+            align-self: center; /* Forces vertical centering with text */
+            margin-top: 4px;    /* Subtle manual nudge for visual balance */
             user-select: none;
         }
 
