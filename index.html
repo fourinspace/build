@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
-        /* Reset and Base Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body, html {
             height: 100%;
@@ -49,7 +53,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Header Navigation */
         header {
             position: fixed;
             top: 35px;
@@ -76,46 +79,42 @@
             font-size: 14px;
         }
 
-        /* MAIN STAGE - Using Absolute Positioning to Force the Overlap */
+        /* MAIN AREA - Acts as the stage for our independent "frames" */
         main {
-            position: absolute;
-            top: 115px; 
-            left: 0;
-            width: 100%;
-            height: calc(100% - 115px);
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 80px; /* Space for bottom nav */
-        }
-
-        .image-wrapper {
             position: relative;
-            width: 90%;
-            max-width: 1100px;
-            height: 75vh; /* Fixed height for the container */
+            width: 100%;
+            height: 100vh;
         }
 
-        /* TRAIN: LEFT, LARGE, FRONT */
-        .img-train {
+        /* TRAIN FRAME - Fixed on the left, Huge, Front layer */
+        .frame-train {
             position: absolute;
-            left: 0;
+            left: 10%;
             bottom: 0;
-            height: 100% !important; /* Forces it to be the largest */
+            height: 85vh; /* Large height from Layout 4 */
             width: auto;
-            z-index: 50; /* Higher number = In front */
+            z-index: 100; /* Stays in front */
+        }
+
+        .frame-train img {
+            height: 100%;
+            width: auto;
             display: block;
         }
 
-        /* LION ROCK: RIGHT, SMALLER, BEHIND */
-        .img-rock {
+        /* LION ROCK FRAME - Fixed location, Small, Behind the train */
+        .frame-rock {
             position: absolute;
-            right: 0;
-            bottom: 20px; /* Slightly lifted from bottom */
-            height: 60% !important; /* Significantly smaller */
+            left: 43%; /* Positioned to tuck slightly behind the train */
+            bottom: 0;
+            height: 55vh; /* Much smaller height from Layout 4 */
             width: auto;
-            z-index: 10; /* Lower number = Behind */
-            transform: translateX(-15%); /* Pulls it behind the train */
+            z-index: 50; /* Stays behind */
+        }
+
+        .frame-rock img {
+            height: 100%;
+            width: auto;
             display: block;
         }
 
@@ -137,16 +136,15 @@
         .bottom-nav a { color: #ffdaeb; text-decoration: none; font-size: 15px; }
         .icon { width: 24px; height: 24px; stroke: #ffdaeb; fill: none; stroke-width: 2.5; }
 
-        /* Map Overlay Simple */
+        /* Map Overlay */
         #map-overlay {
             position: fixed;
             top: 100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 3000;
-            transition: top 0.5s ease-in-out;
+            transition: top 0.5s ease;
         }
         #map-overlay.active { top: 0; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
-
     </style>
 </head>
 <body>
@@ -171,16 +169,17 @@
     </header>
 
     <main>
-        <div class="image-wrapper">
-            <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
-            
-            <img class="img-rock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+        <div class="frame-train">
+            <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+        </div>
+
+        <div class="frame-rock">
+            <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
-        <h1 style="color: #bf5399; text-align: center; margin-top: 20%;">MAP VIEW</h1>
     </div>
 
     <nav class="bottom-nav">
