@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
-        /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
             height: 100%;
@@ -32,7 +27,6 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            white-space: nowrap;
         }
 
         .marquee-container {
@@ -53,6 +47,7 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Header */
         header {
             position: fixed;
             top: 35px;
@@ -79,40 +74,40 @@
             font-size: 14px;
         }
 
-        /* MAIN AREA - Acts as the stage for our independent "frames" */
-        main {
-            position: relative;
+        /* THE FIX: Independent Image Containers */
+        .stage {
+            position: absolute;
+            top: 115px; 
+            left: 0;
             width: 100%;
-            height: 100vh;
+            height: calc(100% - 115px);
         }
 
-        /* TRAIN FRAME - Fixed on the left, Huge, Front layer */
-        .frame-train {
+        /* TRAIN: Fixed Left, Massive Height, In Front */
+        .train-container {
             position: absolute;
-            left: 10%;
+            left: 11%;
             bottom: 0;
             height: 85vh; /* Large height from Layout 4 */
-            width: auto;
-            z-index: 100; /* Stays in front */
+            z-index: 100; /* Front */
         }
 
-        .frame-train img {
+        .train-container img {
             height: 100%;
             width: auto;
             display: block;
         }
 
-        /* LION ROCK FRAME - Fixed location, Small, Behind the train */
-        .frame-rock {
+        /* LION ROCK: Fixed Location, Smaller, Behind */
+        .rock-container {
             position: absolute;
-            left: 43%; /* Positioned to tuck slightly behind the train */
+            left: 43%; /* Tucks behind the train */
             bottom: 0;
-            height: 55vh; /* Much smaller height from Layout 4 */
-            width: auto;
-            z-index: 50; /* Stays behind */
+            height: 55vh; /* Smaller height from Layout 4 */
+            z-index: 50; /* Behind */
         }
 
-        .frame-rock img {
+        .rock-container img {
             height: 100%;
             width: auto;
             display: block;
@@ -158,7 +153,7 @@
 
     <header>
         <div class="logo">
-            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo">
+            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
         </div>
         <nav class="nav-buttons">
             <a href="#" class="nav-btn">Micro-Trips</a>
@@ -168,15 +163,15 @@
         </nav>
     </header>
 
-    <main>
-        <div class="frame-train">
+    <div class="stage">
+        <div class="train-container">
             <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
         </div>
 
-        <div class="frame-rock">
+        <div class="rock-container">
             <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
-    </main>
+    </div>
 
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
