@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
+        /* Reset and Base Styles */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
@@ -15,7 +16,7 @@
             overflow: hidden; 
         }
 
-        /* Top Bar */
+        /* Top Blue Bar */
         .top-bar {
             position: fixed;
             top: 0;
@@ -23,10 +24,11 @@
             width: 100%;
             height: 35px;
             background-color: #83b0e1;
-            z-index: 100;
+            z-index: 1000;
             display: flex;
             align-items: center;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .marquee-container {
@@ -47,6 +49,7 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Header Navigation */
         header {
             position: fixed;
             top: 35px;
@@ -57,10 +60,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 90;
+            z-index: 900;
         }
 
-        .logo img { height: 45px; }
+        .logo img { height: 45px; display: block; }
 
         .nav-buttons { display: flex; gap: 12px; }
 
@@ -73,43 +76,46 @@
             font-size: 14px;
         }
 
-        /* MAIN AREA - FIXED POSITIONING */
+        /* MAIN STAGE - Using Absolute Positioning to Force the Overlap */
         main {
-            position: relative;
+            position: absolute;
+            top: 115px; 
+            left: 0;
             width: 100%;
-            height: 100vh;
+            height: calc(100% - 115px);
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            padding-bottom: 80px; /* Space for bottom nav */
         }
 
-        .image-container {
+        .image-wrapper {
             position: relative;
             width: 90%;
-            max-width: 1200px;
-            height: 80vh;
-            margin-bottom: 60px; /* Space for bottom nav */
+            max-width: 1100px;
+            height: 75vh; /* Fixed height for the container */
         }
 
-        /* TRAIN - LEFT, LARGE, FRONT */
+        /* TRAIN: LEFT, LARGE, FRONT */
         .img-train {
             position: absolute;
-            left: 10%;
+            left: 0;
             bottom: 0;
-            height: 100%; /* Full height of container */
+            height: 100% !important; /* Forces it to be the largest */
             width: auto;
-            z-index: 10;
+            z-index: 50; /* Higher number = In front */
             display: block;
         }
 
-        /* LION ROCK - RIGHT, SMALL, BEHIND */
-        .img-lionrock {
+        /* LION ROCK: RIGHT, SMALLER, BEHIND */
+        .img-rock {
             position: absolute;
-            left: 45%; /* Positioned to overlap the train */
-            bottom: 30px; /* Lifted slightly */
-            height: 65%; /* Much smaller height */
+            right: 0;
+            bottom: 20px; /* Slightly lifted from bottom */
+            height: 60% !important; /* Significantly smaller */
             width: auto;
-            z-index: 5; /* Behind the train */
+            z-index: 10; /* Lower number = Behind */
+            transform: translateX(-15%); /* Pulls it behind the train */
             display: block;
         }
 
@@ -125,20 +131,22 @@
             padding: 10px 20px;
             border-radius: 10px;
             gap: 25px;
-            z-index: 200;
+            z-index: 2000;
         }
 
         .bottom-nav a { color: #ffdaeb; text-decoration: none; font-size: 15px; }
-        .icon { width: 24px; height: 24px; stroke: #ffdaeb; fill: none; stroke-width: 2; }
+        .icon { width: 24px; height: 24px; stroke: #ffdaeb; fill: none; stroke-width: 2.5; }
 
         /* Map Overlay Simple */
         #map-overlay {
             position: fixed;
             top: 100%; left: 0; width: 100%; height: 100%;
-            background-color: #ffeef4; z-index: 500;
-            transition: top 0.5s ease;
+            background-color: #ffeef4; z-index: 3000;
+            transition: top 0.5s ease-in-out;
         }
         #map-overlay.active { top: 0; }
+        .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
+
     </style>
 </head>
 <body>
@@ -152,7 +160,7 @@
 
     <header>
         <div class="logo">
-            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
+            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo">
         </div>
         <nav class="nav-buttons">
             <a href="#" class="nav-btn">Micro-Trips</a>
@@ -163,15 +171,16 @@
     </header>
 
     <main>
-        <div class="image-container">
+        <div class="image-wrapper">
             <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
             
-            <img class="img-lionrock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+            <img class="img-rock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
     <div id="map-overlay">
-        <button onclick="toggleMap()" style="margin: 40px; font-size: 20px;">Close Map</button>
+        <div class="close-map" onclick="toggleMap()">✕</div>
+        <h1 style="color: #bf5399; text-align: center; margin-top: 20%;">MAP VIEW</h1>
     </div>
 
     <nav class="bottom-nav">
