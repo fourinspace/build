@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content - Strict Layout 4 Alignment */
+        /* Main Content - Re-engineered for DTA_layout4.png */
         main {
             position: absolute;
             top: 115px; 
@@ -89,36 +89,40 @@
             height: calc(100% - 115px);
             background-color: #f05a44;
             display: flex;
-            align-items: flex-end; 
             justify-content: center;
+            align-items: flex-end; 
             padding-bottom: 40px; 
         }
 
-        .image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 85vh;
-}
+        .image-stage {
+            position: relative;
+            width: 100%;
+            max-width: 1200px; /* Limits how far apart they spread */
+            height: 85vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
 
-/* Train - LEFT & BIG */
-.img-left-train {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 85vh;
-    width: auto;
-    z-index: 2;
-}
+        /* 1. TRAIN: FORCED TO LEFT, TALL, ON TOP */
+        .train-front {
+            height: 85vh; /* Very Tall */
+            width: auto;
+            position: relative;
+            z-index: 10; /* Ensures it sits over the rock */
+            display: block;
+        }
 
-/* Lion - RIGHT & SMALL */
-.img-right-lion {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 55vh; /* smaller than train */
-    width: auto;
-    z-index: 1;
-}
+        /* 2. LION ROCK: FORCED TO RIGHT, SMALLER, BEHIND */
+        .lion-back {
+            height: 60vh; /* Shorter */
+            width: auto;
+            position: relative;
+            z-index: 5; /* Sits behind */
+            margin-left: -120px; /* This pulls it behind the Train */
+            margin-bottom: 20px; /* Lifts it slightly to match layout 4 */
+            display: block;
+        }
 
         /* Map Overlay */
         #map-overlay {
@@ -148,21 +152,9 @@
             justify-content: space-between;
         }
 
-        .map-menu {
-            width: 30%;
-            color: #bf5399;
-        }
-
+        .map-menu { width: 30%; color: #bf5399; }
         .map-menu ul { list-style: none; }
-
-        .map-menu li {
-            font-size: 32px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
 
         .active-region {
             color: #ffdaeb;
@@ -184,11 +176,7 @@
             font-size: 18px;
         }
 
-        .map-visual {
-            width: 70%;
-            transition: transform 0.8s ease-in-out;
-        }
-
+        .map-visual { width: 70%; transition: transform 0.8s ease-in-out; }
         .world-svg { width: 100%; height: auto; }
         .land { fill: #bf5399; }
         .highlight { fill: #ffc2e7; }
@@ -228,6 +216,11 @@
         }
 
         .icon { width: 24px; height: 24px; stroke: currentColor; }
+
+        @media (max-width: 768px) {
+            .image-stage { flex-direction: column; align-items: center; height: auto; }
+            .train-front, .lion-back { width: 90%; height: auto; margin: 10px 0; }
+        }
     </style>
 </head>
 <body>
@@ -252,10 +245,10 @@
     </header>
 
     <main>
-        <div class="image-wrapper">
-            <img class="img-left-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+        <div class="image-stage">
+            <img class="train-front" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
             
-            <img class="img-right-lion" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+            <img class="lion-back" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
