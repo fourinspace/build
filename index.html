@@ -49,7 +49,7 @@
             text-decoration: none; font-size: 14px;
         }
 
-        /* 4. THE STAGE - TRAIN ONLY (Positioned per DTA_layout4.jpg) */
+        /* 4. THE STAGE */
         .stage {
             position: absolute;
             top: 115px; 
@@ -58,14 +58,29 @@
             height: calc(100vh - 115px);
         }
 
+        /* TRAIN (Front Layer) */
         .train-position {
             position: absolute;
             left: 11%; 
-            bottom: 10;
+            bottom: 0;
             height: 85vh; 
+            z-index: 20; 
+        }
+        .train-position img {
+            height: 100%;
+            width: auto;
+            display: block;
         }
 
-        .train-position img {
+        /* LION ROCK (Behind & Moved Right to avoid overlap) */
+        .rock-position {
+            position: absolute;
+            left: 55%; /* Pushed further right to stop overlapping */
+            bottom: 5vh; 
+            height: 65vh; 
+            z-index: 10; /* Lower z-index keeps it "behind" */
+        }
+        .rock-position img {
             height: 100%;
             width: auto;
             display: block;
@@ -127,7 +142,11 @@
 
     <div class="stage">
         <div class="train-position">
-            <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Train">
+            <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+        </div>
+
+        <div class="rock-position">
+            <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </div>
 
