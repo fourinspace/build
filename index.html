@@ -20,7 +20,7 @@
             overflow: hidden; 
         }
 
-        /* Top Blue Bar with Seamless Marquee */
+        /* Top Blue Bar */
         .top-bar {
             position: fixed;
             top: 0;
@@ -53,7 +53,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Header Section */
         header {
             position: fixed;
             top: 35px;
@@ -68,15 +67,9 @@
             z-index: 90;
         }
 
-        .logo img {
-            height: 45px;
-            display: block;
-        }
+        .logo img { height: 45px; display: block; }
 
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
+        .nav-buttons { display: flex; gap: 12px; }
 
         .nav-btn {
             background-color: #c94091; 
@@ -85,10 +78,9 @@
             border-radius: 6px;
             text-decoration: none;
             font-size: 14px;
-            transition: transform 0.1s;
         }
 
-        /* Map Section (Slide Up) */
+        /* Map Overlay */
         #map-overlay {
             position: fixed;
             bottom: -100%; 
@@ -106,9 +98,7 @@
             font-weight: bold;
         }
 
-        #map-overlay.active {
-            bottom: 0;
-        }
+        #map-overlay.active { bottom: 0; }
 
         .map-container {
             display: flex;
@@ -116,41 +106,37 @@
             max-width: 1400px;
             align-items: center;
             justify-content: space-between;
-            position: relative;
         }
 
         .map-menu {
-            width: 35%;
-            color: #c94091;
+            width: 30%;
+            color: #bf5399;
             z-index: 2;
         }
 
-        .map-menu ul {
-            list-style: none;
-        }
+        .map-menu ul { list-style: none; }
 
         .map-menu li {
             font-size: 32px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            transition: 0.3s;
         }
 
         .map-menu li span.count {
             font-size: 16px;
-            margin-left: 5px;
             vertical-align: super;
             font-weight: normal;
+            opacity: 0.7;
         }
 
         .map-menu li.active-region {
             color: #ffdaeb;
-            background: #c94091;
-            padding: 5px 15px;
+            background: #bf5399;
+            padding: 8px 20px;
             border-radius: 50px;
             width: fit-content;
         }
@@ -158,7 +144,7 @@
         .arrow-circle {
             width: 32px;
             height: 32px;
-            background: #c94091;
+            background: #bf5399;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -167,46 +153,26 @@
             font-size: 18px;
         }
 
-        /* Map Visual Styling */
+        /* The Map Visual */
         .map-visual {
-            width: 65%;
+            width: 70%;
             position: relative;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: transform 0.8s ease-in-out;
         }
-
-        .concentric-circles {
-            position: absolute;
-            width: 140%;
-            height: 140%;
-            border: 1px dashed rgba(201, 64, 145, 0.15);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .circle-2 { width: 110%; height: 110%; }
-        .circle-3 { width: 80%; height: 80%; }
 
         .world-svg {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 15px 30px rgba(201, 64, 145, 0.1));
+            /* Subtly matches the drop shadow feel from your UI */
+            filter: drop-shadow(0 10px 15px rgba(191, 83, 153, 0.1));
         }
 
-        .land-mass {
-            fill: #c94091;
-            transition: fill 0.3s ease, opacity 0.3s ease;
-        }
-
-        .land-mass:hover {
-            opacity: 0.8;
-        }
-
-        .highlighted {
-            fill: #ffdaeb !important;
-        }
+        /* SVG Colors based on your image */
+        .land { fill: #bf5399; }
+        .highlight { fill: #ffc2e7; }
 
         .close-map {
             position: absolute;
@@ -214,11 +180,9 @@
             right: 40px;
             font-size: 32px;
             cursor: pointer;
-            color: #c94091;
-            z-index: 10;
+            color: #bf5399;
         }
 
-        /* Bottom Floating Menu */
         .bottom-nav {
             position: fixed;
             bottom: 30px;
@@ -243,18 +207,7 @@
             cursor: pointer;
         }
 
-        .v-arrow {
-            font-size: 16px; 
-            display: inline-flex;
-            align-self: center;
-            margin-top: 4px;    
-        }
-
-        .icon {
-            width: 24px;
-            height: 24px;
-            stroke: #ffdaeb;
-        }
+        .icon { width: 24px; height: 24px; stroke: #ffdaeb; }
 
         main {
             position: absolute;
@@ -263,9 +216,7 @@
             width: 100%;
             height: calc(100% - 35px);
             background-color: #f05a44;
-            overflow-y: auto;
             padding-top: 80px; 
-            padding-bottom: 120px; 
         }
     </style>
 </head>
@@ -306,63 +257,48 @@
             </div>
             
             <div class="map-visual" id="zoom-target">
-                <div class="concentric-circles"></div>
-                <div class="concentric-circles circle-2"></div>
-                <div class="concentric-circles circle-3"></div>
-                
                 <svg class="world-svg" viewBox="0 0 1146 419" xmlns="http://www.w3.org/2000/svg">
-                    <g id="landmass-group">
-                        <path class="land-mass" d="M1025 298L1024 298L1024 299L1023 300L1022 300L1022 301L1021 302L1020 302L1020 303L1019 304L1018 304L1016 306L1016 307L1019 307L1021 305L1021 304L1022 303L1022 302L1023 301L1023 300L1024 299L1025 299Z" />
-                        <path class="land-mass" d="M1027 288L1027 289L1026 290L1026 295L1027 295L1030 292L1030 291L1029 290L1028 290L1027 289Z" />
-                        <path class="land-mass" d="M826 246L824 246L818 252L818 265L819 265L820 266L822 266L822 264L823 263L823 261L824 260L824 259L825 258L825 255L827 253L827 247Z" />
-                        <path class="land-mass highlighted" d="M720 180L740 180L760 210L710 230L680 200Z" />
-                        <path class="land-mass" d="M300 100L500 80L550 150L400 180L350 140Z" />
-                        <path class="land-mass" d="M450 200L550 200L580 350L480 320Z" />
-                        <path class="land-mass" d="M800 80L1000 100L1050 250L850 280Z" />
-                        <path class="land-mass" d="M850 300L950 300L980 400L880 400Z" />
+                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
+                    <path class="land" d="M100 220 L180 220 L140 300 Z" />
+                    <path class="land" d="M220 230 L320 220 L350 300 L280 400 L210 320 Z" />
+                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
+                    <path class="land" d="M460 30 L600 20 L800 50 L850 150 L650 140 L480 130 Z" />
+                    <path class="land" d="M810 55 L1050 80 L1100 250 L900 270 L860 160 Z" />
+                    <path class="land" d="M950 300 L1080 300 L1120 380 L980 400 Z" />
+                    
+                    <g class="highlight">
+                        <path d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
+                        <path d="M550 140 L620 140 L620 160 L500 160 Z" />
                     </g>
                 </svg>
             </div>
         </div>
     </div>
 
-    <main>
-        <div class="content-container"></div>
-    </main>
+    <main></main>
 
     <nav class="bottom-nav">
         <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </div>
-        <a href="#">My Page <span class="v-arrow">︾</span></a>
-        <a href="#">Community <span class="v-arrow">︾</span></a>
+        <a href="#">My Page <span style="font-size:10px; margin-left:4px;">︾</span></a>
+        <a href="#">Community <span style="font-size:10px; margin-left:4px;">︾</span></a>
         <div class="nav-item" onclick="toggleMap()">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </div>
     </nav>
 
     <script>
         function toggleMap() {
-            const overlay = document.getElementById('map-overlay');
-            overlay.classList.toggle('active');
-            if(!overlay.classList.contains('active')) {
-                // Reset zoom when closing
-                document.getElementById('zoom-target').style.transform = "scale(1)";
-            }
+            document.getElementById('map-overlay').classList.toggle('active');
         }
 
         function zoomMap(region) {
             const target = document.getElementById('zoom-target');
-            // Remove active classes from all menu items
-            document.querySelectorAll('.map-menu li').forEach(li => li.classList.remove('active-region'));
-            
-            // Logic for different regions
             if(region === 'arab') {
-                target.style.transform = "scale(2.5) translate(-15%, 5%)";
-            } else if(region === 'africa') {
-                target.style.transform = "scale(2) translate(10%, 15%)";
+                target.style.transform = "scale(2.2) translate(-10%, 0%)";
             } else {
-                target.style.transform = "scale(1.2) translate(0, 0)";
+                target.style.transform = "scale(1.1)";
             }
         }
     </script>
