@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout - Layered Approach */
+        /* Main Content Layout - Redesigned for DTA_layout4 */
         main {
             position: absolute;
             top: 115px; 
@@ -91,7 +91,7 @@
             display: flex;
             align-items: flex-end; 
             justify-content: center;
-            padding-bottom: 60px; /* Space for bottom nav */
+            padding-bottom: 60px; 
             overflow: hidden;
         }
 
@@ -103,27 +103,27 @@
             position: relative;
         }
 
-        /* Left Image (Train) - Scaled Up and on Top */
-        .img-train-left {
-            height: 95%; /* Scaled up taller */
+        /* Front Image (Train) - Scaled Up */
+        .img-front {
+            height: 95%; 
             width: auto;
             border-radius: 4px;
             object-fit: cover;
             position: relative;
-            z-index: 2; /* Keeps it in front */
-            box-shadow: 15px 0 30px rgba(0,0,0,0.1); /* Subtle shadow over the ruins */
+            z-index: 2; 
+            box-shadow: 15px 0 30px rgba(0,0,0,0.1);
         }
 
-        /* Right Image (Ruins) - Smaller and tucked behind */
-        .img-ruins-right {
-            height: 70%; /* Smaller height */
+        /* Back Image (Ruins) - Smaller and tucked behind */
+        .img-back {
+            height: 70%; 
             width: auto;
             border-radius: 4px;
             object-fit: cover;
             position: relative;
-            z-index: 1; /* Sits behind */
-            margin-left: -60px; /* Pulls it behind the left image */
-            margin-bottom: 30px; /* Slightly offset from the bottom baseline */
+            z-index: 1; 
+            margin-left: -60px; /* Overlap effect */
+            margin-bottom: 30px; 
         }
 
         /* Map Overlay */
@@ -237,7 +237,7 @@
 
         @media (max-width: 768px) {
             .image-container { flex-direction: column; align-items: center; height: auto; }
-            .img-train-left, .img-ruins-right { width: 90%; height: auto; margin: 10px 0; }
+            .img-front, .img-back { width: 90%; height: auto; margin: 10px 0; }
         }
     </style>
 </head>
@@ -264,8 +264,8 @@
 
     <main>
         <div class="image-container">
-            <img class="img-train-left" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
-            <img class="img-ruins-right" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
+            <img class="img-front" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+            <img class="img-back" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
         </div>
     </main>
 
