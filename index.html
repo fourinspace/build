@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
+        /* Essential Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
@@ -15,7 +16,7 @@
             overflow: hidden; 
         }
 
-        /* Top Blue Bar */
+        /* Top Bar */
         .top-bar {
             position: fixed;
             top: 0;
@@ -74,7 +75,7 @@
             font-size: 14px;
         }
 
-        /* THE FIX: Independent Image Containers */
+        /* THE FIX: Fixed Stage with Absolute Positioning */
         .stage {
             position: absolute;
             top: 115px; 
@@ -83,37 +84,37 @@
             height: calc(100% - 115px);
         }
 
-        /* TRAIN: Fixed Left, Massive Height, In Front */
-        .train-container {
+        /* TRAIN: Locked to Left, 85% Height, Top Layer */
+        .train-layer {
             position: absolute;
             left: 11%;
             bottom: 0;
-            height: 85vh; /* Large height from Layout 4 */
-            z-index: 100; /* Front */
+            height: 85vh; 
+            z-index: 200; /* Stays in front */
         }
 
-        .train-container img {
+        .train-layer img {
             height: 100%;
             width: auto;
             display: block;
         }
 
-        /* LION ROCK: Fixed Location, Smaller, Behind */
-        .rock-container {
+        /* LION ROCK: Locked Behind, 55% Height, Bottom Layer */
+        .rock-layer {
             position: absolute;
-            left: 43%; /* Tucks behind the train */
+            left: 42%; /* Positioned to tuck behind the train */
             bottom: 0;
-            height: 55vh; /* Smaller height from Layout 4 */
-            z-index: 50; /* Behind */
+            height: 55vh; 
+            z-index: 100; /* Stays behind */
         }
 
-        .rock-container img {
+        .rock-layer img {
             height: 100%;
             width: auto;
             display: block;
         }
 
-        /* Bottom Nav */
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 30px;
@@ -136,7 +137,7 @@
             position: fixed;
             top: 100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 3000;
-            transition: top 0.5s ease;
+            transition: top 0.5s ease-in-out;
         }
         #map-overlay.active { top: 0; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
@@ -153,7 +154,7 @@
 
     <header>
         <div class="logo">
-            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
+            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo">
         </div>
         <nav class="nav-buttons">
             <a href="#" class="nav-btn">Micro-Trips</a>
@@ -164,11 +165,11 @@
     </header>
 
     <div class="stage">
-        <div class="train-container">
+        <div class="train-layer">
             <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
         </div>
 
-        <div class="rock-container">
+        <div class="rock-layer">
             <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </div>
