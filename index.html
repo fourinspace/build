@@ -95,14 +95,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffeef4; /* Pale pink background from image */
+            background-color: #ffeef4; 
             z-index: 150;
             transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 60px;
-            /* Using Helvetica Bold as requested */
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-weight: bold;
         }
@@ -120,7 +119,6 @@
             position: relative;
         }
 
-        /* Map Menu Styling */
         .map-menu {
             width: 35%;
             color: #c94091;
@@ -169,11 +167,11 @@
             font-size: 18px;
         }
 
-        /* Map Visual with Geometric World */
+        /* Map Visual Styling */
         .map-visual {
             width: 65%;
             position: relative;
-            transition: transform 1s ease-in-out;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -181,25 +179,29 @@
 
         .concentric-circles {
             position: absolute;
-            width: 120%;
-            height: 120%;
+            width: 140%;
+            height: 140%;
             border: 1px dashed rgba(201, 64, 145, 0.15);
             border-radius: 50%;
             pointer-events: none;
         }
 
-        .circle-2 { width: 90%; height: 90%; }
-        .circle-3 { width: 60%; height: 60%; }
+        .circle-2 { width: 110%; height: 110%; }
+        .circle-3 { width: 80%; height: 80%; }
 
         .world-svg {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
+            filter: drop-shadow(0 15px 30px rgba(201, 64, 145, 0.1));
         }
 
         .land-mass {
             fill: #c94091;
-            transition: fill 0.4s ease;
+            transition: fill 0.3s ease, opacity 0.3s ease;
+        }
+
+        .land-mass:hover {
+            opacity: 0.8;
         }
 
         .highlighted {
@@ -271,14 +273,8 @@
 
     <div class="top-bar">
         <div class="marquee-container">
-            <span class="marquee-text">
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-            </span>
-            <span class="marquee-text">
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-            </span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
         </div>
     </div>
 
@@ -314,14 +310,17 @@
                 <div class="concentric-circles circle-2"></div>
                 <div class="concentric-circles circle-3"></div>
                 
-                <svg class="world-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                    <path class="land-mass" d="M80,80 L180,60 L240,100 L200,180 L120,160 Z" />
-                    <path class="land-mass" d="M190,190 L260,220 L230,350 L160,280 Z" />
-                    <path class="land-mass" d="M380,80 L480,70 L500,130 L400,140 Z" />
-                    <path class="land-mass" d="M380,160 L500,160 L520,320 L440,340 L380,260 Z" />
-                    <path id="arab-states" class="land-mass highlighted" d="M420,145 L540,145 L570,200 L500,210 L450,190 Z" />
-                    <path class="land-mass" d="M510,60 L720,80 L740,240 L600,250 Z" />
-                    <path class="land-mass" d="M650,280 L750,270 L780,350 L680,360 Z" />
+                <svg class="world-svg" viewBox="0 0 1146 419" xmlns="http://www.w3.org/2000/svg">
+                    <g id="landmass-group">
+                        <path class="land-mass" d="M1025 298L1024 298L1024 299L1023 300L1022 300L1022 301L1021 302L1020 302L1020 303L1019 304L1018 304L1016 306L1016 307L1019 307L1021 305L1021 304L1022 303L1022 302L1023 301L1023 300L1024 299L1025 299Z" />
+                        <path class="land-mass" d="M1027 288L1027 289L1026 290L1026 295L1027 295L1030 292L1030 291L1029 290L1028 290L1027 289Z" />
+                        <path class="land-mass" d="M826 246L824 246L818 252L818 265L819 265L820 266L822 266L822 264L823 263L823 261L824 260L824 259L825 258L825 255L827 253L827 247Z" />
+                        <path class="land-mass highlighted" d="M720 180L740 180L760 210L710 230L680 200Z" />
+                        <path class="land-mass" d="M300 100L500 80L550 150L400 180L350 140Z" />
+                        <path class="land-mass" d="M450 200L550 200L580 350L480 320Z" />
+                        <path class="land-mass" d="M800 80L1000 100L1050 250L850 280Z" />
+                        <path class="land-mass" d="M850 300L950 300L980 400L880 400Z" />
+                    </g>
                 </svg>
             </div>
         </div>
@@ -344,15 +343,26 @@
 
     <script>
         function toggleMap() {
-            document.getElementById('map-overlay').classList.toggle('active');
+            const overlay = document.getElementById('map-overlay');
+            overlay.classList.toggle('active');
+            if(!overlay.classList.contains('active')) {
+                // Reset zoom when closing
+                document.getElementById('zoom-target').style.transform = "scale(1)";
+            }
         }
 
         function zoomMap(region) {
             const target = document.getElementById('zoom-target');
+            // Remove active classes from all menu items
+            document.querySelectorAll('.map-menu li').forEach(li => li.classList.remove('active-region'));
+            
+            // Logic for different regions
             if(region === 'arab') {
-                target.style.transform = "scale(2.2) translate(-10%, -5%)";
+                target.style.transform = "scale(2.5) translate(-15%, 5%)";
+            } else if(region === 'africa') {
+                target.style.transform = "scale(2) translate(10%, 15%)";
             } else {
-                target.style.transform = "scale(1.2)";
+                target.style.transform = "scale(1.2) translate(0, 0)";
             }
         }
     </script>
