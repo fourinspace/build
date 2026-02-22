@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout - Fixed for Layout 4 */
+        /* Main Content Layout - Strict Layout 4 Replication */
         main {
             position: absolute;
             top: 115px; 
@@ -91,38 +91,38 @@
             display: flex;
             align-items: flex-end; 
             justify-content: center;
-            padding-bottom: 40px; 
+            padding-bottom: 50px; 
             overflow: hidden;
         }
 
         .image-container {
             display: flex;
-            align-items: flex-end;
+            align-items: flex-end; /* Align both to the bottom */
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
             position: relative;
-            max-width: 95%;
-            height: 85vh;
         }
 
-        /* Train Image - Left and In Front */
+        /* TRAIN - LEFT SIDE, TALLER, FRONT */
         .img-train {
-            height: 100%; /* Scale up to fill container */
+            height: 100% !important; /* Forces it to be big */
             width: auto;
-            border-radius: 2px;
-            object-fit: cover;
+            z-index: 20; /* Brings it to the very front */
             position: relative;
-            z-index: 10; /* Ensures it is in front of the Rock */
+            border-radius: 2px;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.2);
         }
 
-        /* Lion Rock Image - Right and Tucked Behind */
+        /* LION ROCK - RIGHT SIDE, SMALLER, BEHIND */
         .img-lionrock {
-            height: 75%; /* Smaller scale than the train */
+            height: 65% !important; /* Forces it to be smaller */
             width: auto;
-            border-radius: 2px;
-            object-fit: cover;
+            z-index: 10; /* Put it behind the train */
             position: relative;
-            z-index: 5; /* Sits behind the train */
-            margin-left: -50px; /* Pulls it behind the train image */
-            margin-bottom: 20px; /* Slight vertical offset for style */
+            margin-left: -80px; /* Pulls it behind the left image */
+            margin-bottom: 20px; /* Slight lift from the bottom */
+            border-radius: 2px;
         }
 
         /* Map Overlay */
@@ -264,6 +264,7 @@
     <main>
         <div class="image-container">
             <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+            
             <img class="img-lionrock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
