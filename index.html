@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTA - Micro-Trips & Macro-Journeys</title>
+    <title>DTA - Restored & Fixed</title>
     <style>
-        /* 1. RESET */
+        /* 1. RESET & CORE */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
@@ -16,19 +16,19 @@
             overflow: hidden; 
         }
 
-        /* 2. TOP BAR */
+        /* 2. TOP BAR & MARQUEE */
         .top-bar {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 35px;
             background-color: #83b0e1; z-index: 1000;
-            display: flex; align-items: center; overflow: hidden;
+            display: flex; align-items: center; overflow: hidden; white-space: nowrap;
         }
         .marquee-container {
             display: inline-block; white-space: nowrap;
             animation: marquee 30s linear infinite;
         }
         .marquee-text {
-            display: inline-block; color: white; font-size: 14px; padding-right: 50px;
+            display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 50px;
         }
         @keyframes marquee {
             0% { transform: translateX(0); }
@@ -49,37 +49,41 @@
             text-decoration: none; font-size: 14px;
         }
 
-        /* 4. THE STAGE - NO FLEXBOX */
+        /* 4. THE STAGE - TRAIN ONLY */
         .stage {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            background-color: #f05a44;
-        }
-
-        /* FORCED TRAIN POSITIONING */
-        .train-container {
             position: absolute;
-            bottom: 0;
-            left: 5%;
-            height: 85vh; /* This makes it big */
-            z-index: 500;
+            top: 115px; left: 0; width: 100%;
+            height: calc(100vh - 115px);
         }
-
-        .train-container img {
-            height: 100%; /* Forces the image to be 85% of screen height */
-            width: auto;  /* Keeps it from being squished */
-            display: block;
+        .train-layer {
+            position: absolute;
+            left: 10%; bottom: 0;
+            height: 85vh; 
+            z-index: 200; 
         }
+        .train-layer img { height: 100%; width: auto; display: block; }
 
-        /* 5. MAP OVERLAY */
+        /* 5. MAP OVERLAY - FULLY RESTORED */
         #map-overlay {
             position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 3000;
-            transition: bottom 0.6s ease;
+            transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; align-items: center; justify-content: center;
+            padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
         }
         #map-overlay.active { bottom: 0; }
+
+        .map-container { display: flex; width: 100%; max-width: 1400px; align-items: center; justify-content: space-between; }
+        .map-menu { width: 30%; color: #bf5399; }
+        .map-menu ul { list-style: none; }
+        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        .active-region { color: #ffdaeb; background: #bf5399; padding: 8px 20px; border-radius: 50px; width: fit-content; }
+        .arrow-circle { width: 32px; height: 32px; background: #bf5399; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+
+        .map-visual { width: 70%; }
+        .world-svg { width: 100%; height: auto; }
+        .land { fill: #bf5399; }
+        .highlight { fill: #ffc2e7; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
 
         /* 6. BOTTOM NAV */
@@ -88,7 +92,7 @@
             background-color: #c94091; display: flex; align-items: center;
             padding: 10px 20px; border-radius: 10px; gap: 25px; z-index: 4000;
         }
-        .bottom-nav a, .nav-item { color: #ffdaeb; text-decoration: none; font-size: 15px; cursor: pointer; display: flex; align-items: center; }
+        .bottom-nav a, .nav-item { color: #ffdaeb; text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
     </style>
 </head>
@@ -96,8 +100,8 @@
 
     <div class="top-bar">
         <div class="marquee-container">
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
         </div>
     </div>
 
@@ -114,14 +118,31 @@
     </header>
 
     <div class="stage">
-        <div class="train-container">
+        <div class="train-layer">
             <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
         </div>
     </div>
 
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
-        <h1 style="color: #bf5399;">MAP VIEW</h1>
+        <div class="map-container">
+            <div class="map-menu">
+                <ul>
+                    <li>Africa <span style="font-size: 14px; opacity: 0.7;">52</span></li>
+                    <li class="active-region"><div class="arrow-circle">›</div> Arab States <span style="font-size: 14px;">37</span></li>
+                    <li>Asia & the Pacific <span style="font-size: 14px; opacity: 0.7;">38</span></li>
+                    <li>Europe & North America <span style="font-size: 14px; opacity: 0.7;">96</span></li>
+                    <li>Latin America & the Caribbean <span style="font-size: 14px; opacity: 0.7;">59</span></li>
+                </ul>
+            </div>
+            <div class="map-visual">
+                <svg class="world-svg" viewBox="0 0 1146 419">
+                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
+                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
+                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
+                </svg>
+            </div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
