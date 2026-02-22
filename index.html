@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout - Redesigned for DTA_layout4 */
+        /* Main Content Layout */
         main {
             position: absolute;
             top: 115px; 
@@ -103,8 +103,8 @@
             position: relative;
         }
 
-        /* Front Image (Train) - Scaled Up */
-        .img-front {
+        /* Front Image (Left) - Scaled Up */
+        .img-left {
             height: 95%; 
             width: auto;
             border-radius: 4px;
@@ -114,15 +114,15 @@
             box-shadow: 15px 0 30px rgba(0,0,0,0.1);
         }
 
-        /* Back Image (Ruins) - Smaller and tucked behind */
-        .img-back {
+        /* Back Image (Right) - Smaller and tucked behind */
+        .img-right {
             height: 70%; 
             width: auto;
             border-radius: 4px;
             object-fit: cover;
             position: relative;
             z-index: 1; 
-            margin-left: -60px; /* Overlap effect */
+            margin-left: -60px; /* Creates the overlap */
             margin-bottom: 30px; 
         }
 
@@ -237,7 +237,7 @@
 
         @media (max-width: 768px) {
             .image-container { flex-direction: column; align-items: center; height: auto; }
-            .img-front, .img-back { width: 90%; height: auto; margin: 10px 0; }
+            .img-left, .img-right { width: 90%; height: auto; margin: 10px 0; }
         }
     </style>
 </head>
@@ -264,8 +264,8 @@
 
     <main>
         <div class="image-container">
-            <img class="img-front" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
-            <img class="img-back" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Ruins">
+            <img class="img-left" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+            <img class="img-right" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
