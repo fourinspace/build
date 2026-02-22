@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
-        /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
             height: 100%;
@@ -20,7 +15,7 @@
             overflow: hidden; 
         }
 
-        /* Top Blue Bar */
+        /* Top Bar */
         .top-bar {
             position: fixed;
             top: 0;
@@ -32,7 +27,6 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            white-space: nowrap;
         }
 
         .marquee-container {
@@ -45,7 +39,7 @@
             display: inline-block;
             color: white;
             font-size: 14px;
-            letter-spacing: 1px;
+            padding-right: 50px;
         }
 
         @keyframes marquee {
@@ -63,11 +57,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #f05a44; 
             z-index: 90;
         }
 
-        .logo img { height: 45px; display: block; }
+        .logo img { height: 45px; }
 
         .nav-buttons { display: flex; gap: 12px; }
 
@@ -80,114 +73,44 @@
             font-size: 14px;
         }
 
-        /* Main Content - Re-engineered for DTA_layout4.png */
+        /* MAIN AREA - FIXED POSITIONING */
         main {
-            position: absolute;
-            top: 115px; 
-            left: 0;
-            width: 100%;
-            height: calc(100% - 115px);
-            background-color: #f05a44;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; 
-            padding-bottom: 40px; 
-        }
-
-        .image-stage {
             position: relative;
             width: 100%;
-            max-width: 1200px; /* Limits how far apart they spread */
-            height: 85vh;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* 1. TRAIN: FORCED TO LEFT, TALL, ON TOP */
-        .train-front {
-            height: 85vh; /* Very Tall */
-            width: auto;
+        .image-container {
             position: relative;
-            z-index: 10; /* Ensures it sits over the rock */
-            display: block;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            margin-bottom: 60px; /* Space for bottom nav */
         }
 
-        /* 2. LION ROCK: FORCED TO RIGHT, SMALLER, BEHIND */
-        .lion-back {
-            height: 60vh; /* Shorter */
-            width: auto;
-            position: relative;
-            z-index: 5; /* Sits behind */
-            margin-left: -120px; /* This pulls it behind the Train */
-            margin-bottom: 20px; /* Lifts it slightly to match layout 4 */
-            display: block;
-        }
-
-        /* Map Overlay */
-        #map-overlay {
-            position: fixed;
-            bottom: -100%; 
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffeef4; 
-            z-index: 150;
-            transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-            font-family: "Helvetica", Arial, sans-serif;
-            font-weight: bold;
-        }
-
-        #map-overlay.active { bottom: 0; }
-
-        .map-container {
-            display: flex;
-            width: 100%;
-            max-width: 1400px;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .map-menu { width: 30%; color: #bf5399; }
-        .map-menu ul { list-style: none; }
-        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
-
-        .active-region {
-            color: #ffdaeb;
-            background: #bf5399;
-            padding: 8px 20px;
-            border-radius: 50px;
-            width: fit-content;
-        }
-
-        .arrow-circle {
-            width: 32px;
-            height: 32px;
-            background: #bf5399;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-
-        .map-visual { width: 70%; transition: transform 0.8s ease-in-out; }
-        .world-svg { width: 100%; height: auto; }
-        .land { fill: #bf5399; }
-        .highlight { fill: #ffc2e7; }
-
-        .close-map {
+        /* TRAIN - LEFT, LARGE, FRONT */
+        .img-train {
             position: absolute;
-            top: 40px;
-            right: 40px;
-            font-size: 32px;
-            cursor: pointer;
-            color: #bf5399;
+            left: 10%;
+            bottom: 0;
+            height: 100%; /* Full height of container */
+            width: auto;
+            z-index: 10;
+            display: block;
+        }
+
+        /* LION ROCK - RIGHT, SMALL, BEHIND */
+        .img-lionrock {
+            position: absolute;
+            left: 45%; /* Positioned to overlap the train */
+            bottom: 30px; /* Lifted slightly */
+            height: 65%; /* Much smaller height */
+            width: auto;
+            z-index: 5; /* Behind the train */
+            display: block;
         }
 
         /* Bottom Nav */
@@ -205,36 +128,31 @@
             z-index: 200;
         }
 
-        .bottom-nav a, .bottom-nav .nav-item {
-            color: #ffdaeb;
-            text-decoration: none;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
+        .bottom-nav a { color: #ffdaeb; text-decoration: none; font-size: 15px; }
+        .icon { width: 24px; height: 24px; stroke: #ffdaeb; fill: none; stroke-width: 2; }
 
-        .icon { width: 24px; height: 24px; stroke: currentColor; }
-
-        @media (max-width: 768px) {
-            .image-stage { flex-direction: column; align-items: center; height: auto; }
-            .train-front, .lion-back { width: 90%; height: auto; margin: 10px 0; }
+        /* Map Overlay Simple */
+        #map-overlay {
+            position: fixed;
+            top: 100%; left: 0; width: 100%; height: 100%;
+            background-color: #ffeef4; z-index: 500;
+            transition: top 0.5s ease;
         }
+        #map-overlay.active { top: 0; }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="marquee-container">
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
         </div>
     </div>
 
     <header>
         <div class="logo">
-            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo">
+            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
         </div>
         <nav class="nav-buttons">
             <a href="#" class="nav-btn">Micro-Trips</a>
@@ -245,45 +163,23 @@
     </header>
 
     <main>
-        <div class="image-stage">
-            <img class="train-front" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+        <div class="image-container">
+            <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
             
-            <img class="lion-back" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+            <img class="img-lionrock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
     <div id="map-overlay">
-        <div class="close-map" onclick="toggleMap()">✕</div>
-        <div class="map-container">
-            <div class="map-menu">
-                <ul>
-                    <li>Africa <span style="font-size: 14px; opacity: 0.7;">52</span></li>
-                    <li class="active-region">
-                        <div class="arrow-circle">›</div> Arab States <span style="font-size: 14px;">37</span>
-                    </li>
-                    <li>Asia & the Pacific <span style="font-size: 14px; opacity: 0.7;">38</span></li>
-                    <li>Europe & North America <span style="font-size: 14px; opacity: 0.7;">96</span></li>
-                    <li>Latin America & the Caribbean <span style="font-size: 14px; opacity: 0.7;">59</span></li>
-                </ul>
-            </div>
-            <div class="map-visual">
-                <svg class="world-svg" viewBox="0 0 1146 419">
-                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                </svg>
-            </div>
-        </div>
+        <button onclick="toggleMap()" style="margin: 40px; font-size: 20px;">Close Map</button>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        </div>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         <a href="#">My Page ︾</a>
         <a href="#">Community ︾</a>
-        <div class="nav-item" onclick="toggleMap()">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <div onclick="toggleMap()" style="cursor:pointer;">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </div>
     </nav>
 
