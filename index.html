@@ -59,11 +59,10 @@
             z-index: 10;
         }
 
-        /* Train Position */
         .train-position {
             position: absolute;
             left: 11%; 
-            bottom: 20;
+            bottom: 0;
             height: 85vh; 
             z-index: 20;
         }
@@ -73,7 +72,6 @@
             display: block;
         }
 
-        /* Lion Rock Position (Behind Train) */
         .rock-position {
             position: absolute;
             left: 42%; 
@@ -87,7 +85,7 @@
             display: block;
         }
 
-        /* 5. TYPOGRAPHY (Helvetica Bold) */
+        /* 5. TYPOGRAPHY */
         .image-text {
             position: absolute;
             color: white;
@@ -97,59 +95,86 @@
             line-height: 0.95;
             letter-spacing: -1px;
         }
+        .title-train { top: 15%; left: 2%; font-size: 4.4vw; width: 50%; }
+        .title-rock { bottom: 15%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
+        .more-locations { bottom: 12%; left: 2%; font-size: 1.8vw; font-family: 'Andale Mono', monospace; font-weight: normal; }
 
-        .title-train {
-            top: 15%;
-            left: 2%;
-            font-size: 4.4vw;
-            width: 50%;
+        /* 6. BOTTOM NAVIGATION & SLIDE-UP MENU */
+        .nav-wrapper {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .title-rock {
-            bottom: 15%;
-            right: 5%;
-            font-size: 4.4vw;
-            text-align: right;
-            width: 50%;
+        .slide-up-menu {
+            background-color: #bf5399; /* Darker pink for the menu content */
+            width: 100%;
+            border-radius: 10px 10px 0 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
         }
 
-        .more-locations {
-            bottom: 12%;
-            left: 2%;
-            font-size: 1.8vw;
-            font-family: 'Andale Mono', monospace;
-            font-weight: normal;
+        .slide-up-menu.active {
+            max-height: 200px;
+            padding: 15px 20px;
+            margin-bottom: -5px; /* Slight overlap with bottom bar */
         }
 
-        /* 6. MAP OVERLAY */
+        .menu-link {
+            color: #ffdaeb;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 0;
+            display: block;
+        }
+
+        .bottom-nav {
+            background-color: #c94091;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 10px;
+            gap: 5px;
+        }
+
+        .nav-item {
+            color: #ffdaeb;
+            text-decoration: none;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-item.active-btn {
+            background-color: #bf5399; /* Changes color to match image dta_layout6 */
+        }
+
+        .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+        /* 7. MAP OVERLAY */
         #map-overlay {
             position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
-            background-color: #ffeef4; z-index: 3000;
+            background-color: #ffeef4; z-index: 5000;
             transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; align-items: center; justify-content: center;
             padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
         }
         #map-overlay.active { bottom: 0; }
-        .map-container { display: flex; width: 100%; max-width: 1400px; align-items: center; justify-content: space-between; }
-        .map-menu { width: 30%; color: #bf5399; }
-        .map-menu ul { list-style: none; }
-        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .active-region { color: #ffdaeb; background: #bf5399; padding: 8px 20px; border-radius: 50px; width: fit-content; }
-        .arrow-circle { width: 32px; height: 32px; background: #bf5399; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
-        .map-visual { width: 70%; }
-        .world-svg { width: 100%; height: auto; }
-        .land { fill: #bf5399; }
-        .highlight { fill: #ffc2e7; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
-
-        /* 7. BOTTOM NAVIGATION */
-        .bottom-nav {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: #c94091; display: flex; align-items: center;
-            padding: 10px 20px; border-radius: 10px; gap: 25px; z-index: 4000;
-        }
-        .bottom-nav a, .nav-item { color: #ffdaeb; text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
-        .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
     </style>
 </head>
 <body>
@@ -179,46 +204,60 @@
         <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
 
         <div class="train-position">
-           <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="train">
+           <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="train">
         </div>
+        <div class="rock-position">
+            <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+         </div>
+    </div>
+
+    <div class="nav-wrapper">
+        <div id="mypage-menu" class="slide-up-menu">
+            <a href="#" class="menu-link">Eyes</a>
+            <a href="#" class="menu-link">Proxies</a>
+            <a href="#" class="menu-link">Sensors</a>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            </div>
+            
+            <div class="nav-item" id="btn-mypage" onclick="toggleSubMenu('mypage')">
+                My Page ︾
+            </div>
+
+            <div class="nav-item" id="btn-community" onclick="toggleSubMenu('community')">
+                Community ︾
+            </div>
+
+            <div class="nav-item" onclick="toggleMap()">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </div>
+        </nav>
     </div>
 
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
         <div class="map-container">
-            <div class="map-menu">
-                <ul>
-                    <li>Africa</li>
-                    <li class="active-region"><div class="arrow-circle">›</div> Arab States</li>
-                    <li>Asia & the Pacific</li>
-                    <li>Europe & North America</li>
-                    <li>Latin America & the Caribbean</li>
-                </ul>
-            </div>
-            <div class="map-visual">
-                <svg class="world-svg" viewBox="0 0 1146 419">
-                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                </svg>
-            </div>
+            <h1 style="color:#bf5399">World Map Placeholder</h1>
         </div>
     </div>
-
-    <nav class="bottom-nav">
-        <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        </div>
-        <a href="#">My Page ︾</a>
-        <a href="#">Community ︾</a>
-        <div class="nav-item" onclick="toggleMap()">
-            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        </div>
-    </nav>
 
     <script>
         function toggleMap() {
             document.getElementById('map-overlay').classList.toggle('active');
+        }
+
+        function toggleSubMenu(type) {
+            const menu = document.getElementById('mypage-menu');
+            const btn = document.getElementById('btn-mypage');
+            
+            if (type === 'mypage') {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active-btn');
+            }
+            // Add similar logic for 'community' if you have specific items for it
         }
     </script>
 </body>
