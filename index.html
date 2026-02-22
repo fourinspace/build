@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTA - Micro-Trips & Macro-Journeys</title>
     <style>
-        /* Essential Reset */
+        /* CSS Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
@@ -16,31 +16,21 @@
             overflow: hidden; 
         }
 
-        /* Top Bar */
+        /* Top Blue Bar */
         .top-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 35px;
-            background-color: #83b0e1;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 35px;
+            background-color: #83b0e1; z-index: 1000;
+            display: flex; align-items: center; overflow: hidden; white-space: nowrap;
         }
 
         .marquee-container {
-            display: inline-block;
-            white-space: nowrap;
+            display: inline-block; white-space: nowrap;
             animation: marquee 30s linear infinite;
         }
 
         .marquee-text {
-            display: inline-block;
-            color: white;
-            font-size: 14px;
-            padding-right: 50px;
+            display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 50px;
         }
 
         @keyframes marquee {
@@ -50,16 +40,9 @@
 
         /* Header */
         header {
-            position: fixed;
-            top: 35px;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            padding: 0 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 900;
+            position: fixed; top: 35px; left: 0; width: 100%; height: 80px;
+            padding: 0 40px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 900;
         }
 
         .logo img { height: 45px; display: block; }
@@ -67,94 +50,86 @@
         .nav-buttons { display: flex; gap: 12px; }
 
         .nav-btn {
-            background-color: #c94091; 
-            color: #ffdaeb;
-            padding: 8px 18px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
+            background-color: #c94091; color: #ffdaeb;
+            padding: 8px 18px; border-radius: 6px;
+            text-decoration: none; font-size: 14px;
         }
 
-        /* THE FIX: Fixed Stage with Absolute Positioning */
+        /* MAIN STAGE - Absolute Positioning for Layout 4 */
         .stage {
             position: absolute;
-            top: 115px; 
-            left: 0;
-            width: 100%;
+            top: 115px; left: 0; width: 100%;
             height: calc(100% - 115px);
         }
 
-        /* TRAIN: Locked to Left, 85% Height, Top Layer */
+        /* TRAIN: LEFT, BIG (85% height), FRONT */
         .train-layer {
             position: absolute;
-            left: 11%;
-            bottom: 0;
+            left: 10%; bottom: 0;
             height: 85vh; 
-            z-index: 200; /* Stays in front */
+            z-index: 200; 
         }
+        .train-layer img { height: 100%; width: auto; display: block; }
 
-        .train-layer img {
-            height: 100%;
-            width: auto;
-            display: block;
-        }
-
-        /* LION ROCK: Locked Behind, 55% Height, Bottom Layer */
+        /* LION ROCK: RIGHT, SMALL (55% height), BEHIND */
         .rock-layer {
             position: absolute;
-            left: 42%; /* Positioned to tuck behind the train */
-            bottom: 0;
+            left: 42%; bottom: 0;
             height: 55vh; 
-            z-index: 100; /* Stays behind */
+            z-index: 100; 
         }
+        .rock-layer img { height: 100%; width: auto; display: block; }
 
-        .rock-layer img {
-            height: 100%;
-            width: auto;
-            display: block;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #c94091;
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 10px;
-            gap: 25px;
-            z-index: 2000;
-        }
-
-        .bottom-nav a { color: #ffdaeb; text-decoration: none; font-size: 15px; }
-        .icon { width: 24px; height: 24px; stroke: #ffdaeb; fill: none; stroke-width: 2.5; }
-
-        /* Map Overlay */
+        /* Map Overlay Styling */
         #map-overlay {
-            position: fixed;
-            top: 100%; left: 0; width: 100%; height: 100%;
+            position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 3000;
-            transition: top 0.5s ease-in-out;
+            transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; align-items: center; justify-content: center;
+            padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
         }
-        #map-overlay.active { top: 0; }
+
+        #map-overlay.active { bottom: 0; }
+
+        .map-container { display: flex; width: 100%; max-width: 1400px; align-items: center; justify-content: space-between; }
+        .map-menu { width: 30%; color: #bf5399; }
+        .map-menu ul { list-style: none; }
+        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+
+        .active-region { color: #ffdaeb; background: #bf5399; padding: 8px 20px; border-radius: 50px; width: fit-content; }
+        .arrow-circle { width: 32px; height: 32px; background: #bf5399; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+
+        .map-visual { width: 70%; }
+        .world-svg { width: 100%; height: auto; }
+        .land { fill: #bf5399; }
+        .highlight { fill: #ffc2e7; }
+
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background-color: #c94091; display: flex; align-items: center;
+            padding: 10px 20px; border-radius: 10px; gap: 25px; z-index: 4000;
+        }
+
+        .bottom-nav a, .bottom-nav .nav-item { color: #ffdaeb; text-decoration: none; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="marquee-container">
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
-            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; +</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
+            <span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span>
         </div>
     </div>
 
     <header>
         <div class="logo">
-            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo">
+            <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
         </div>
         <nav class="nav-buttons">
             <a href="#" class="nav-btn">Micro-Trips</a>
@@ -168,7 +143,6 @@
         <div class="train-layer">
             <img src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
         </div>
-
         <div class="rock-layer">
             <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
@@ -176,13 +150,33 @@
 
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
+        <div class="map-container">
+            <div class="map-menu">
+                <ul>
+                    <li>Africa <span style="font-size: 14px; opacity: 0.7;">52</span></li>
+                    <li class="active-region"><div class="arrow-circle">›</div> Arab States <span style="font-size: 14px;">37</span></li>
+                    <li>Asia & the Pacific <span style="font-size: 14px; opacity: 0.7;">38</span></li>
+                    <li>Europe & North America <span style="font-size: 14px; opacity: 0.7;">96</span></li>
+                    <li>Latin America & the Caribbean <span style="font-size: 14px; opacity: 0.7;">59</span></li>
+                </ul>
+            </div>
+            <div class="map-visual">
+                <svg class="world-svg" viewBox="0 0 1146 419">
+                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
+                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
+                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
+                </svg>
+            </div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <div class="nav-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        </div>
         <a href="#">My Page ︾</a>
         <a href="#">Community ︾</a>
-        <div onclick="toggleMap()" style="cursor:pointer;">
+        <div class="nav-item" onclick="toggleMap()">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </div>
     </nav>
