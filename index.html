@@ -80,7 +80,7 @@
             font-size: 14px;
         }
 
-        /* Main Content Layout */
+        /* Main Content Layout - Fixed for Layout 4 */
         main {
             position: absolute;
             top: 115px; 
@@ -91,39 +91,38 @@
             display: flex;
             align-items: flex-end; 
             justify-content: center;
-            padding-bottom: 60px; 
+            padding-bottom: 40px; 
             overflow: hidden;
         }
 
         .image-container {
             display: flex;
             align-items: flex-end;
-            max-width: 90%;
-            height: 85vh; 
             position: relative;
+            max-width: 95%;
+            height: 85vh;
         }
 
-        /* Front Image (Left) - Scaled Up */
-        .img-left {
-            height: 95%; 
+        /* Train Image - Left and In Front */
+        .img-train {
+            height: 100%; /* Scale up to fill container */
             width: auto;
-            border-radius: 4px;
+            border-radius: 2px;
             object-fit: cover;
             position: relative;
-            z-index: 2; 
-            box-shadow: 15px 0 30px rgba(0,0,0,0.1);
+            z-index: 10; /* Ensures it is in front of the Rock */
         }
 
-        /* Back Image (Right) - Smaller and tucked behind */
-        .img-right {
-            height: 70%; 
+        /* Lion Rock Image - Right and Tucked Behind */
+        .img-lionrock {
+            height: 75%; /* Smaller scale than the train */
             width: auto;
-            border-radius: 4px;
+            border-radius: 2px;
             object-fit: cover;
             position: relative;
-            z-index: 1; 
-            margin-left: -60px; /* Creates the overlap */
-            margin-bottom: 30px; 
+            z-index: 5; /* Sits behind the train */
+            margin-left: -50px; /* Pulls it behind the train image */
+            margin-bottom: 20px; /* Slight vertical offset for style */
         }
 
         /* Map Overlay */
@@ -237,7 +236,7 @@
 
         @media (max-width: 768px) {
             .image-container { flex-direction: column; align-items: center; height: auto; }
-            .img-left, .img-right { width: 90%; height: auto; margin: 10px 0; }
+            .img-train, .img-lionrock { width: 90%; height: auto; margin: 10px 0; }
         }
     </style>
 </head>
@@ -264,8 +263,8 @@
 
     <main>
         <div class="image-container">
-            <img class="img-left" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
-            <img class="img-right" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
+            <img class="img-train" src="https://drive.google.com/thumbnail?id=1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9&sz=w1000" alt="Train">
+            <img class="img-lionrock" src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="Lion Rock">
         </div>
     </main>
 
