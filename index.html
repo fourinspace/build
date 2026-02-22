@@ -48,7 +48,6 @@
             letter-spacing: 1px;
         }
 
-        /* The animation moves the container by half, creating a seamless loop */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -89,28 +88,89 @@
             transition: transform 0.1s;
         }
 
-        .nav-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Scrollable Content Area */
-        main {
-            position: absolute;
-            top: 35px; 
+        /* Map Section (Slide Up) */
+        #map-overlay {
+            position: fixed;
+            bottom: -100%; /* Hidden by default */
             left: 0;
             width: 100%;
-            height: calc(100% - 35px);
-            background-color: #f05a44;
-            overflow-y: auto;
-            padding-top: 80px; 
-            padding-bottom: 120px; 
+            height: 100%;
+            background-color: #ffdaeb; /* Light pink from your design */
+            z-index: 150;
+            transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-weight: bold;
         }
 
-        .content-container {
+        #map-overlay.active {
+            bottom: 0;
+        }
+
+        .map-container {
+            display: flex;
+            width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px;
-            min-height: 120vh;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .map-menu {
+            width: 40%;
+            color: #c94091;
+        }
+
+        .map-menu ul {
+            list-style: none;
+        }
+
+        .map-menu li {
+            font-size: 28px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .map-menu li span.count {
+            font-size: 14px;
+            vertical-align: super;
+            opacity: 0.7;
+        }
+
+        .map-menu li:hover {
+            opacity: 0.6;
+        }
+
+        .map-visual {
+            width: 55%;
+            position: relative;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .map-visual svg {
+            width: 100%;
+            height: auto;
+            fill: #c94091;
+        }
+
+        .highlight-region {
+            fill: #ff9dcf !important;
+        }
+
+        /* Close button for Map */
+        .close-map {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #c94091;
         }
 
         /* Bottom Floating Menu */
@@ -125,7 +185,7 @@
             padding: 10px 20px;
             border-radius: 10px;
             gap: 25px;
-            z-index: 100;
+            z-index: 200;
         }
 
         .bottom-nav a, .bottom-nav .nav-item {
@@ -135,6 +195,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .v-arrow {
@@ -142,7 +203,6 @@
             display: inline-flex;
             align-self: center;
             margin-top: 4px;    
-            user-select: none;
         }
 
         .icon {
@@ -151,22 +211,17 @@
             stroke: #ffdaeb;
         }
 
-        /* Scrollbar Styling */
-        main::-webkit-scrollbar {
-            width: 12px;
-        }
-        main::-webkit-scrollbar-track {
-            background: #f05a44;
-        }
-        main::-webkit-scrollbar-thumb {
-            background: #c94091;
-            border-radius: 10px;
-            border: 2px solid #f05a44;
-        }
-
-        @media (max-width: 768px) {
-            .nav-buttons { display: none; }
-            header { padding: 0 20px; }
+        /* Scrollable Content */
+        main {
+            position: absolute;
+            top: 35px; 
+            left: 0;
+            width: 100%;
+            height: calc(100% - 35px);
+            background-color: #f05a44;
+            overflow-y: auto;
+            padding-top: 80px; 
+            padding-bottom: 120px; 
         }
     </style>
 </head>
@@ -177,14 +232,10 @@
             <span class="marquee-text">
                 + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
                 + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
             </span>
             <span class="marquee-text">
                 + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
                 + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp; 
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
-                + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;
             </span>
         </div>
     </div>
@@ -201,24 +252,59 @@
         </nav>
     </header>
 
-    <main>
-        <div class="content-container">
+    <div id="map-overlay">
+        <div class="close-map" onclick="toggleMap()">✕</div>
+        <div class="map-container">
+            <div class="map-menu">
+                <ul>
+                    <li onclick="zoomMap('africa')">Africa <span class="count">52</span></li>
+                    <li onclick="zoomMap('arab')" style="color: #ff9dcf;">› Arab States <span class="count">37</span></li>
+                    <li onclick="zoomMap('asia')">Asia & the Pacific <span class="count">38</span></li>
+                    <li onclick="zoomMap('europe')">Europe & North America <span class="count">96</span></li>
+                    <li onclick="zoomMap('latin')">Latin America & the Caribbean <span class="count">59</span></li>
+                </ul>
             </div>
+            <div class="map-visual" id="world-map">
+                <svg viewBox="0 0 1000 500">
+                    <path d="M150,150 L200,100 L250,150 L220,250 L150,220 Z" title="North America" />
+                    <path d="M220,260 L280,300 L250,450 L180,350 Z" title="South America" />
+                    <path d="M450,150 L550,100 L650,120 L600,250 L480,250 Z" title="Europe/Asia" />
+                    <path id="africa-svg" d="M480,260 L580,260 L600,400 L500,450 L450,350 Z" title="Africa" />
+                    <path id="arab-svg" class="highlight-region" d="M500,230 L580,230 L600,280 L520,280 Z" title="Arab States" />
+                    <path d="M700,350 L800,320 L850,400 L750,450 Z" title="Australia" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="content-container"></div>
     </main>
 
     <nav class="bottom-nav">
         <div class="nav-item">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </div>
-        
         <a href="#">My Page <span class="v-arrow">︾</span></a>
-        
         <a href="#">Community <span class="v-arrow">︾</span></a>
-        
-        <div class="nav-item">
+        <div class="nav-item" onclick="toggleMap()">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
         </div>
     </nav>
 
+    <script>
+        function toggleMap() {
+            document.getElementById('map-overlay').classList.toggle('active');
+        }
+
+        function zoomMap(region) {
+            const map = document.getElementById('world-map');
+            if(region === 'arab') {
+                map.style.transform = "scale(2.5) translate(-15%, -10%)";
+            } else {
+                map.style.transform = "scale(1.5)";
+            }
+        }
+    </script>
 </body>
 </html>
