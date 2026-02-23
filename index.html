@@ -10,11 +10,28 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; width: 100%; font-family: 'Andale Mono', 'Courier New', monospace; background-color: #f05a44; overflow: hidden; }
 
-        /* 2. TOP BLUE BAR & MARQUEE */
-        .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: 35px; background-color: #83b0e1; z-index: 1000; display: flex; align-items: center; overflow: hidden; white-space: nowrap; }
-        .marquee-container { display: inline-block; white-space: nowrap; animation: marquee 30s linear infinite; }
-        .marquee-text { display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 50px; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* 2. TOP BLUE BAR & INFINITE MARQUEE */
+        .top-bar { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 35px; 
+            background-color: #83b0e1; z-index: 8000; 
+            display: flex; align-items: center; overflow: hidden; 
+        }
+        .marquee-container { 
+            display: flex; 
+            white-space: nowrap; 
+            animation: marquee-loop 20s linear infinite; 
+        }
+        .marquee-text { 
+            display: inline-block; 
+            color: white; 
+            font-size: 14px; 
+            letter-spacing: 1px; 
+            padding-right: 0px;
+        }
+        @keyframes marquee-loop { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
 
         /* 3. HEADER */
         header { position: fixed; top: 35px; left: 0; width: 100%; height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; z-index: 4500; }
@@ -59,15 +76,15 @@
         .nav-item { color: #ffdaeb; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 8px 15px; border-radius: 8px; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-        /* 7. WORLD MAP OVERLAY (Original Text and SVG Restored) */
+        /* 7. WORLD MAP OVERLAY (Behind Navigation) */
         #map-overlay { 
             position: fixed; 
-            bottom: -100%; /* Hidden below */
+            bottom: -100%; 
             left: 0; 
             width: 100%; 
             height: 100%; 
             background-color: #ffeef4; 
-            z-index: 6000; /* Behind nav-wrapper (7000) */
+            z-index: 6000; /* Stays behind nav-wrapper (7000) */
             transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
             display: flex; 
             flex-direction: column; 
@@ -89,7 +106,14 @@
 <body>
 
     <div class="top-bar">
-        <div class="marquee-container"><span class="marquee-text">+ &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; &nbsp; &nbsp; &nbsp;</span></div>
+        <div class="marquee-container">
+            <span class="marquee-text">
+                Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;
+            </span>
+            <span class="marquee-text">
+                Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;
+            </span>
+        </div>
     </div>
 
     <header>
@@ -133,7 +157,6 @@
             </div>
             <div id="step-finished" class="panel-step">
                 <h2 style="font-size: 32px;">Trip Started!</h2>
-                <p style="margin-top: 20px;">Max is now connecting. Enjoy the journey.</p>
                 <button class="btn-black" onclick="resetAll()">End Session</button>
             </div>
         </div>
