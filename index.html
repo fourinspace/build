@@ -47,16 +47,41 @@
             background-color: #c94091; color: #ffdaeb;
             padding: 8px 18px; border-radius: 6px;
             text-decoration: none; font-size: 14px;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
 
-        /* 4. THE STAGE */
+        /* 4. THE STAGE & SLIDE LOGIC */
+        /* Container to hold the orange content and the new side panel */
+        .main-viewport {
+            display: flex;
+            width: 130%; /* Extra width for the hidden panel */
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* When active, slide left. The 480px matches the approximate width of the nav-buttons area */
+        .main-viewport.shifted {
+            transform: translateX(-480px);
+        }
+
         .stage {
-            position: absolute;
-            top: 115px; 
-            left: 0; 
-            width: 100%;
+            position: relative;
+            width: 100vw;
             height: calc(100vh - 115px);
+            margin-top: 115px;
             z-index: 10;
+        }
+
+        /* The New Right Side Panel */
+        .side-panel {
+            width: 480px;
+            height: 100vh;
+            background-color: #ffdaeb; /* Light pink background for the new section */
+            padding: 130px 40px 40px 40px;
+            color: #c94091;
+            box-shadow: inset 10px 0 20px rgba(0,0,0,0.05);
         }
 
         .train-position {
@@ -72,20 +97,7 @@
             display: block;
         }
 
-        .rock-position {
-            position: absolute;
-            left: 42%; 
-            bottom: 5vh; 
-            height: 65vh; 
-            z-index: 10;
-        }
-        .rock-position img {
-            height: 100%;
-            width: auto;
-            display: block;
-        }
-
-        /* 5. TYPOGRAPHY (Helvetica Bold) */
+        /* 5. TYPOGRAPHY */
         .image-text {
             position: absolute;
             color: white;
@@ -99,7 +111,7 @@
         .title-rock { bottom: 15%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
         .more-locations { bottom: 12%; left: 2%; font-size: 1.8vw; font-family: 'Andale Mono', monospace; font-weight: normal; }
 
-        /* 6. BOTTOM NAVIGATION & SLIDE-UP MENU */
+        /* 6. BOTTOM NAVIGATION */
         .nav-wrapper {
             position: fixed;
             bottom: 30px;
@@ -159,13 +171,10 @@
             transition: background 0.2s;
         }
 
-        .nav-item.active-btn {
-            background-color: #bf5399; 
-        }
-
+        .nav-item.active-btn { background-color: #bf5399; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-        /* 7. MAP OVERLAY (Restored Content) */
+        /* 7. MAP OVERLAY */
         #map-overlay {
             position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 5000;
@@ -174,18 +183,6 @@
             padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
         }
         #map-overlay.active { bottom: 0; }
-
-        .map-container { display: flex; width: 100%; max-width: 1400px; align-items: center; justify-content: space-between; }
-        .map-menu { width: 30%; color: #bf5399; }
-        .map-menu ul { list-style: none; }
-        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .active-region { color: #ffdaeb; background: #bf5399; padding: 8px 20px; border-radius: 50px; width: fit-content; }
-        .arrow-circle { width: 32px; height: 32px; background: #bf5399; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
-
-        .map-visual { width: 70%; }
-        .world-svg { width: 100%; height: auto; }
-        .land { fill: #bf5399; }
-        .highlight { fill: #ffc2e7; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
     </style>
 </head>
@@ -203,22 +200,28 @@
             <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="Logo">
         </div>
         <nav class="nav-buttons">
-            <a href="#" class="nav-btn">Micro-Trips</a>
-            <a href="#" class="nav-btn">Macro-Journeys</a>
-            <a href="#" class="nav-btn">Raffle</a>
-            <a href="#" class="nav-btn">Geo-Quest</a>
+            <button class="nav-btn" onclick="openPanel('Micro-Trips')">Micro-Trips</button>
+            <button class="nav-btn" onclick="openPanel('Macro-Journeys')">Macro-Journeys</button>
+            <button class="nav-btn" onclick="openPanel('Raffle')">Raffle</button>
+            <button class="nav-btn" onclick="openPanel('Geo-Quest')">Geo-Quest</button>
         </nav>
     </header>
 
-    <div class="stage">
-        <div class="image-text title-train">Riding The Bernina<br>Orange Train</div>
-        <div class="image-text more-locations">More Locations</div>
-        <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
+    <div class="main-viewport" id="viewport">
+        <div class="stage" onclick="closePanel()">
+            <div class="image-text title-train">Riding The Bernina<br>Orange Train</div>
+            <div class="image-text more-locations">More Locations</div>
+            <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
 
-        <div class="train-position">
-            <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="train">
+            <div class="train-position">
+                <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000" alt="train">
+            </div>
         </div>
-      
+
+        <div class="side-panel" id="side-panel">
+            <h2 id="panel-title">Details</h2>
+            <p style="margin-top: 20px; font-family: 'Andale Mono';">Explore new destinations and curated experiences here.</p>
+        </div>
     </div>
 
     <div class="nav-wrapper">
@@ -229,7 +232,7 @@
         </div>
 
         <nav class="bottom-nav">
-            <div class="nav-item">
+            <div class="nav-item" onclick="closePanel()">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             </div>
             <div class="nav-item" id="btn-mypage" onclick="toggleSubMenu('mypage')">My Page ︾</div>
@@ -243,26 +246,20 @@
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
         <div class="map-container">
-            <div class="map-menu">
-                <ul>
-                    <li>Africa</li>
-                    <li class="active-region"><div class="arrow-circle">›</div> Arab States</li>
-                    <li>Asia & the Pacific</li>
-                    <li>Europe & North America</li>
-                    <li>Latin America & the Caribbean</li>
-                </ul>
-            </div>
-            <div class="map-visual">
-                <svg class="world-svg" viewBox="0 0 1146 419">
-                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                </svg>
-            </div>
+            <div style="font-size: 40px; color: #bf5399;">MAP VIEW</div>
         </div>
     </div>
 
     <script>
+        function openPanel(title) {
+            document.getElementById('viewport').classList.add('shifted');
+            document.getElementById('panel-title').innerText = title;
+        }
+
+        function closePanel() {
+            document.getElementById('viewport').classList.remove('shifted');
+        }
+
         function toggleMap() {
             document.getElementById('map-overlay').classList.toggle('active');
         }
