@@ -39,7 +39,7 @@
         header {
             position: fixed; top: 35px; left: 0; width: 100%; height: 80px;
             padding: 0 40px; display: flex; justify-content: space-between;
-            align-items: center; z-index: 900;
+            align-items: center; z-index: 4500; /* Higher than panel to stay visible */
         }
         .logo img { height: 45px; display: block; }
         .nav-buttons { display: flex; gap: 12px; }
@@ -47,41 +47,39 @@
             background-color: #c94091; color: #ffdaeb;
             padding: 8px 18px; border-radius: 6px;
             text-decoration: none; font-size: 14px;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
+            cursor: pointer; border: none; font-family: inherit;
         }
 
-        /* 4. THE STAGE & SLIDE LOGIC */
-        /* Container to hold the orange content and the new side panel */
+        /* 4. THE VIEWPORT SLIDE LOGIC */
         .main-viewport {
             display: flex;
-            width: 130%; /* Extra width for the hidden panel */
+            width: 170vw; /* Extended width to accommodate the large slide */
             height: 100%;
-            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        /* When active, slide left. The 480px matches the approximate width of the nav-buttons area */
+        /* This moves the orange stage 70% to the left, passing the nav buttons */
         .main-viewport.shifted {
-            transform: translateX(-480px);
+            transform: translateX(-70vw);
         }
 
         .stage {
             position: relative;
             width: 100vw;
-            height: calc(100vh - 115px);
-            margin-top: 115px;
+            height: 100vh;
+            padding-top: 115px;
+            background-color: #f05a44;
             z-index: 10;
         }
 
         /* The New Right Side Panel */
         .side-panel {
-            width: 480px;
+            width: 70vw;
             height: 100vh;
-            background-color: #ffdaeb; /* Light pink background for the new section */
-            padding: 130px 40px 40px 40px;
+            background-color: #ffdaeb; 
+            padding: 130px 60px 40px 60px;
             color: #c94091;
-            box-shadow: inset 10px 0 20px rgba(0,0,0,0.05);
+            overflow-y: auto;
         }
 
         .train-position {
@@ -117,7 +115,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 4000;
+            z-index: 5000;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -177,7 +175,7 @@
         /* 7. MAP OVERLAY */
         #map-overlay {
             position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
-            background-color: #ffeef4; z-index: 5000;
+            background-color: #ffeef4; z-index: 6000;
             transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; align-items: center; justify-content: center;
             padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
@@ -219,8 +217,9 @@
         </div>
 
         <div class="side-panel" id="side-panel">
-            <h2 id="panel-title">Details</h2>
-            <p style="margin-top: 20px; font-family: 'Andale Mono';">Explore new destinations and curated experiences here.</p>
+            <h2 id="panel-title" style="font-size: 3rem; text-transform: uppercase;">Details</h2>
+            <hr style="border: 2px solid #c94091; margin: 20px 0;">
+            <p style="font-size: 1.2rem; line-height: 1.6;">Welcome to the <span id="panel-name-span"></span> section. Here you can explore deeper content, booking options, and travel details while keeping the main journey just a slide away.</p>
         </div>
     </div>
 
@@ -246,7 +245,7 @@
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
         <div class="map-container">
-            <div style="font-size: 40px; color: #bf5399;">MAP VIEW</div>
+             <div style="font-size: 40px; color: #bf5399;">WORLD MAP</div>
         </div>
     </div>
 
@@ -254,6 +253,7 @@
         function openPanel(title) {
             document.getElementById('viewport').classList.add('shifted');
             document.getElementById('panel-title').innerText = title;
+            document.getElementById('panel-name-span').innerText = title;
         }
 
         function closePanel() {
@@ -267,7 +267,6 @@
         function toggleSubMenu(type) {
             const menu = document.getElementById('mypage-menu');
             const btn = document.getElementById('btn-mypage');
-            
             if (type === 'mypage') {
                 menu.classList.toggle('active');
                 btn.classList.toggle('active-btn');
