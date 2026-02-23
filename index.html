@@ -50,15 +50,14 @@
             cursor: pointer; border: none; font-family: inherit;
         }
 
-        /* 4. THE VIEWPORT SLIDE LOGIC (REDUCED) */
+        /* 4. THE VIEWPORT SLIDE LOGIC */
         .main-viewport {
             display: flex;
-            width: calc(100vw + 450px); /* Slightly wider than the shift for safety */
+            width: calc(100vw + 450px); 
             height: 100%;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Shifting exactly 450px to reveal the panel under the buttons */
         .main-viewport.shifted {
             transform: translateX(-450px);
         }
@@ -72,7 +71,6 @@
             z-index: 10;
         }
 
-        /* The New Right Side Panel (REDUCED) */
         .side-panel {
             width: 450px;
             height: 100vh;
@@ -116,7 +114,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 5000;
+            z-index: 4000;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -173,7 +171,7 @@
         .nav-item.active-btn { background-color: #bf5399; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-        /* 7. MAP OVERLAY */
+        /* 7. MAP OVERLAY (RESTORED) */
         #map-overlay {
             position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
             background-color: #ffeef4; z-index: 6000;
@@ -182,6 +180,18 @@
             padding: 60px; font-family: "Helvetica", Arial, sans-serif; font-weight: bold;
         }
         #map-overlay.active { bottom: 0; }
+
+        .map-container { display: flex; width: 100%; max-width: 1400px; align-items: center; justify-content: space-between; }
+        .map-menu { width: 30%; color: #bf5399; }
+        .map-menu ul { list-style: none; }
+        .map-menu li { font-size: 32px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        .active-region { color: #ffdaeb; background: #bf5399; padding: 8px 20px; border-radius: 50px; width: fit-content; }
+        .arrow-circle { width: 32px; height: 32px; background: #bf5399; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+
+        .map-visual { width: 70%; }
+        .world-svg { width: 100%; height: auto; }
+        .land { fill: #bf5399; }
+        .highlight { fill: #ffc2e7; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; }
     </style>
 </head>
@@ -219,7 +229,7 @@
 
         <div class="side-panel" id="side-panel">
             <h2 id="panel-title" style="font-size: 1.8rem; text-transform: uppercase;">Details</h2>
-            <p style="font-size: 14px; margin-top: 20px; line-height: 1.4;">Explore the details for <span id="panel-name-span"></span>.</p>
+            <p style="font-size: 14px; margin-top: 20px; line-height: 1.4;">Explore the specific offerings for <span id="panel-name-span"></span>.</p>
         </div>
     </div>
 
@@ -227,7 +237,7 @@
         <div id="mypage-menu" class="slide-up-menu">
             <a href="#" class="menu-link">Eyes</a>
             <a href="#" class="menu-link">Proxies</a>
-            <a href="#" class="menu-link" onclick="closePanel()">Sensors</a>
+            <a href="#" class="menu-link">Sensors</a>
         </div>
 
         <nav class="bottom-nav">
@@ -245,7 +255,22 @@
     <div id="map-overlay">
         <div class="close-map" onclick="toggleMap()">✕</div>
         <div class="map-container">
-             <div style="font-size: 40px; color: #bf5399;">WORLD MAP</div>
+            <div class="map-menu">
+                <ul>
+                    <li>Africa</li>
+                    <li class="active-region"><div class="arrow-circle">›</div> Arab States</li>
+                    <li>Asia & the Pacific</li>
+                    <li>Europe & North America</li>
+                    <li>Latin America & the Caribbean</li>
+                </ul>
+            </div>
+            <div class="map-visual">
+                <svg class="world-svg" viewBox="0 0 1146 419">
+                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
+                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
+                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
+                </svg>
+            </div>
         </div>
     </div>
 
