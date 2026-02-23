@@ -39,7 +39,7 @@
         header {
             position: fixed; top: 35px; left: 0; width: 100%; height: 80px;
             padding: 0 40px; display: flex; justify-content: space-between;
-            align-items: center; z-index: 4500; /* Higher than panel to stay visible */
+            align-items: center; z-index: 4500;
         }
         .logo img { height: 45px; display: block; }
         .nav-buttons { display: flex; gap: 12px; }
@@ -50,17 +50,17 @@
             cursor: pointer; border: none; font-family: inherit;
         }
 
-        /* 4. THE VIEWPORT SLIDE LOGIC */
+        /* 4. THE VIEWPORT SLIDE LOGIC (REDUCED) */
         .main-viewport {
             display: flex;
-            width: 170vw; /* Extended width to accommodate the large slide */
+            width: calc(100vw + 450px); /* Slightly wider than the shift for safety */
             height: 100%;
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* This moves the orange stage 70% to the left, passing the nav buttons */
+        /* Shifting exactly 450px to reveal the panel under the buttons */
         .main-viewport.shifted {
-            transform: translateX(-70vw);
+            transform: translateX(-450px);
         }
 
         .stage {
@@ -72,14 +72,15 @@
             z-index: 10;
         }
 
-        /* The New Right Side Panel */
+        /* The New Right Side Panel (REDUCED) */
         .side-panel {
-            width: 70vw;
+            width: 450px;
             height: 100vh;
             background-color: #ffdaeb; 
-            padding: 130px 60px 40px 60px;
+            padding: 130px 30px 40px 30px;
             color: #c94091;
             overflow-y: auto;
+            border-left: 2px solid rgba(201, 64, 145, 0.2);
         }
 
         .train-position {
@@ -217,9 +218,8 @@
         </div>
 
         <div class="side-panel" id="side-panel">
-            <h2 id="panel-title" style="font-size: 3rem; text-transform: uppercase;">Details</h2>
-            <hr style="border: 2px solid #c94091; margin: 20px 0;">
-            <p style="font-size: 1.2rem; line-height: 1.6;">Welcome to the <span id="panel-name-span"></span> section. Here you can explore deeper content, booking options, and travel details while keeping the main journey just a slide away.</p>
+            <h2 id="panel-title" style="font-size: 1.8rem; text-transform: uppercase;">Details</h2>
+            <p style="font-size: 14px; margin-top: 20px; line-height: 1.4;">Explore the details for <span id="panel-name-span"></span>.</p>
         </div>
     </div>
 
@@ -227,7 +227,7 @@
         <div id="mypage-menu" class="slide-up-menu">
             <a href="#" class="menu-link">Eyes</a>
             <a href="#" class="menu-link">Proxies</a>
-            <a href="#" class="menu-link">Sensors</a>
+            <a href="#" class="menu-link" onclick="closePanel()">Sensors</a>
         </div>
 
         <nav class="bottom-nav">
