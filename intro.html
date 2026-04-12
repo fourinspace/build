@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic UI Video Background</title>
+    <title>Organic UI Full Width</title>
     <style>
         body, html {
             margin: 0;
@@ -14,13 +14,13 @@
             background-color: #000;
         }
 
-        /* 1. Video Container - Always Full Width */
+        /* 1. Video fills the width, maintains 16:9 ratio */
         .video-container {
             position: absolute;
-            top: 0;
+            top: 50%;
             left: 0;
             width: 100%;
-            height: 100%;
+            transform: translateY(-50%);
             z-index: 0;
         }
 
@@ -28,39 +28,35 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             border: none;
+            display: block;
         }
 
-        /* 2. SVG Bar Styling */
-        .bar-container {
+        /* 2. Interactive Bar Containers */
+        .bar-trigger {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 200px; /* Area where the bar moves */
+            height: 25vh; /* Large trigger area for the pointer */
             z-index: 10;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .top-bar { top: 0; transform: translateY(-20px); }
-        .bottom-bar { bottom: 0; transform: translateY(20px); }
+        .top-trigger { top: 0; align-items: flex-start; }
+        .bottom-trigger { bottom: 0; align-items: flex-end; }
 
-        /* Push away on hover */
-        .top-bar:hover { transform: translateY(-80px); }
-        .bottom-bar:hover { transform: translateY(80px); }
+        /* Movement: Push away when pointer comes close */
+        .top-trigger:hover { transform: translateY(-40px); }
+        .bottom-trigger:hover { transform: translateY(40px); }
 
         svg {
             width: 100%;
-            height: 100%;
-            fill: #ff0055; /* Match your pink sample color */
+            height: 120px; /* Height of the pink bar */
+            fill: #ff0055; /* The pink from your sample */
         }
 
-        /* The "Allergic Reaction" - Path transition */
         path {
-            transition: d 0.4s ease;
-        }
-
-        /* When hovering the container, change the path to be more "rounded" */
-        .bar-container:hover path {
-            d: path("M0,0 L100,0 C80,50 20,50 0,0 Z"); /* This is a placeholder for the curve logic */
+            transition: d 0.3s ease-out; /* Smooths the 'allergic' rounding */
         }
     </style>
 </head>
@@ -74,49 +70,51 @@
         </iframe>
     </div>
 
-    <div class="bar-container top-bar">
-        <svg viewBox="0 0 100 20" preserveAspectRatio="none">
-            <path d="M0,0 L100,0 L100,15 Q50,15 0,15 Z" />
+    <div class="bar-trigger top-trigger">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+            <path id="topPath" d="M0,0 L1000,0 L1000,80 Q500,80 0,80 Z" />
         </svg>
     </div>
 
-    <div class="bar-container bottom-bar">
-        <svg viewBox="0 0 100 20" preserveAspectRatio="none">
-            <path d="M0,5 L100,5 L100,20 L0,20 Q50,5 0,5 Z" />
+    <div class="bar-trigger bottom-trigger">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+            <path id="bottomPath" d="M0,20 L1000,20 L1000,100 L0,100 Q500,20 0,20 Z" />
         </svg>
     </div>
 
     <script>
-        // Optional: For a true "allergic reaction" where it rounds specifically 
-        // WHERE the mouse is, we can update the SVG path via JavaScript.
-        
-        const bars = document.querySelectorAll('.bar-container');
-        
-        bars.forEach(bar => {
-            const path = bar.querySelector('path');
-            const isTop = bar.classList.contains('top-bar');
+        const topPath = document.getElementById('topPath');
+        const bottomPath = document.getElementById('bottomPath');
+        const topTrigger = document.querySelector('.top-trigger');
+        const bottomTrigger = document.querySelector('.bottom-trigger');
 
-            bar.addEventListener('mousemove', (e) => {
-                const rect = bar.getBoundingClientRect();
-                const x = (e.clientX / rect.width) * 100; // Get percentage of mouse position
-                
-                // Redraw the curve to peak exactly at the mouse X position
-                if(isTop) {
-                    path.setAttribute('d', `M0,0 L100,0 L100,10 Q${x},25 0,10 Z`);
-                } else {
-                    path.setAttribute('d', `M0,10 L100,10 L100,20 L0,20 Q${x},-5 0,10 Z`);
-                }
-            });
+        // Function to create the 'allergic reaction' curve at mouse X
+        const updateCurve = (e, path, isTop) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 1000;
+            
+            if (isTop) {
+                // Bulge downwards
+                path.setAttribute('d', `M0,0 L1000,0 L1000,60 Q${x},120 0,60 Z`);
+            } else {
+                // Bulge upwards
+                path.setAttribute('d', `M0,40 L1000,40 L1000,100 L0,100 Q${x},-20 0,40 Z`);
+            }
+        };
 
-            bar.addEventListener('mouseleave', () => {
-                // Return to flat/subtle curve when mouse leaves
-                if(isTop) {
-                    path.setAttribute('d', "M0,0 L100,0 L100,15 Q50,15 0,15 Z");
-                } else {
-                    path.setAttribute('d', "M0,5 L100,5 L100,20 L0,20 Q50,5 0,5 Z");
-                }
-            });
-        });
+        const resetCurve = (path, isTop) => {
+            if (isTop) {
+                path.setAttribute('d', "M0,0 L1000,0 L1000,80 Q500,80 0,80 Z");
+            } else {
+                path.setAttribute('d', "M0,20 L1000,20 L1000,100 L0,100 Q500,20 0,20 Z");
+            }
+        };
+
+        topTrigger.addEventListener('mousemove', (e) => updateCurve(e, topPath, true));
+        topTrigger.addEventListener('mouseleave', () => resetCurve(topPath, true));
+
+        bottomTrigger.addEventListener('mousemove', (e) => updateCurve(e, bottomPath, false));
+        bottomTrigger.addEventListener('mouseleave', () => resetCurve(bottomPath, false));
     </script>
 </body>
 </html>
