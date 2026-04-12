@@ -3,33 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vimeo Full Width</title>
+    <title>Organic UI Video Background</title>
     <style>
-        /* Remove default spacing and allow vertical scrolling if needed */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: #000;
         }
 
-        /* Container spans 100% of the width. 
-           aspect-ratio ensures the height scales perfectly with the width.
-        */
+        /* 1. Video Container - Always Full Width */
         .video-container {
-            width: 100%;
-            aspect-ratio: 16 / 9; 
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* The iframe fills the container completely */
-        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            z-index: 0;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
             border: none;
+        }
+
+        /* 2. SVG Bar Styling */
+        .bar-container {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 200px; /* Area where the bar moves */
+            z-index: 10;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .top-bar { top: 0; transform: translateY(-20px); }
+        .bottom-bar { bottom: 0; transform: translateY(20px); }
+
+        /* Push away on hover */
+        .top-bar:hover { transform: translateY(-80px); }
+        .bottom-bar:hover { transform: translateY(80px); }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            fill: #ff0055; /* Match your pink sample color */
+        }
+
+        /* The "Allergic Reaction" - Path transition */
+        path {
+            transition: d 0.4s ease;
+        }
+
+        /* When hovering the container, change the path to be more "rounded" */
+        .bar-container:hover path {
+            d: path("M0,0 L100,0 C80,50 20,50 0,0 Z"); /* This is a placeholder for the curve logic */
         }
     </style>
 </head>
@@ -37,11 +68,55 @@
 
     <div class="video-container">
         <iframe 
-            src="https://player.vimeo.com/video/1182375605?background=1&autopause=0" 
+            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" 
             allow="autoplay; fullscreen" 
             allowfullscreen>
         </iframe>
     </div>
 
+    <div class="bar-container top-bar">
+        <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+            <path d="M0,0 L100,0 L100,15 Q50,15 0,15 Z" />
+        </svg>
+    </div>
+
+    <div class="bar-container bottom-bar">
+        <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+            <path d="M0,5 L100,5 L100,20 L0,20 Q50,5 0,5 Z" />
+        </svg>
+    </div>
+
+    <script>
+        // Optional: For a true "allergic reaction" where it rounds specifically 
+        // WHERE the mouse is, we can update the SVG path via JavaScript.
+        
+        const bars = document.querySelectorAll('.bar-container');
+        
+        bars.forEach(bar => {
+            const path = bar.querySelector('path');
+            const isTop = bar.classList.contains('top-bar');
+
+            bar.addEventListener('mousemove', (e) => {
+                const rect = bar.getBoundingClientRect();
+                const x = (e.clientX / rect.width) * 100; // Get percentage of mouse position
+                
+                // Redraw the curve to peak exactly at the mouse X position
+                if(isTop) {
+                    path.setAttribute('d', `M0,0 L100,0 L100,10 Q${x},25 0,10 Z`);
+                } else {
+                    path.setAttribute('d', `M0,10 L100,10 L100,20 L0,20 Q${x},-5 0,10 Z`);
+                }
+            });
+
+            bar.addEventListener('mouseleave', () => {
+                // Return to flat/subtle curve when mouse leaves
+                if(isTop) {
+                    path.setAttribute('d', "M0,0 L100,0 L100,15 Q50,15 0,15 Z");
+                } else {
+                    path.setAttribute('d', "M0,5 L100,5 L100,20 L0,20 Q50,5 0,5 Z");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
