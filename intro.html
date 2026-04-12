@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic Wave Avoidance</title>
+    <title>Organic Fluid Wave UI</title>
     <style>
         body, html {
             margin: 0;
@@ -31,20 +31,28 @@
             display: block;
         }
 
+        /* The bar is lower/centered by default, and lifts up on hover */
         .bar-trigger {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 200px;
+            height: 180px;
             z-index: 10;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .top-trigger { top: 0; }
-        .bottom-trigger { bottom: 0; }
+        .top-trigger { 
+            top: 0; 
+            transform: translateY(0px); /* Default position closer to center */
+        }
+        .bottom-trigger { 
+            bottom: 0; 
+            transform: translateY(0px); 
+        }
 
-        .top-trigger:hover { transform: translateY(-20px); }
-        .bottom-trigger:hover { transform: translateY(20px); }
+        /* Lift the bar AWAY from the pointer as it enters the zone */
+        .top-trigger:hover { transform: translateY(-40px); }
+        .bottom-trigger:hover { transform: translateY(40px); }
 
         svg {
             width: 100%;
@@ -54,7 +62,7 @@
         }
 
         path {
-            transition: d 0.15s ease-out;
+            transition: d 0.2s ease-out; /* Smooth wave following */
         }
     </style>
 </head>
@@ -92,34 +100,25 @@
                 const rect = trigger.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 1000;
                 
-                // radius: Doubled the width as requested (was 60, now 120)
-                const r = 120; 
-                const d = 50;  // Vertical depth of the push
-                const dip = 15; // How much the sides "pull down"
+                // r: Radius of the wave influence (Wide and soft)
+                // d: Peak height of the avoidance curve
+                const r = 250; 
+                const d = 45; 
 
                 if (isTop) {
-                    // M0,0 L1000,0 L1000,100 -> Flat part
-                    // L${x + r},100 -> Start of the bend
-                    // First C: Pulls down slightly (100 + dip)
-                    // Second C: Pushes up at center (100 - d)
-                    // Third C: Pulls down slightly on other side (100 + dip)
+                    // Smooth Bell Curve Path
                     path.setAttribute('d', `
                         M0,0 L1000,0 L1000,100 
                         L${x + r},100 
-                        C${x + r * 0.7},100 ${x + r * 0.5},${100 + dip} ${x + r * 0.3},${100 + dip}
-                        C${x + r * 0.1},${100 + dip} ${x + r * 0.1},${100 - d} ${x},${100 - d}
-                        C${x - r * 0.1},${100 - d} ${x - r * 0.1},${100 + dip} ${x - r * 0.3},${100 + dip}
-                        C${x - r * 0.5},${100 + dip} ${x - r * 0.7},100 ${x - r},100
+                        C${x + r/2},100 ${x + r/3},${100 - d} ${x},${100 - d}
+                        C${x - r/3},${100 - d} ${x - r/2},100 ${x - r},100
                         L0,100 Z
                     `);
                 } else {
-                    // Reversed logic for the bottom bar
                     path.setAttribute('d', `
                         M0,50 L${x - r},50 
-                        C${x - r * 0.7},50 ${x - r * 0.5},${50 - dip} ${x - r * 0.3},${50 - dip}
-                        C${x - r * 0.1},${50 - dip} ${x - r * 0.1},${50 + d} ${x},${50 + d}
-                        C${x + r * 0.1},${50 + d} ${x + r * 0.1},${50 - dip} ${x + r * 0.3},${50 - dip}
-                        C${x + r * 0.5},${50 - dip} ${x + r * 0.7},50 ${x + r},50
+                        C${x - r/2},50 ${x - r/3},${50 + d} ${x},${50 + d}
+                        C${x + r/3},${50 + d} ${x + r/2},50 ${x + r},50
                         L1000,50 L1000,150 L0,150 Z
                     `);
                 }
