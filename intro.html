@@ -3,77 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vimeo Fullscreen Background</title>
+    <title>Vimeo Full Width</title>
     <style>
-        /* Reset margins and ensure full height */
+        /* Remove default spacing and allow vertical scrolling if needed */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
             background-color: #000;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* 1. The Video Layer (Stays behind everything) */
-        .video-background {
-            position: fixed; /* Use fixed to keep it locked to the viewport */
-            top: 0;
-            left: 0;
+        /* Container spans 100% of the width. 
+           aspect-ratio ensures the height scales perfectly with the width.
+        */
+        .video-container {
             width: 100%;
-            height: 100%;
-            z-index: -1; /* Push to the back */
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .video-background iframe {
-            width: 100vw;
-            height: 56.25vw; /* Custom math for 16:9 ratio */
-            min-height: 100vh;
-            min-width: 177.77vh; 
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: none;
-        }
-
-        /* 2. The Content Layer (Sits on top of the video) */
-        .content-overlay {
-            position: relative;
-            z-index: 1; /* Pull to the front */
-            height: 100vh;
+            aspect-ratio: 16 / 9; 
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none; /* Allows clicks to pass through if needed */
         }
 
-        h1 {
-            color: white;
-            font-size: 4rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Makes text readable over video */
-            pointer-events: auto; /* Re-enables interaction for the text itself */
+        /* The iframe fills the container completely */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="video-background">
+    <div class="video-container">
         <iframe 
-            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0&loop=1&muted=1" 
+            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" 
             allow="autoplay; fullscreen" 
             allowfullscreen>
         </iframe>
-    </div>
-
-    <div class="content-overlay">
-        <h1>Full Screen Video</h1>
     </div>
 
 </body>
