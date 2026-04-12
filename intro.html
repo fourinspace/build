@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic Radius Avoidance</title>
+    <title>Organic Wave Avoidance</title>
     <style>
         body, html {
             margin: 0;
@@ -35,7 +35,7 @@
             position: fixed;
             left: 0;
             width: 100%;
-            height: 180px;
+            height: 200px;
             z-index: 10;
             transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
@@ -43,7 +43,6 @@
         .top-trigger { top: 0; }
         .bottom-trigger { bottom: 0; }
 
-        /* Moves the entire bar away from the edge when close */
         .top-trigger:hover { transform: translateY(-20px); }
         .bottom-trigger:hover { transform: translateY(20px); }
 
@@ -55,7 +54,7 @@
         }
 
         path {
-            transition: d 0.1s linear; /* Fast response for a tight feel */
+            transition: d 0.15s ease-out;
         }
     </style>
 </head>
@@ -93,26 +92,34 @@
                 const rect = trigger.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 1000;
                 
-                // radius: how wide the "bend" is. 
-                // depth: how deep the curve goes.
-                const r = 60; 
-                const d = 40; 
+                // radius: Doubled the width as requested (was 60, now 120)
+                const r = 120; 
+                const d = 50;  // Vertical depth of the push
+                const dip = 15; // How much the sides "pull down"
 
                 if (isTop) {
-                    // C (Control Point 1) (Control Point 2) (End Point)
-                    // We create a "U" shape around the X coordinate
+                    // M0,0 L1000,0 L1000,100 -> Flat part
+                    // L${x + r},100 -> Start of the bend
+                    // First C: Pulls down slightly (100 + dip)
+                    // Second C: Pushes up at center (100 - d)
+                    // Third C: Pulls down slightly on other side (100 + dip)
                     path.setAttribute('d', `
                         M0,0 L1000,0 L1000,100 
                         L${x + r},100 
-                        C${x + r/2},100 ${x + r/2},${100 - d} ${x},${100 - d}
-                        C${x - r/2},${100 - d} ${x - r/2},100 ${x - r},100
+                        C${x + r * 0.7},100 ${x + r * 0.5},${100 + dip} ${x + r * 0.3},${100 + dip}
+                        C${x + r * 0.1},${100 + dip} ${x + r * 0.1},${100 - d} ${x},${100 - d}
+                        C${x - r * 0.1},${100 - d} ${x - r * 0.1},${100 + dip} ${x - r * 0.3},${100 + dip}
+                        C${x - r * 0.5},${100 + dip} ${x - r * 0.7},100 ${x - r},100
                         L0,100 Z
                     `);
                 } else {
+                    // Reversed logic for the bottom bar
                     path.setAttribute('d', `
                         M0,50 L${x - r},50 
-                        C${x - r/2},50 ${x - r/2},${50 + d} ${x},${50 + d}
-                        C${x + r/2},${50 + d} ${x + r/2},50 ${x + r},50
+                        C${x - r * 0.7},50 ${x - r * 0.5},${50 - dip} ${x - r * 0.3},${50 - dip}
+                        C${x - r * 0.1},${50 - dip} ${x - r * 0.1},${50 + d} ${x},${50 + d}
+                        C${x + r * 0.1},${50 + d} ${x + r * 0.1},${50 - dip} ${x + r * 0.3},${50 - dip}
+                        C${x + r * 0.5},${50 - dip} ${x + r * 0.7},50 ${x + r},50
                         L1000,50 L1000,150 L0,150 Z
                     `);
                 }
