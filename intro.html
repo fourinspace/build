@@ -3,47 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vimeo Loop Background</title>
+    <title>Vimeo Fullscreen Background</title>
     <style>
-        /* 1. Center everything in the middle of the screen */
+        /* Remove default margins and hide scrollbars */
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
-            overflow: hidden;
-        }
-
-        /* 2. Scalable Container */
-        .video-container {
-            position: relative;
-            width: 80vw; /* Scales with the viewport width */
-            aspect-ratio: 16 / 9; /* Maintains video proportions */
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 3. The Video Frame */
-        iframe {
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* The container spans the entire browser window */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none; /* Allows clicking on elements above it */
+        }
+
+        /* Scale the iframe to cover the screen while maintaining center alignment */
+        .video-background iframe {
+            width: 100vw;
+            height: 56.25vw; /* 100/17.77 (aspect ratio 16:9) */
+            min-height: 100vh;
+            min-width: 177.77vh; /* 100 * 1.77 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             border: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="video-container">
+    <div class="video-background">
         <iframe 
-            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" 
+            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0&loop=1&muted=1" 
             allow="autoplay; fullscreen" 
             allowfullscreen>
         </iframe>
+    </div>
+
+    <div style="position: relative; z-index: 1; color: white; text-align: center; margin-top: 20vh; font-family: sans-serif;">
+        <h1>Full Screen Video</h1>
     </div>
 
 </body>
