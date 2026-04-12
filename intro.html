@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic Avoidance UI</title>
+    <title>Organic Radius Avoidance</title>
     <style>
         body, html {
             margin: 0;
@@ -14,7 +14,6 @@
             background-color: #000;
         }
 
-        /* Video Container - Center Scaled */
         .video-container {
             position: absolute;
             top: 50%;
@@ -32,32 +31,31 @@
             display: block;
         }
 
-        /* Bar Containers */
         .bar-trigger {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 150px; /* Trigger height */
+            height: 180px;
             z-index: 10;
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .top-trigger { top: 0; }
         .bottom-trigger { bottom: 0; }
 
-        /* General Bar Movement: Push the whole bar away on hover */
-        .top-trigger:hover { transform: translateY(-30px); }
-        .bottom-trigger:hover { transform: translateY(30px); }
+        /* Moves the entire bar away from the edge when close */
+        .top-trigger:hover { transform: translateY(-20px); }
+        .bottom-trigger:hover { transform: translateY(20px); }
 
         svg {
             width: 100%;
             height: 100%;
             display: block;
-            fill: #ff0055; /* The pink from your sample */
+            fill: #ff0055;
         }
 
         path {
-            transition: d 0.15s ease-out; /* Fast reaction to follow mouse */
+            transition: d 0.1s linear; /* Fast response for a tight feel */
         }
     </style>
 </head>
@@ -72,13 +70,13 @@
 
     <div class="bar-trigger top-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="topPath" d="M0,0 L1000,0 L1000,100 Q500,100 0,100 Z" />
+            <path id="topPath" d="M0,0 L1000,0 L1000,100 L0,100 Z" />
         </svg>
     </div>
 
     <div class="bar-trigger bottom-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="bottomPath" d="M0,50 L1000,50 L1000,150 L0,150 Q500,50 0,50 Z" />
+            <path id="bottomPath" d="M0,50 L1000,50 L1000,150 L0,150 Z" />
         </svg>
     </div>
 
@@ -93,24 +91,38 @@
 
             trigger.addEventListener('mousemove', (e) => {
                 const rect = trigger.getBoundingClientRect();
-                // Calculate mouse X as a percentage of the 1000 unit viewBox
                 const x = ((e.clientX - rect.left) / rect.width) * 1000;
                 
+                // radius: how wide the "bend" is. 
+                // depth: how deep the curve goes.
+                const r = 60; 
+                const d = 40; 
+
                 if (isTop) {
-                    // "Avoidance": The curve point moves UP where the mouse is
-                    path.setAttribute('d', `M0,0 L1000,0 L1000,100 Q${x},20 0,100 Z`);
+                    // C (Control Point 1) (Control Point 2) (End Point)
+                    // We create a "U" shape around the X coordinate
+                    path.setAttribute('d', `
+                        M0,0 L1000,0 L1000,100 
+                        L${x + r},100 
+                        C${x + r/2},100 ${x + r/2},${100 - d} ${x},${100 - d}
+                        C${x - r/2},${100 - d} ${x - r/2},100 ${x - r},100
+                        L0,100 Z
+                    `);
                 } else {
-                    // "Avoidance": The curve point moves DOWN where the mouse is
-                    path.setAttribute('d', `M0,50 L1000,50 L1000,150 L0,150 Q${x},130 0,50 Z`);
+                    path.setAttribute('d', `
+                        M0,50 L${x - r},50 
+                        C${x - r/2},50 ${x - r/2},${50 + d} ${x},${50 + d}
+                        C${x + r/2},${50 + d} ${x + r/2},50 ${x + r},50
+                        L1000,50 L1000,150 L0,150 Z
+                    `);
                 }
             });
 
             trigger.addEventListener('mouseleave', () => {
-                // Reset to flat/neutral state
                 if (isTop) {
-                    path.setAttribute('d', "M0,0 L1000,0 L1000,100 Q500,100 0,100 Z");
+                    path.setAttribute('d', "M0,0 L1000,0 L1000,100 L0,100 Z");
                 } else {
-                    path.setAttribute('d', "M0,50 L1000,50 L1000,150 L0,150 Q500,50 0,50 Z");
+                    path.setAttribute('d', "M0,50 L1000,50 L1000,150 L0,150 Z");
                 }
             });
         });
