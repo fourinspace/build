@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic UI Full Width</title>
+    <title>Organic Avoidance UI</title>
     <style>
         body, html {
             margin: 0;
@@ -14,7 +14,7 @@
             background-color: #000;
         }
 
-        /* 1. Video fills the width, maintains 16:9 ratio */
+        /* Video Container - Center Scaled */
         .video-container {
             position: absolute;
             top: 50%;
@@ -22,6 +22,7 @@
             width: 100%;
             transform: translateY(-50%);
             z-index: 0;
+            pointer-events: none;
         }
 
         .video-container iframe {
@@ -31,32 +32,32 @@
             display: block;
         }
 
-        /* 2. Interactive Bar Containers */
+        /* Bar Containers */
         .bar-trigger {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 25vh; /* Large trigger area for the pointer */
+            height: 150px; /* Trigger height */
             z-index: 10;
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .top-trigger { top: 0; align-items: flex-start; }
-        .bottom-trigger { bottom: 0; align-items: flex-end; }
+        .top-trigger { top: 0; }
+        .bottom-trigger { bottom: 0; }
 
-        /* Movement: Push away when pointer comes close */
-        .top-trigger:hover { transform: translateY(-40px); }
-        .bottom-trigger:hover { transform: translateY(40px); }
+        /* General Bar Movement: Push the whole bar away on hover */
+        .top-trigger:hover { transform: translateY(-30px); }
+        .bottom-trigger:hover { transform: translateY(30px); }
 
         svg {
             width: 100%;
-            height: 120px; /* Height of the pink bar */
+            height: 100%;
+            display: block;
             fill: #ff0055; /* The pink from your sample */
         }
 
         path {
-            transition: d 0.3s ease-out; /* Smooths the 'allergic' rounding */
+            transition: d 0.15s ease-out; /* Fast reaction to follow mouse */
         }
     </style>
 </head>
@@ -65,56 +66,54 @@
     <div class="video-container">
         <iframe 
             src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" 
-            allow="autoplay; fullscreen" 
-            allowfullscreen>
+            allow="autoplay; fullscreen">
         </iframe>
     </div>
 
     <div class="bar-trigger top-trigger">
-        <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
-            <path id="topPath" d="M0,0 L1000,0 L1000,80 Q500,80 0,80 Z" />
+        <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
+            <path id="topPath" d="M0,0 L1000,0 L1000,100 Q500,100 0,100 Z" />
         </svg>
     </div>
 
     <div class="bar-trigger bottom-trigger">
-        <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
-            <path id="bottomPath" d="M0,20 L1000,20 L1000,100 L0,100 Q500,20 0,20 Z" />
+        <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
+            <path id="bottomPath" d="M0,50 L1000,50 L1000,150 L0,150 Q500,50 0,50 Z" />
         </svg>
     </div>
 
     <script>
         const topPath = document.getElementById('topPath');
         const bottomPath = document.getElementById('bottomPath');
-        const topTrigger = document.querySelector('.top-trigger');
-        const bottomTrigger = document.querySelector('.bottom-trigger');
+        const triggers = document.querySelectorAll('.bar-trigger');
 
-        // Function to create the 'allergic reaction' curve at mouse X
-        const updateCurve = (e, path, isTop) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 1000;
-            
-            if (isTop) {
-                // Bulge downwards
-                path.setAttribute('d', `M0,0 L1000,0 L1000,60 Q${x},120 0,60 Z`);
-            } else {
-                // Bulge upwards
-                path.setAttribute('d', `M0,40 L1000,40 L1000,100 L0,100 Q${x},-20 0,40 Z`);
-            }
-        };
+        triggers.forEach(trigger => {
+            const isTop = trigger.classList.contains('top-trigger');
+            const path = isTop ? topPath : bottomPath;
 
-        const resetCurve = (path, isTop) => {
-            if (isTop) {
-                path.setAttribute('d', "M0,0 L1000,0 L1000,80 Q500,80 0,80 Z");
-            } else {
-                path.setAttribute('d', "M0,20 L1000,20 L1000,100 L0,100 Q500,20 0,20 Z");
-            }
-        };
+            trigger.addEventListener('mousemove', (e) => {
+                const rect = trigger.getBoundingClientRect();
+                // Calculate mouse X as a percentage of the 1000 unit viewBox
+                const x = ((e.clientX - rect.left) / rect.width) * 1000;
+                
+                if (isTop) {
+                    // "Avoidance": The curve point moves UP where the mouse is
+                    path.setAttribute('d', `M0,0 L1000,0 L1000,100 Q${x},20 0,100 Z`);
+                } else {
+                    // "Avoidance": The curve point moves DOWN where the mouse is
+                    path.setAttribute('d', `M0,50 L1000,50 L1000,150 L0,150 Q${x},130 0,50 Z`);
+                }
+            });
 
-        topTrigger.addEventListener('mousemove', (e) => updateCurve(e, topPath, true));
-        topTrigger.addEventListener('mouseleave', () => resetCurve(topPath, true));
-
-        bottomTrigger.addEventListener('mousemove', (e) => updateCurve(e, bottomPath, false));
-        bottomTrigger.addEventListener('mouseleave', () => resetCurve(bottomPath, false));
+            trigger.addEventListener('mouseleave', () => {
+                // Reset to flat/neutral state
+                if (isTop) {
+                    path.setAttribute('d', "M0,0 L1000,0 L1000,100 Q500,100 0,100 Z");
+                } else {
+                    path.setAttribute('d', "M0,50 L1000,50 L1000,150 L0,150 Q500,50 0,50 Z");
+                }
+            });
+        });
     </script>
 </body>
 </html>
