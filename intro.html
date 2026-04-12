@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic Breathing UI</title>
+    <title>Organic Breathing Wave UI</title>
     <style>
         body, html {
             margin: 0;
@@ -31,7 +31,7 @@
             display: block;
         }
 
-        /* Bars sit closer to the center by default */
+        /* Default position sits closer to the center for better visibility of the push */
         .bar-trigger {
             position: fixed;
             left: 0;
@@ -41,35 +41,18 @@
             transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .top-trigger { 
-            top: 0; 
-            transform: translateY(20px); /* Pushed down toward center */
-        }
-        .bottom-trigger { 
-            bottom: 0; 
-            transform: translateY(-20px); /* Pushed up toward center */
-        }
+        .top-trigger { top: 0; transform: translateY(30px); }
+        .bottom-trigger { bottom: 0; transform: translateY(-30px); }
 
-        /* Retreat away from the pointer */
-        .top-trigger:hover { transform: translateY(-60px); }
-        .bottom-trigger:hover { transform: translateY(60px); }
+        /* Global push-away when pointer enters the zone */
+        .top-trigger:hover { transform: translateY(-40px); }
+        .bottom-trigger:hover { transform: translateY(40px); }
 
         svg {
             width: 100%;
             height: 100%;
             display: block;
             fill: #ff0055;
-        }
-
-        /* The Idle Breathing Animation */
-        @keyframes breathe {
-            0%, 100% { d: path("M0,0 L1000,0 L1000,100 Q500,110 0,100 Z"); }
-            50% { d: path("M0,0 L1000,0 L1000,100 Q500,125 0,100 Z"); }
-        }
-
-        /* Smooth transition for the path when mouse moves */
-        path {
-            transition: d 0.3s ease-out;
         }
     </style>
 </head>
@@ -84,60 +67,78 @@
 
     <div class="bar-trigger top-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="topPath" d="M0,0 L1000,0 L1000,110 Q500,110 0,110 Z" />
+            <path id="topPath" d="M0,0 L1000,0 L1000,100 L0,100 Z" />
         </svg>
     </div>
 
     <div class="bar-trigger bottom-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="bottomPath" d="M0,40 L1000,40 L1000,150 L0,150 Q500,40 0,40 Z" />
+            <path id="bottomPath" d="M0,50 L1000,50 L1000,150 L0,150 Z" />
         </svg>
     </div>
 
     <script>
         const topPath = document.getElementById('topPath');
         const bottomPath = document.getElementById('bottomPath');
-        const triggers = document.querySelectorAll('.bar-trigger');
+        
+        let mouseX = -1000; // Keep off-screen initially
+        let isHovering = false;
+        let time = 0;
 
-        // Parameters for the waves
-        const r = 300; // Large radius for organic feel
-        const pushDepth = 60; // How deep the pointer pushes
-
-        triggers.forEach(trigger => {
-            const isTop = trigger.classList.contains('top-trigger');
-            const path = isTop ? topPath : bottomPath;
-
-            trigger.addEventListener('mousemove', (e) => {
-                const rect = trigger.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 1000;
-                
-                if (isTop) {
-                    path.setAttribute('d', `
-                        M0,0 L1000,0 L1000,100 
-                        L${x + r},100 
-                        C${x + r/2},100 ${x + r/4},${100 - pushDepth} ${x},${100 - pushDepth}
-                        C${x - r/4},${100 - pushDepth} ${x - r/2},100 ${x - r},100
-                        L0,100 Z
-                    `);
-                } else {
-                    path.setAttribute('d', `
-                        M0,50 L${x - r},50 
-                        C${x - r/2},50 ${x - r/4},${50 + pushDepth} ${x},${50 + pushDepth}
-                        C${x + r/4},${50 + pushDepth} ${x + r/2},50 ${x + r},50
-                        L1000,50 L1000,150 L0,150 Z
-                    `);
-                }
-            });
-
-            trigger.addEventListener('mouseleave', () => {
-                // Return to a soft, natural default curve
-                if (isTop) {
-                    path.setAttribute('d', "M0,0 L1000,0 L1000,110 Q500,110 0,110 Z");
-                } else {
-                    path.setAttribute('d', "M0,40 L1000,40 L1000,150 L0,150 Q500,40 0,40 Z");
-                }
-            });
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 1000;
         });
+
+        document.querySelectorAll('.bar-trigger').forEach(trig => {
+            trig.addEventListener('mouseenter', () => isHovering = true);
+            trig.addEventListener('mouseleave', () => isHovering = false);
+        });
+
+        function animate() {
+            time += 0.02; // Speed of the automatic wave
+            
+            // Automatic Wave Calculation (Sinusoidal)
+            const autoWaveHeight = Math.sin(time) * 15; 
+            const autoWaveX = 500 + Math.cos(time * 0.5) * 200; // The automatic wave moves side to side
+
+            // Render Top Bar
+            renderPath(topPath, true, autoWaveX, autoWaveHeight);
+            // Render Bottom Bar
+            renderPath(bottomPath, false, autoWaveX, autoWaveHeight);
+
+            requestAnimationFrame(animate);
+        }
+
+        function renderPath(path, isTop, autoX, autoH) {
+            const baseLine = isTop ? 100 : 50;
+            const r = 250; // Radius of the wave
+            const pushDepth = isHovering ? 60 : 0;
+            
+            // We blend the automatic wave with the cursor push
+            // If hovering, use mouseX, otherwise influence by autoX
+            const targetX = isHovering ? mouseX : autoX;
+            const targetH = isHovering ? pushDepth : autoH;
+
+            // Smooth cubic bezier that creates a 'dip and rise'
+            if (isTop) {
+                path.setAttribute('d', `
+                    M0,0 L1000,0 L1000,${baseLine} 
+                    L${targetX + r},${baseLine} 
+                    C${targetX + r/2},${baseLine} ${targetX + r/4},${baseLine - targetH} ${targetX},${baseLine - targetH}
+                    C${targetX - r/4},${baseLine - targetH} ${targetX - r/2},${baseLine} ${targetX - r},${baseLine}
+                    L0,${baseLine} Z
+                `);
+            } else {
+                path.setAttribute('d', `
+                    M0,${baseLine} L${targetX - r},${baseLine} 
+                    C${targetX - r/2},${baseLine} ${targetX - r/4},${baseLine + targetH} ${targetX},${baseLine + targetH}
+                    C${targetX + r/4},${baseLine + targetH} ${targetX + r/2},${baseLine} ${targetX + r},${baseLine}
+                    L1000,${baseLine} L1000,150 L0,150 Z
+                `);
+            }
+        }
+
+        animate();
     </script>
 </body>
 </html>
