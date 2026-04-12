@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organic Fluid Wave UI</title>
+    <title>Organic Breathing UI</title>
     <style>
         body, html {
             margin: 0;
@@ -31,28 +31,28 @@
             display: block;
         }
 
-        /* The bar is lower/centered by default, and lifts up on hover */
+        /* Bars sit closer to the center by default */
         .bar-trigger {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 180px;
+            height: 250px;
             z-index: 10;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .top-trigger { 
             top: 0; 
-            transform: translateY(0px); /* Default position closer to center */
+            transform: translateY(20px); /* Pushed down toward center */
         }
         .bottom-trigger { 
             bottom: 0; 
-            transform: translateY(0px); 
+            transform: translateY(-20px); /* Pushed up toward center */
         }
 
-        /* Lift the bar AWAY from the pointer as it enters the zone */
-        .top-trigger:hover { transform: translateY(-40px); }
-        .bottom-trigger:hover { transform: translateY(40px); }
+        /* Retreat away from the pointer */
+        .top-trigger:hover { transform: translateY(-60px); }
+        .bottom-trigger:hover { transform: translateY(60px); }
 
         svg {
             width: 100%;
@@ -61,8 +61,15 @@
             fill: #ff0055;
         }
 
+        /* The Idle Breathing Animation */
+        @keyframes breathe {
+            0%, 100% { d: path("M0,0 L1000,0 L1000,100 Q500,110 0,100 Z"); }
+            50% { d: path("M0,0 L1000,0 L1000,100 Q500,125 0,100 Z"); }
+        }
+
+        /* Smooth transition for the path when mouse moves */
         path {
-            transition: d 0.2s ease-out; /* Smooth wave following */
+            transition: d 0.3s ease-out;
         }
     </style>
 </head>
@@ -77,13 +84,13 @@
 
     <div class="bar-trigger top-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="topPath" d="M0,0 L1000,0 L1000,100 L0,100 Z" />
+            <path id="topPath" d="M0,0 L1000,0 L1000,110 Q500,110 0,110 Z" />
         </svg>
     </div>
 
     <div class="bar-trigger bottom-trigger">
         <svg viewBox="0 0 1000 150" preserveAspectRatio="none">
-            <path id="bottomPath" d="M0,50 L1000,50 L1000,150 L0,150 Z" />
+            <path id="bottomPath" d="M0,40 L1000,40 L1000,150 L0,150 Q500,40 0,40 Z" />
         </svg>
     </div>
 
@@ -91,6 +98,10 @@
         const topPath = document.getElementById('topPath');
         const bottomPath = document.getElementById('bottomPath');
         const triggers = document.querySelectorAll('.bar-trigger');
+
+        // Parameters for the waves
+        const r = 300; // Large radius for organic feel
+        const pushDepth = 60; // How deep the pointer pushes
 
         triggers.forEach(trigger => {
             const isTop = trigger.classList.contains('top-trigger');
@@ -100,35 +111,30 @@
                 const rect = trigger.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 1000;
                 
-                // r: Radius of the wave influence (Wide and soft)
-                // d: Peak height of the avoidance curve
-                const r = 250; 
-                const d = 45; 
-
                 if (isTop) {
-                    // Smooth Bell Curve Path
                     path.setAttribute('d', `
                         M0,0 L1000,0 L1000,100 
                         L${x + r},100 
-                        C${x + r/2},100 ${x + r/3},${100 - d} ${x},${100 - d}
-                        C${x - r/3},${100 - d} ${x - r/2},100 ${x - r},100
+                        C${x + r/2},100 ${x + r/4},${100 - pushDepth} ${x},${100 - pushDepth}
+                        C${x - r/4},${100 - pushDepth} ${x - r/2},100 ${x - r},100
                         L0,100 Z
                     `);
                 } else {
                     path.setAttribute('d', `
                         M0,50 L${x - r},50 
-                        C${x - r/2},50 ${x - r/3},${50 + d} ${x},${50 + d}
-                        C${x + r/3},${50 + d} ${x + r/2},50 ${x + r},50
+                        C${x - r/2},50 ${x - r/4},${50 + pushDepth} ${x},${50 + pushDepth}
+                        C${x + r/4},${50 + pushDepth} ${x + r/2},50 ${x + r},50
                         L1000,50 L1000,150 L0,150 Z
                     `);
                 }
             });
 
             trigger.addEventListener('mouseleave', () => {
+                // Return to a soft, natural default curve
                 if (isTop) {
-                    path.setAttribute('d', "M0,0 L1000,0 L1000,100 L0,100 Z");
+                    path.setAttribute('d', "M0,0 L1000,0 L1000,110 Q500,110 0,110 Z");
                 } else {
-                    path.setAttribute('d', "M0,50 L1000,50 L1000,150 L0,150 Z");
+                    path.setAttribute('d', "M0,40 L1000,40 L1000,150 L0,150 Q500,40 0,40 Z");
                 }
             });
         });
