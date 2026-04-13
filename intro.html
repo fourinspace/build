@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluid Organic Interface</title>
+    <title>Flat Intersecting Video Bars</title>
     <style>
         body, html {
             margin: 0;
@@ -14,6 +14,7 @@
             background-color: #000;
         }
 
+        /* Video Container - Flat and Stationary */
         .video-container {
             position: absolute;
             top: 50%;
@@ -21,6 +22,9 @@
             width: 100%;
             transform: translateY(-50%);
             z-index: 0;
+            /* 1. Remove the wave behavior by removing the border-radius */
+            border-radius: 0; 
+            overflow: hidden;
             pointer-events: none;
         }
 
@@ -31,27 +35,39 @@
             display: block;
         }
 
-        .bar-trigger {
+        /* 2. Update the color to match the sample image: #c64c9f */
+        .bar {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 30vh;
+            height: 120px;
+            background-color: #c64c9f;
             z-index: 10;
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .top-trigger { top: 0; transform: translateY(30px); }
-        .bottom-trigger { bottom: 0; transform: translateY(-30px); }
+        .top-bar { top: 0; }
+        .bottom-bar { 
+            bottom: 0; 
+            /* 1. Remove the organic wave bend by removing the transform-origin */
+            transform-origin: center bottom; 
+        }
 
-        .top-trigger:hover { transform: translateY(-40px); }
-        .bottom-trigger:hover { transform: translateY(40px); }
-
-        svg {
+        /* Push the entire bars away when pointer is in the zone */
+        /* Increased the trigger area (padding) to make it responsive */
+        .trigger-zone {
+            position: fixed;
+            left: 0;
             width: 100%;
-            height: 100%;
-            display: block;
-            fill: #ff0055;
+            height: 20vh; /* large detection area */
+            z-index: 5;
         }
+
+        .top-trigger { top: 0; }
+        .bottom-trigger { bottom: 0; }
+
+        .top-trigger:hover ~ .top-bar { transform: translateY(-50px); }
+        .bottom-trigger:hover ~ .bottom-bar { transform: translateY(50px); }
     </style>
 </head>
 <body>
@@ -63,89 +79,11 @@
         </iframe>
     </div>
 
-    <div class="bar-trigger top-trigger" id="topTrigger">
-        <svg viewBox="0 0 1000 200" preserveAspectRatio="none">
-            <path id="topPath" d="M0,0 L1000,0 L1000,100 L0,100 Z" />
-        </svg>
-    </div>
+    <div class="trigger-zone top-trigger"></div>
+    <div class="bar top-bar"></div>
 
-    <div class="bar-trigger bottom-trigger" id="bottomTrigger">
-        <svg viewBox="0 0 1000 200" preserveAspectRatio="none">
-            <path id="bottomPath" d="M0,100 L1000,100 L1000,200 L0,200 Z" />
-        </svg>
-    </div>
+    <div class="trigger-zone bottom-trigger"></div>
+    <div class="bar bottom-bar"></div>
 
-    <script>
-        const topPath = document.getElementById('topPath');
-        const bottomPath = document.getElementById('bottomPath');
-        
-        let mouseX = 500;
-        let topActive = false, bottomActive = false;
-        let time = 0;
-
-        // "Smoothed" values for the waves
-        let currentPointerX = 500, currentPointerStrength = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 1000;
-        });
-
-        const setupTrigger = (id, activeVar) => {
-            const el = document.getElementById(id);
-            el.addEventListener('mouseenter', () => { if(id === 'topTrigger') topActive = true; else bottomActive = true; });
-            el.addEventListener('mouseleave', () => { if(id === 'topTrigger') topActive = false; else bottomActive = false; });
-        };
-
-        setupTrigger('topTrigger');
-        setupTrigger('bottomTrigger');
-
-        function animate() {
-            time += 0.015;
-
-            // 1. Auto Wave Params
-            const autoX = 500 + Math.sin(time * 0.4) * 300;
-            const autoH = 25 + Math.sin(time * 0.8) * 15;
-
-            // 2. Pointer Wave Params (with smoothing to prevent flicker)
-            let targetStrength = (topActive || bottomActive) ? 60 : 0;
-            currentPointerStrength += (targetStrength - currentPointerStrength) * 0.1;
-            currentPointerX += (mouseX - currentPointerX) * 0.1;
-
-            // 3. Draw
-            renderFluidWave(topPath, true, autoX, autoH, currentPointerX, currentPointerStrength);
-            renderFluidWave(bottomPath, false, autoX, autoH, currentPointerX, currentPointerStrength);
-
-            requestAnimationFrame(animate);
-        }
-
-        function renderFluidWave(path, isTop, aX, aH, pX, pS) {
-            const base = 100;
-            const r = 280; // Radius of interaction
-            
-            // Logic: We define two control points. 
-            // One is the 'Auto' peak, one is the 'Pointer' peak.
-            // By putting them in one Cubic sequence, they blend naturally.
-            
-            if (isTop) {
-                path.setAttribute('d', `
-                    M0,0 L1000,0 L1000,${base} 
-                    L${Math.max(aX, pX) + r},${base}
-                    C${aX + r/2},${base + aH} ${aX + r/4},${base - aH} ${aX},${base - aH}
-                    C${pX - r/4},${base - pS} ${pX - r/2},${base + pS} ${Math.min(aX, pX) - r},${base}
-                    L0,${base} Z
-                `);
-            } else {
-                path.setAttribute('d', `
-                    M0,${base} 
-                    L${Math.min(aX, pX) - r},${base}
-                    C${aX - r/2},${base - aH} ${aX - r/4},${base + aH} ${aX},${base + aH}
-                    C${pX + r/4},${base + pS} ${pX + r/2},${base - pS} ${Math.max(aX, pX) + r},${base}
-                    L1000,${base} L1000,200 L0,200 Z
-                `);
-            }
-        }
-
-        animate();
-    </script>
 </body>
 </html>
