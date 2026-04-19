@@ -48,8 +48,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px; /* Adjusted gap for smaller button */
+            gap: 20px; 
             pointer-events: none;
+        }
+
+        /* Profile Image Styling */
+        .profile-img {
+            width: 80px; /* Adjusted size for the header image */
+            height: auto;
+            margin-bottom: 10px;
         }
 
         #typewriter-text {
@@ -61,15 +68,15 @@
             letter-spacing: -1px;
         }
 
-        /* Sign-in Button Styling - Scaled to 1/2 size */
+        /* Sign-in Button Styling */
         .signin-btn {
             background-color: #4285f4;
             color: white;
-            padding: 8px 22px; /* Half of original 15px 45px */
-            font-size: 1.1rem;  /* Half of original 2.2rem */
+            padding: 8px 22px;
+            font-size: 1.1rem;
             font-weight: bold;
             border: none;
-            border-radius: 6px; /* Scaled down corner radius */
+            border-radius: 6px;
             cursor: pointer;
             pointer-events: auto;
             transition: background-color 0.2s, transform 0.1s;
@@ -141,9 +148,12 @@
     </div>
 
     <div class="overlay-content">
+        <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky=w1200" alt="Profile" class="profile-img">
+        
         <div>
             <span id="typewriter-text"></span><span class="cursor">&nbsp;</span>
         </div>
+        
         <button class="signin-btn">Sign in</button>
     </div>
 
