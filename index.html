@@ -20,7 +20,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Video Container */
         .video-container {
             position: absolute;
             top: 50%;
@@ -40,7 +39,6 @@
             display: block;
         }
 
-        /* Centered Overlay Container */
         .overlay-content {
             position: fixed;
             top: 50%;
@@ -56,7 +54,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* White Logo on Main Page */
         .main-logo {
             width: 240px;
             height: auto;
@@ -87,7 +84,6 @@
             margin-top: 10px;
         }
 
-        /* The Closing Pink Bars */
         .bar {
             position: fixed;
             left: 0;
@@ -103,18 +99,15 @@
 
         body.content-active .top-bar { transform: translateY(-38vh); }
         body.content-active .bottom-bar { transform: translateY(38vh); }
+        body.bars-closed .top-bar, body.bars-closed .bottom-bar { transform: translateY(0); }
 
-        body.bars-closed .top-bar,
-        body.bars-closed .bottom-bar { transform: translateY(0); }
-
-        /* Login Screen Box - Scaled to 2/3 */
         .login-screen {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 400px; /* Reduced from 600px */
-            height: 300px; /* Reduced from 440px */
+            width: 400px; 
+            height: 300px;
             background-color: #fff;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -123,80 +116,45 @@
             display: none; 
             flex-direction: column;
             box-sizing: border-box;
+            justify-content: center;
+            align-items: center;
         }
 
+        .login-content { width: 100%; height: 100%; display: flex; flex-direction: column; }
         .logo-container { margin-bottom: 20px; }
         .dta-orange-logo { height: 35px; width: auto; }
 
-        /* Skeleton UI Elements */
-        .skeleton-bar-blue {
-            width: 150px;
-            height: 25px;
-            background-color: #8db5e9;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-
-        .skeleton-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .skeleton-circle {
-            width: 20px;
-            height: 20px;
-            background-color: #d1d1d1;
-            border-radius: 50%;
-        }
-
-        .skeleton-bar-grey {
-            width: 160px;
-            height: 15px;
-            background-color: #d1d1d1;
-            border-radius: 8px;
-        }
+        .skeleton-bar-blue { width: 150px; height: 25px; background-color: #8db5e9; border-radius: 12px; margin-bottom: 10px; }
+        .skeleton-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+        .skeleton-circle { width: 20px; height: 20px; background-color: #d1d1d1; border-radius: 50%; }
+        .skeleton-bar-grey { width: 160px; height: 15px; background-color: #d1d1d1; border-radius: 8px; }
 
         .login-input {
-            width: 100%;
-            height: 45px;
-            border: 2px solid #8db5e9;
-            border-radius: 8px;
-            background: transparent;
-            margin-bottom: 25px;
-            padding: 0 15px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
+            width: 100%; height: 45px; border: 2px solid #8db5e9; border-radius: 8px;
+            background: transparent; margin-bottom: 25px; padding: 0 15px; font-size: 1rem;
+            box-sizing: border-box; outline: none;
         }
 
-        .login-bottom {
-            margin-top: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .skeleton-bar-blue-bottom {
-            width: 150px;
-            height: 15px;
-            background-color: #8db5e9;
-            border-radius: 8px;
-        }
+        .login-bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .skeleton-bar-blue-bottom { width: 150px; height: 15px; background-color: #8db5e9; border-radius: 8px; }
 
         .next-btn {
-            background-color: #8db5e9;
-            color: white;
-            border: none;
-            padding: 8px 25px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: 'Arial', sans-serif;
+            background-color: #8db5e9; color: white; border: none; padding: 8px 25px;
+            border-radius: 5px; font-size: 0.9rem; font-weight: bold; cursor: pointer; font-family: 'Arial', sans-serif;
         }
 
+        /* LOADER STYLING */
+        #loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #8db5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 5px; animation: blink 0.7s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
@@ -209,8 +167,8 @@
     </div>
 
     <div class="overlay-content" id="main-ui">
-        <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky=w1200" alt="DTA Logo" class="main-logo">
-        <div><span id="typewriter-text"></span><span class="cursor"> </span></div>
+        <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo" class="main-logo">
+        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
         <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
@@ -218,27 +176,25 @@
     <div class="bar bottom-bar"></div>
 
     <div class="login-screen" id="login-box">
-        <div class="logo-container">
-            <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-orange-logo">
+        <div id="login-form-content" class="login-content">
+            <div class="logo-container">
+                <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo" class="dta-orange-logo" style="filter: hue-rotate(180deg);">
+            </div>
+            <div class="skeleton-bar-blue"></div>
+            <div class="skeleton-meta">
+                <div class="skeleton-circle"></div>
+                <div class="skeleton-bar-grey"></div>
+            </div>
+            <input type="password" id="pass-field" class="login-input" autocomplete="off">
+            <div class="login-bottom">
+                <div class="skeleton-bar-blue-bottom"></div>
+                <button class="next-btn" id="next-action">Next</button>
+            </div>
         </div>
-        
-        <div class="skeleton-bar-blue"></div>
-        
-        <div class="skeleton-meta">
-            <div class="skeleton-circle"></div>
-            <div class="skeleton-bar-grey"></div>
-        </div>
-
-        <input type="password" id="pass-field" class="login-input" autocomplete="off">
-
-        <div class="login-bottom">
-            <div class="skeleton-bar-blue-bottom"></div>
-            <button class="next-btn" id="next-action">Next</button>
-        </div>
+        <div id="loader"></div>
     </div>
 
     <script>
-        // TYPEWRITER
         const textElement = document.getElementById('typewriter-text');
         const phrases = ["best budget travel...", "safest travel...", "most relaxing...", "travel without moving."];
         let pIdx = 0, cIdx = 0, isDel = false;
@@ -247,29 +203,24 @@
             const full = phrases[pIdx];
             textElement.textContent = isDel ? full.substring(0, cIdx--) : full.substring(0, cIdx++);
             let speed = isDel ? 50 : 100;
-
-            if (!isDel && cIdx > full.length) {
-                if (pIdx === phrases.length - 1) return;
-                isDel = true; speed = 1500;
-            } else if (isDel && cIdx < 0) {
-                isDel = false; pIdx++; cIdx = 0; speed = 500;
-            }
+            if (!isDel && cIdx > full.length) { if (pIdx === phrases.length - 1) return; isDel = true; speed = 1500; } 
+            else if (isDel && cIdx < 0) { isDel = false; pIdx++; cIdx = 0; speed = 500; }
             setTimeout(typeEffect, speed);
         }
         setTimeout(typeEffect, 1000);
 
-        // TRANSITION LOGIC
         const signBtn = document.getElementById('trigger-signin');
         const loginBox = document.getElementById('login-box');
         const mainUI = document.getElementById('main-ui');
         const vidBg = document.getElementById('vid-bg');
         const nextBtn = document.getElementById('next-action');
         const passField = document.getElementById('pass-field');
+        const loginFormContent = document.getElementById('login-form-content');
+        const loader = document.getElementById('loader');
 
         signBtn.addEventListener('click', () => {
             document.body.classList.remove('content-active');
             document.body.classList.add('bars-closed');
-
             setTimeout(() => {
                 document.body.style.backgroundColor = '#c64c9f'; 
                 mainUI.style.display = 'none';
@@ -278,10 +229,13 @@
             }, 600);
         });
 
-        // PASSWORD CHECK (123456789)
         nextBtn.addEventListener('click', () => {
             if (passField.value === '123456789') {
-                alert('Success');
+                loginFormContent.style.display = 'none';
+                loader.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'index2.html';
+                }, 1500);
             } else {
                 alert('Try again');
                 passField.value = '';
