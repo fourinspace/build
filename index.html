@@ -19,23 +19,22 @@
             align-items: center;
         }
 
-        .video-container {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
-    pointer-events: none;
+   .video-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
 }
 
-/* The trick */
 .video-container iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 177.78vh;   /* 16:9 ratio based on height */
-    height: 100vh;
-    transform: translate(-50%, -50%);
-    border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw; /* 16:9 based on width */
+  min-height: 100vh;
+  min-width: 177.77vh; /* forces overflow */
+  transform: translate(-50%, -50%);
 }
 
         .overlay-content {
@@ -159,9 +158,14 @@
 </head>
 <body>
 
-    <div class="video-container" id="vid-bg">
-        <iframe src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" allow="autoplay; fullscreen"></iframe>
-    </div>
+    <div class="video-container">
+  <iframe
+    src="https://player.vimeo.com/video/1182372586?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0"
+    frameborder="0"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+</div>
 
     <div class="overlay-content" id="main-ui">
         <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky" alt="DTA Logo" class="main-logo">
