@@ -286,4 +286,10 @@
             }, 600);
         }
 
-        const data = { france: ["Paris", "Marseille", "
+        const data = { france: ["Paris", "Marseille", "Lyon"], usa: ["New-York", "Los-Angeles", "Chicago"] };
+        const countryEl = document.getElementById('country'), cityEl = document.getElementById('city'), goBtn = document.getElementById('goBtn');
+        countryEl.onchange = () => { cityEl.disabled = false; cityEl.innerHTML = '<option value="" disabled selected>Select city</option>'; data[countryEl.value].forEach(c => cityEl.innerHTML += `<option value="${c.toLowerCase()}">${c.replace('-',' ')}</option>`); };
+        cityEl.onchange = () => goBtn.disabled = false;
+    </script>
+</body>
+</html>
