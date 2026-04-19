@@ -56,15 +56,16 @@
         /* TEXT & BUTTON STYLING */
         .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
         .title-train { top: 15%; left: 2%; font-size: 4.4vw; width: 50%; }
-        .title-rock { bottom: 5%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
+        /* Moved up from bottom 5% to 15% to clear the nav bar */
+        .title-rock { bottom: 15%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
 
         .read-more-btn {
             background-color: #5b89f7;
             color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: bold;
+            padding: 8px 20px; /* Matched to original sign-in button size */
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800; /* Heavier weight to match sign-in button */
             text-decoration: none;
             display: inline-block;
             vertical-align: middle;
@@ -74,6 +75,7 @@
             cursor: pointer;
             text-transform: none;
             letter-spacing: normal;
+            line-height: normal;
         }
 
         /* SIDE PANEL */
@@ -193,7 +195,7 @@
             <div class="nav-item" onclick="resetAll(); closeMap();"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
             <div class="nav-item" onclick="toggleSubMenu('mypage')">My Page ︾</div>
             <div class="nav-item" onclick="toggleSubMenu('community')">Community ︾</div>
-            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
         </nav>
     </div>
 
