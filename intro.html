@@ -17,6 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s ease;
         }
 
         /* Video Container */
@@ -82,95 +83,110 @@
             position: fixed;
             left: 0;
             width: 100%;
-            height: 50vh; /* Meet in the middle */
+            height: 50vh; 
             background-color: #c64c9f;
             z-index: 10;
             transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        .top-bar { 
-            top: 0; 
-            transform: translateY(-100%); /* Start off-screen */
-        }
-        .bottom-bar { 
-            bottom: 0; 
-            transform: translateY(100%); /* Start off-screen */
-        }
+        .top-bar { top: 0; transform: translateY(-100%); }
+        .bottom-bar { bottom: 0; transform: translateY(100%); }
 
-        /* Open state (Bars showing slightly as margins) */
-        body.content-active .top-bar { transform: translateY(-38vh); } /* Adjust based on bar height */
+        body.content-active .top-bar { transform: translateY(-38vh); }
         body.content-active .bottom-bar { transform: translateY(38vh); }
 
-        /* Closing state (Triggered on click) */
+        /* Bars closed state */
         body.bars-closed .top-bar,
         body.bars-closed .bottom-bar { transform: translateY(0); }
 
-        /* Trigger Zones */
-        .trigger-zone {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            height: 15vh;
-            z-index: 15;
-        }
-        .top-trigger { top: 0; }
-        .bottom-trigger { bottom: 0; }
-
-        /* Login Screen */
+        /* Recreated Login Screen from Example Image */
         .login-screen {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 450px;
+            width: 600px;
+            height: 440px;
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 20;
-            padding: 40px;
-            display: none; /* Hidden by default */
+            padding: 50px;
+            display: none; /* Hidden until triggered */
             flex-direction: column;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .logo-container { text-align: left; margin-bottom: 20px; }
-        .dta-logo { height: 35px; }
-
-        .login-title { font-size: 24px; color: #202124; margin-bottom: 8px; font-weight: 400; }
-        .login-subtitle { font-size: 16px; color: #202124; margin-bottom: 30px; }
-
-        .login-input {
-            width: 100%;
-            padding: 13px 15px;
-            margin-bottom: 20px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 16px;
             box-sizing: border-box;
         }
 
-        .login-input:focus {
-            outline: none;
-            border: 2px solid #1a73e8;
-            padding: 12px 14px;
+        .logo-container { margin-bottom: 30px; }
+        .dta-logo { height: 45px; width: auto; }
+
+        /* Abstract skeleton UI elements */
+        .skeleton-bar-blue {
+            width: 220px;
+            height: 35px;
+            background-color: #8db5e9;
+            border-radius: 17px;
+            margin-bottom: 12px;
         }
 
-        .login-footer {
+        .skeleton-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .skeleton-circle {
+            width: 25px;
+            height: 25px;
+            background-color: #d1d1d1;
+            border-radius: 50%;
+        }
+
+        .skeleton-bar-grey {
+            width: 240px;
+            height: 22px;
+            background-color: #d1d1d1;
+            border-radius: 11px;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 65px;
+            border: 2px solid #8db5e9;
+            border-radius: 12px;
+            background: transparent;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .login-bottom {
+            margin-top: auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
         }
 
-        .forgot-link { color: #1a73e8; font-weight: bold; text-decoration: none; font-size: 14px; }
+        .skeleton-bar-blue-bottom {
+            width: 220px;
+            height: 22px;
+            background-color: #8db5e9;
+            border-radius: 11px;
+        }
 
         .next-btn {
-            background-color: #1a73e8;
+            background-color: #8db5e9;
             color: white;
             border: none;
-            padding: 10px 24px;
-            border-radius: 4px;
+            padding: 12px 35px;
+            border-radius: 6px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
+            font-family: 'Arial', sans-serif;
         }
 
         .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 5px; animation: blink 0.7s infinite; }
@@ -189,24 +205,25 @@
         <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
-    <div class="trigger-zone top-trigger"></div>
     <div class="bar top-bar"></div>
-
-    <div class="trigger-zone bottom-trigger"></div>
     <div class="bar bottom-bar"></div>
 
     <div class="login-screen" id="login-box">
         <div class="logo-container">
             <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-logo">
         </div>
-        <div class="login-title">Sign in</div>
-        <div class="login-subtitle">Use your DTA Account</div>
+        
+        <div class="skeleton-bar-blue"></div>
+        
+        <div class="skeleton-meta">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-bar-grey"></div>
+        </div>
 
-        <input type="text" class="login-input" placeholder="Email or phone">
-        <input type="password" id="pass-field" class="login-input" placeholder="Enter your password">
+        <input type="password" id="pass-field" class="login-input" autocomplete="off">
 
-        <div class="login-footer">
-            <a href="#" class="forgot-link">Forgot password?</a>
+        <div class="login-bottom">
+            <div class="skeleton-bar-blue-bottom"></div>
             <button class="next-btn" id="next-action">Next</button>
         </div>
     </div>
@@ -241,28 +258,27 @@
         const passField = document.getElementById('pass-field');
 
         signBtn.addEventListener('click', () => {
-            // 1. Close bars
+            // 1. Close bars to meeting point
             document.body.classList.remove('content-active');
             document.body.classList.add('bars-closed');
 
-            // 2. Wait for bars to cover screen, then switch content
+            // 2. Switch background to pink and swap content
             setTimeout(() => {
+                document.body.style.backgroundColor = '#c64c9f'; // Keep background pink
                 mainUI.style.display = 'none';
                 vidBg.style.display = 'none';
                 loginBox.style.display = 'flex';
                 
-                // 3. Open bars back up to reveal login
-                document.body.classList.remove('bars-closed');
-                document.body.style.backgroundColor = '#f0f2f5'; // Light grey like the image
+                // 3. Keep bars in closed (flat pink) state while login shows
             }, 600);
         });
 
-        // PASSWORD CHECK
+        // PASSWORD CHECK (123456789)
         nextBtn.addEventListener('click', () => {
             if (passField.value === '123456789') {
-                alert('Access Granted');
+                alert('Success');
             } else {
-                alert('Wrong password. Try again.');
+                alert('Try again');
                 passField.value = '';
             }
         });
