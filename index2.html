@@ -29,7 +29,7 @@
             display: flex; align-items: center; overflow: hidden; 
         }
         .marquee-container { display: flex; white-space: nowrap; animation: marquee-loop 20s linear infinite; }
-        .marquee-text { display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 0px; }
+        .marquee-text { display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 20px; }
         @keyframes marquee-loop { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* HEADER */
@@ -97,7 +97,7 @@
         .nav-item { color: #ffdaeb; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 8px 15px; border-radius: 8px; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-        /* WORLD MAP OVERLAY */
+        /* MAP OVERLAY */
         #map-overlay { position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%; background-color: #ffeef4; z-index: 6000; transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; }
         #map-overlay.active { bottom: 0; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; z-index: 10; }
@@ -149,7 +149,7 @@
                 </div>
 
                 <div class="rock-position">
-                    <img src="https://drive.google.com/thumbnail?id=1S0iYvSreR0-v70f4W59Tj_C_j0xKqTAn&sz=w1000">
+                    <img src="https://lh3.googleusercontent.com/d/1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9=w1200">
                 </div>
                 <div class="image-text title-rock">
                     Lion Rock, Sri Lanka<br>Escape Reality<br>
@@ -192,7 +192,7 @@
             <div class="nav-item" onclick="resetAll(); closeMap();"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
             <div class="nav-item" onclick="toggleSubMenu('mypage')">My Page ︾</div>
             <div class="nav-item" onclick="toggleSubMenu('community')">Community ︾</div>
-            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
+            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
         </nav>
     </div>
 
