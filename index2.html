@@ -3,268 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTA - Travel From The Comfort Of Your Home</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>DTA - Travel Without Moving</title>
+    <link href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap" rel="stylesheet">
     <style>
-        /* RESET & CORE */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; width: 100%; font-family: 'Andale Mono', 'Courier New', monospace; background-color: #f05a44; overflow: hidden; }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Krona+One', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
 
-        /* TRANSITION BARS */
+        .video-container {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            display: block;
+        }
+
+        .overlay-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .main-logo {
+            width: 240px;
+            height: auto;
+            margin-bottom: 5px;
+            pointer-events: none;
+        }
+
+        #typewriter-text {
+            color: #fff;
+            font-weight: bold;
+            font-size: 3rem;
+            text-transform: lowercase;
+            letter-spacing: -1px;
+        }
+
+        .signin-btn {
+            background-color: #4285f4;
+            color: white;
+            padding: 8px 22px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-family: 'Arial', sans-serif;
+            margin-top: 10px;
+        }
+
         .bar {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 50vh;
+            height: 50vh; 
             background-color: #c64c9f;
-            z-index: 9999;
-            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-            pointer-events: none;
+            z-index: 10;
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
-        .top-bar { top: 0; transform: translateY(0); }
-        .bottom-bar { bottom: 0; transform: translateY(0); }
-        body.loaded .top-bar { transform: translateY(-100%); }
-        body.loaded .bottom-bar { transform: translateY(100%); }
 
-        /* TOP BLUE BAR */
-        .top-bar-blue { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 35px; 
-            background-color: #83b0e1; z-index: 8000; 
-            display: flex; align-items: center; overflow: hidden; 
+        .top-bar { top: 0; transform: translateY(-100%); }
+        .bottom-bar { bottom: 0; transform: translateY(100%); }
+
+        body.content-active .top-bar { transform: translateY(-38vh); }
+        body.content-active .bottom-bar { transform: translateY(38vh); }
+        body.bars-closed .top-bar, body.bars-closed .bottom-bar { transform: translateY(0); }
+
+        .login-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px; 
+            height: 300px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 20;
+            padding: 30px;
+            display: none; 
+            flex-direction: column;
+            box-sizing: border-box;
+            justify-content: center;
+            align-items: center;
         }
-        .marquee-container { display: flex; white-space: nowrap; animation: marquee-loop 20s linear infinite; }
-        .marquee-text { display: inline-block; color: white; font-size: 14px; letter-spacing: 1px; padding-right: 0px; }
-        @keyframes marquee-loop { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* HEADER */
-        header { position: fixed; top: 35px; left: 0; width: 100%; height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; z-index: 4500; }
-        
-        /* Logo size maintained at 45px */
-        .logo img { height: 45px; width: auto; display: block; }
-        
-        .nav-buttons { display: flex; gap: 12px; }
-        .nav-btn { background-color: #c94091; color: #ffdaeb; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-size: 14px; cursor: pointer; border: none; font-family: inherit; }
+        .login-content { width: 100%; height: 100%; display: flex; flex-direction: column; }
+        .logo-container { margin-bottom: 20px; }
+        .dta-orange-logo { height: 35px; width: auto; }
 
-        /* VIEWPORT & STAGE */
-        .main-viewport { display: flex; width: calc(100vw + 450px); height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-        .main-viewport.shifted { transform: translateX(-450px); }
-        .stage-container { position: relative; width: 100vw; height: 100vh; background-color: #f05a44; z-index: 10; overflow: hidden; }
-        
-        #interactive-map { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); z-index: 50; display: none; }
-        .stage-content { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); }
-        .train-position { position: absolute; left: 11%; bottom: 0; height: 85vh; z-index: 20; }
-        .train-position img { height: 100%; width: auto; display: block; }
-        .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
-        .title-train { top: 15%; left: 2%; font-size: 4.4vw; width: 50%; }
-        .title-rock { bottom: 15%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
+        .skeleton-bar-blue { width: 150px; height: 25px; background-color: #8db5e9; border-radius: 12px; margin-bottom: 10px; }
+        .skeleton-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+        .skeleton-circle { width: 20px; height: 20px; background-color: #d1d1d1; border-radius: 50%; }
+        .skeleton-bar-grey { width: 160px; height: 15px; background-color: #d1d1d1; border-radius: 8px; }
 
-        /* SIDE PANEL */
-        .side-panel { width: 450px; height: 100vh; background-color: #ffffff; padding: 130px 30px 40px 30px; border-left: 1px solid #eee; overflow-y: auto; font-family: 'Inter', sans-serif; }
-        .panel-step { display: none; }
-        .active-step { display: block; }
-        .selection-box { position: relative; background: #f3f3f3; border-radius: 8px; margin-bottom: 8px; padding: 12px 16px; display: flex; align-items: center; }
-        .dot { width: 8px; height: 8px; margin-right: 15px; background: black; flex-shrink: 0; }
-        .line { position: absolute; left: 19.5px; top: 35px; width: 1px; height: 25px; background: black; }
-        .selection-box label { position: absolute; font-size: 11px; top: 8px; left: 40px; color: #555; text-transform: uppercase; font-weight: 600; }
-        .selection-box select, .selection-box input { width: 100%; border: none; background: transparent; font-size: 16px; padding-top: 15px; outline: none; font-family: inherit; color: #000; }
-        .btn-black { background: black; color: white; border: none; padding: 16px; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; }
-        .btn-black:disabled { background: #cecece; }
-        .guide-card { display: flex; align-items: center; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 2px solid transparent; }
-        .active-guide { border: 2.5px solid #000; cursor: pointer; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #000; margin-right: 15px; }
+        .login-input {
+            width: 100%; height: 45px; border: 2px solid #8db5e9; border-radius: 8px;
+            background: transparent; margin-bottom: 25px; padding: 0 15px; font-size: 1rem;
+            box-sizing: border-box; outline: none;
+        }
 
-        /* BOTTOM NAVIGATION */
-        .nav-wrapper { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 7000; display: flex; flex-direction: column; align-items: center; }
-        .slide-up-menu { background-color: #bf5399; width: 100%; border-radius: 10px 10px 0 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; display: flex; flex-direction: column; padding: 0 20px; }
-        .slide-up-menu.active { max-height: 200px; padding: 15px 20px; margin-bottom: -5px; }
-        .menu-link { color: #ffdaeb; text-decoration: none; font-size: 14px; padding: 8px 0; display: block; }
-        .bottom-nav { background-color: #c94091; display: flex; align-items: center; padding: 5px; border-radius: 10px; gap: 5px; }
-        .nav-item { color: #ffdaeb; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 8px 15px; border-radius: 8px; }
-        .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+        .login-bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .skeleton-bar-blue-bottom { width: 150px; height: 15px; background-color: #8db5e9; border-radius: 8px; }
 
-        /* WORLD MAP OVERLAY */
-        #map-overlay { position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%; background-color: #ffeef4; z-index: 6000; transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; }
-        #map-overlay.active { bottom: 0; }
-        .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; z-index: 10; }
-        .map-container { display: flex; height: 100%; width: 100%; padding: 100px 40px; }
-        .map-menu { width: 350px; padding-top: 50px; }
-        .map-menu ul { list-style: none; }
-        .map-menu li { font-size: 22px; padding: 15px 0; color: #bf5399; cursor: pointer; display: flex; align-items: center; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; }
-        .active-region { color: #000 !important; }
-        .arrow-circle { width: 30px; height: 30px; border: 2px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
-        .map-visual { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .world-svg { width: 100%; height: auto; max-width: 1000px; }
-        .land { fill: #f8c8d8; }
-        .highlight { fill: #f05a44; }
+        .next-btn {
+            background-color: #8db5e9; color: white; border: none; padding: 8px 25px;
+            border-radius: 5px; font-size: 0.9rem; font-weight: bold; cursor: pointer; font-family: 'Arial', sans-serif;
+        }
+
+        /* LOADER STYLING */
+        #loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #8db5e9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 5px; animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
     </style>
 </head>
-<body>
+<body class="content-active">
+
+    <div class="video-container" id="vid-bg">
+        <iframe src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" allow="autoplay; fullscreen"></iframe>
+    </div>
+
+    <div class="overlay-content" id="main-ui">
+        <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo" class="main-logo">
+        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
+        <button class="signin-btn" id="trigger-signin">Sign in</button>
+    </div>
 
     <div class="bar top-bar"></div>
     <div class="bar bottom-bar"></div>
 
-    <div class="top-bar-blue">
-        <div class="marquee-container">
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
-        </div>
-    </div>
-
-    <header>
-        <div class="logo"><img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000"></div>
-        <nav class="nav-buttons">
-            <button class="nav-btn" onclick="openPlanning('Micro-Trips')">Micro-Trips</button>
-            <button class="nav-btn" onclick="openPlanning('Macro-Journeys')">Macro-Journeys</button>
-            <button class="nav-btn">Raffle</button>
-            <button class="nav-btn">Geo-Quest</button>
-        </nav>
-    </header>
-
-    <div class="main-viewport" id="viewport">
-        <div class="stage-container" id="stage-container" onclick="closePanel()">
-            <div id="interactive-map"></div>
-            <div class="stage-content" id="stage-visuals">
-                <div class="image-text title-train">Riding The Bernina<br>Orange Train</div>
-                <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
-                <div class="train-position"><img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000"></div>
+    <div class="login-screen" id="login-box">
+        <div id="login-form-content" class="login-content">
+            <div class="logo-container">
+                <img src="https://drive.google.com/thumbnail?id=1AaVVRT6GORcAOocLO8fsnoWigTbIx1dr&sz=w1000" alt="DTA Logo" class="dta-orange-logo" style="filter: hue-rotate(180deg);">
+            </div>
+            <div class="skeleton-bar-blue"></div>
+            <div class="skeleton-meta">
+                <div class="skeleton-circle"></div>
+                <div class="skeleton-bar-grey"></div>
+            </div>
+            <input type="password" id="pass-field" class="login-input" autocomplete="off">
+            <div class="login-bottom">
+                <div class="skeleton-bar-blue-bottom"></div>
+                <button class="next-btn" id="next-action">Next</button>
             </div>
         </div>
-
-        <div class="side-panel">
-            <div id="step-form" class="panel-step active-step">
-                <h1 id="panel-title" style="font-size: 42px; margin-bottom: 30px; letter-spacing: -2px;">Plan Trip</h1>
-                <div class="selection-box"><div class="dot"></div><div class="line"></div><label>Country</label>
-                    <select id="country"><option value="" disabled selected>Select country</option><option value="france">France</option><option value="usa">USA</option></select>
-                </div>
-                <div class="selection-box"><div class="dot"></div><label>City</label><select id="city" disabled><option value="" disabled selected>Select city</option></select></div>
-                <button id="goBtn" class="btn-black" disabled onclick="showAvailability()">See Availability</button>
-            </div>
-            <div id="step-guides" class="panel-step">
-                <h2 style="margin-bottom: 20px;">Guides</h2>
-                <div class="guide-card active-guide" onclick="startMapSequence()"><div class="avatar"></div><div class="details"><b>Max ✓</b><br><small>★ 5.0 • Top Guide</small></div><div style="margin-left:auto; font-weight:800;">READY →</div></div>
-            </div>
-            <div id="step-route" class="panel-step">
-                <h2 style="margin-bottom: 15px;">Set Your Route</h2>
-                <div class="selection-box"><label>Point A</label><input type="text" id="pointA" readonly placeholder="Tap map..."></div>
-                <div class="selection-box"><label>Point B</label><input type="text" id="pointB" readonly placeholder="Tap map..."></div>
-                <button id="startTripBtn" class="btn-black" style="display:none;" onclick="finishTrip()">Start Trip</button>
-            </div>
-            <div id="step-finished" class="panel-step">
-                <h2 style="font-size: 32px;">Trip Started!</h2>
-                <button class="btn-black" onclick="resetAll()">End Session</button>
-            </div>
-        </div>
+        <div id="loader"></div>
     </div>
 
-    <div class="nav-wrapper">
-        <div id="mypage-menu" class="slide-up-menu"><a href="#" class="menu-link">Eyes</a><a href="#" class="menu-link">Proxies</a><a href="#" class="menu-link">Sensors</a></div>
-        <div id="community-menu" class="slide-up-menu"><a href="#" class="menu-link">Feed</a><a href="#" class="menu-link">Groups</a></div>
-        <nav class="bottom-nav">
-            <div class="nav-item" onclick="resetAll(); closeMap();"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
-            <div class="nav-item" onclick="toggleSubMenu('mypage')">My Page ︾</div>
-            <div class="nav-item" onclick="toggleSubMenu('community')">Community ︾</div>
-            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
-        </nav>
-    </div>
-
-    <div id="map-overlay">
-        <div class="close-map" onclick="toggleMap()">✕</div>
-        <div class="map-container">
-            <div class="map-menu">
-                <ul>
-                    <li>Africa</li>
-                    <li class="active-region"><div class="arrow-circle">›</div> Arab States</li>
-                    <li>Asia & the Pacific</li>
-                    <li>Europe & North America</li>
-                    <li>Latin America & the Caribbean</li>
-                </ul>
-            </div>
-            <div class="map-visual">
-                <svg class="world-svg" viewBox="0 0 1146 419">
-                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                </svg>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        window.addEventListener('load', () => {
+        const textElement = document.getElementById('typewriter-text');
+        const phrases = ["best budget travel...", "safest travel...", "most relaxing...", "travel without moving."];
+        let pIdx = 0, cIdx = 0, isDel = false;
+
+        function typeEffect() {
+            const full = phrases[pIdx];
+            textElement.textContent = isDel ? full.substring(0, cIdx--) : full.substring(0, cIdx++);
+            let speed = isDel ? 50 : 100;
+            if (!isDel && cIdx > full.length) { if (pIdx === phrases.length - 1) return; isDel = true; speed = 1500; } 
+            else if (isDel && cIdx < 0) { isDel = false; pIdx++; cIdx = 0; speed = 500; }
+            setTimeout(typeEffect, speed);
+        }
+        setTimeout(typeEffect, 1000);
+
+        const signBtn = document.getElementById('trigger-signin');
+        const loginBox = document.getElementById('login-box');
+        const mainUI = document.getElementById('main-ui');
+        const vidBg = document.getElementById('vid-bg');
+        const nextBtn = document.getElementById('next-action');
+        const passField = document.getElementById('pass-field');
+        const loginFormContent = document.getElementById('login-form-content');
+        const loader = document.getElementById('loader');
+
+        signBtn.addEventListener('click', () => {
+            document.body.classList.remove('content-active');
+            document.body.classList.add('bars-closed');
             setTimeout(() => {
-                document.body.classList.add('loaded');
-            }, 300);
+                document.body.style.backgroundColor = '#c64c9f'; 
+                mainUI.style.display = 'none';
+                vidBg.style.display = 'none';
+                loginBox.style.display = 'flex';
+            }, 600);
         });
 
-        let map, markers = [], polyline;
-        const cityCoords = { "paris": [48.8566, 2.3522], "marseille": [43.2965, 5.3698], "lyon": [45.7640, 4.8357], "new-york": [40.7128, -74.0060], "los-angeles": [34.0522, -118.2437], "chicago": [41.8781, -87.6298] };
-
-        function toggleMap() { document.getElementById('map-overlay').classList.toggle('active'); }
-        function closeMap() { document.getElementById('map-overlay').classList.remove('active'); }
-        function toggleSubMenu(type) { 
-            document.getElementById('mypage-menu').classList.remove('active');
-            document.getElementById('community-menu').classList.remove('active');
-            document.getElementById(type + '-menu').classList.toggle('active'); 
-        }
-
-        function openPlanning(title) { document.getElementById('viewport').classList.add('shifted'); document.getElementById('panel-title').innerText = title; }
-        function closePanel() { if (document.getElementById('interactive-map').style.display !== 'block') document.getElementById('viewport').classList.remove('shifted'); }
-
-        function showAvailability() {
-            document.getElementById('step-form').classList.remove('active-step');
-            document.getElementById('step-guides').classList.add('active-step');
-        }
-
-        function startMapSequence() {
-            document.getElementById('stage-visuals').style.display = 'none';
-            document.getElementById('interactive-map').style.display = 'block';
-            document.getElementById('step-guides').classList.remove('active-step');
-            document.getElementById('step-route').classList.add('active-step');
-            initLeafletMap();
-        }
-
-        function initLeafletMap() {
-            if (map) map.remove();
-            const city = document.getElementById('city').value;
-            map = L.map('interactive-map').setView(cityCoords[city] || [48.8566, 2.3522], 14);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            map.on('click', (e) => {
-                if (markers.length >= 2) { markers.forEach(m => map.removeLayer(m)); if (polyline) map.removeLayer(polyline); markers = []; }
-                const marker = L.marker(e.latlng).addTo(map);
-                markers.push(marker);
-                if (markers.length === 1) document.getElementById('pointA').value = "Point A Set";
-                if (markers.length === 2) { 
-                    document.getElementById('pointB').value = "Point B Set"; 
-                    polyline = L.polyline([markers[0].getLatLng(), markers[1].getLatLng()], {color: 'black'}).addTo(map);
-                    document.getElementById('startTripBtn').style.display = 'block';
-                }
-            });
-        }
-
-        function finishTrip() {
-            document.getElementById('interactive-map').style.display = 'none';
-            document.getElementById('stage-visuals').style.display = 'block';
-            document.getElementById('step-route').classList.remove('active-step');
-            document.getElementById('step-finished').classList.add('active-step');
-        }
-
-        function resetAll() {
-            document.getElementById('viewport').classList.remove('shifted');
-            document.getElementById('mypage-menu').classList.remove('active');
-            document.getElementById('community-menu').classList.remove('active');
-            setTimeout(() => {
-                document.querySelectorAll('.panel-step').forEach(s => s.classList.remove('active-step'));
-                document.getElementById('step-form').classList.add('active-step');
-                document.getElementById('stage-visuals').style.display = 'block';
-                document.getElementById('interactive-map').style.display = 'none';
-            }, 600);
-        }
-
-        const data = { france: ["Paris", "Marseille", "Lyon"], usa: ["New-York", "Los-Angeles", "Chicago"] };
-        const countryEl = document.getElementById('country'), cityEl = document.getElementById('city'), goBtn = document.getElementById('goBtn');
-        countryEl.onchange = () => { cityEl.disabled = false; cityEl.innerHTML = '<option value="" disabled selected>Select city</option>'; data[countryEl.value].forEach(c => cityEl.innerHTML += `<option value="${c.toLowerCase()}">${c.replace('-',' ')}</option>`); };
-        cityEl.onchange = () => goBtn.disabled = false;
+        nextBtn.addEventListener('click', () => {
+            if (passField.value === '123456789') {
+                loginFormContent.style.display = 'none';
+                loader.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'index2.html';
+                }, 1500);
+            } else {
+                alert('Try again');
+                passField.value = '';
+            }
+        });
     </script>
 </body>
 </html>
