@@ -19,28 +19,23 @@
             align-items: center;
         }
 
-        /* FULL WIDTH VIDEO - NO SIDE BARS */
+        /* FORCE 100% WIDTH - NO SIDE BARS */
         .video-container {
             position: fixed;
-            top: 0;
+            top: 50%;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100vw; /* Strict viewport width */
+            transform: translateY(-50%);
             z-index: 0;
             overflow: hidden;
             pointer-events: none;
         }
 
         .video-container iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
-            height: 56.25vw; /* 16:9 ratio based on width */
-            min-height: 100vh;
-            min-width: 177.78vh; /* 16:9 ratio based on height */
-            transform: translate(-50%, -50%);
+            width: 100vw; /* Forces video to hit left and right edges */
+            height: 56.25vw; /* Maintains 16:9 ratio based on width */
             border: none;
+            display: block;
         }
 
         .overlay-content {
@@ -87,7 +82,7 @@
             margin-top: 10px;
         }
 
-        /* PINK BARS - HIDDEN UNTIL CLICK */
+        /* PINK BARS - HIDDEN OFF-SCREEN */
         .bar {
             position: fixed;
             left: 0;
@@ -102,7 +97,7 @@
         .top-bar { top: 0; transform: translateY(-100%); }
         .bottom-bar { bottom: 0; transform: translateY(100%); }
 
-        /* Slide in animation */
+        /* Meeting in the middle on click */
         body.bars-closed .top-bar { transform: translateY(0); }
         body.bars-closed .bottom-bar { transform: translateY(0); }
 
@@ -170,7 +165,7 @@
 
     <div class="overlay-content" id="main-ui">
         <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky" alt="DTA Logo" class="main-logo">
-        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
+        <div><span id="typewriter-text"></span><span class="cursor"> </span></div>
         <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
@@ -226,6 +221,7 @@
                 mainUI.style.display = 'none';
                 vidBg.style.display = 'none';
                 loginBox.style.display = 'flex';
+                document.body.style.backgroundColor = '#c64c9f';
             }, 600);
         });
 
