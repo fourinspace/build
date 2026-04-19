@@ -48,15 +48,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px; 
+            gap: 10px; /* Reduced gap to accommodate the larger logo */
             pointer-events: none;
         }
 
-        /* Profile Image Styling */
+        /* Profile Image Styling - Increased to full size (3/3) */
         .profile-img {
-            width: 80px; /* Adjusted size for the header image */
+            width: 240px; /* Original 80px * 3 = 240px */
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* Reduced margin to tighten the layout */
         }
 
         #typewriter-text {
@@ -151,7 +151,7 @@
         <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky=w1200" alt="Profile" class="profile-img">
         
         <div>
-            <span id="typewriter-text"></span><span class="cursor">&nbsp;</span>
+            <span id="typewriter-text"></span><span class="cursor"> </span>
         </div>
         
         <button class="signin-btn">Sign in</button>
