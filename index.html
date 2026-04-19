@@ -56,7 +56,7 @@
             transition: opacity 0.3s ease;
         }
 
-        /* The White Logo on Main Page */
+        /* White Logo on Main Page */
         .main-logo {
             width: 240px;
             height: auto;
@@ -107,66 +107,66 @@
         body.bars-closed .top-bar,
         body.bars-closed .bottom-bar { transform: translateY(0); }
 
-        /* Login Screen Box */
+        /* Login Screen Box - Scaled to 2/3 */
         .login-screen {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 600px;
-            height: 440px;
+            width: 400px; /* Reduced from 600px */
+            height: 300px; /* Reduced from 440px */
             background-color: #fff;
-            border-radius: 20px;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 20;
-            padding: 50px;
+            padding: 30px;
             display: none; 
             flex-direction: column;
             box-sizing: border-box;
         }
 
-        .logo-container { margin-bottom: 30px; }
-        .dta-orange-logo { height: 45px; width: auto; }
+        .logo-container { margin-bottom: 20px; }
+        .dta-orange-logo { height: 35px; width: auto; }
 
         /* Skeleton UI Elements */
         .skeleton-bar-blue {
-            width: 220px;
-            height: 35px;
+            width: 150px;
+            height: 25px;
             background-color: #8db5e9;
-            border-radius: 17px;
-            margin-bottom: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
         }
 
         .skeleton-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
+            gap: 10px;
+            margin-bottom: 25px;
         }
 
         .skeleton-circle {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             background-color: #d1d1d1;
             border-radius: 50%;
         }
 
         .skeleton-bar-grey {
-            width: 240px;
-            height: 22px;
+            width: 160px;
+            height: 15px;
             background-color: #d1d1d1;
-            border-radius: 11px;
+            border-radius: 8px;
         }
 
         .login-input {
             width: 100%;
-            height: 65px;
+            height: 45px;
             border: 2px solid #8db5e9;
-            border-radius: 12px;
+            border-radius: 8px;
             background: transparent;
-            margin-bottom: 40px;
-            padding: 0 20px;
-            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding: 0 15px;
+            font-size: 1rem;
             box-sizing: border-box;
             outline: none;
         }
@@ -179,19 +179,19 @@
         }
 
         .skeleton-bar-blue-bottom {
-            width: 220px;
-            height: 22px;
+            width: 150px;
+            height: 15px;
             background-color: #8db5e9;
-            border-radius: 11px;
+            border-radius: 8px;
         }
 
         .next-btn {
             background-color: #8db5e9;
             color: white;
             border: none;
-            padding: 12px 35px;
-            border-radius: 6px;
-            font-size: 1.1rem;
+            padding: 8px 25px;
+            border-radius: 5px;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             font-family: 'Arial', sans-serif;
@@ -278,7 +278,7 @@
             }, 600);
         });
 
-        // PASSWORD CHECK
+        // PASSWORD CHECK (123456789)
         nextBtn.addEventListener('click', () => {
             if (passField.value === '123456789') {
                 alert('Success');
