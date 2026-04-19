@@ -51,7 +51,7 @@
         .train-position img { height: 100%; width: auto; display: block; }
         
         .rock-position { position: absolute; right: 5%; top: 50%; transform: translateY(-40%); height: 60vh; z-index: 20; }
-        .rock-position img { height: 100%; width: auto; display: block; }
+        .rock-position img { height: 100%; width: auto; display: block; border-radius: 20px; }
 
         .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
         .title-train { top: 15%; left: 2%; font-size: 4.4vw; width: 50%; }
@@ -70,6 +70,24 @@
             vertical-align: middle;
         }
 
+        /* EXTRA PURPLE BUTTONS */
+        .extra-nav-btn {
+            position: absolute;
+            bottom: 40px;
+            background-color: #C80C7C;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            z-index: 40;
+            font-family: inherit;
+        }
+        .btn-left-corner { left: 40px; }
+        .btn-right-corner { right: 40px; }
+
         /* OVERLAYS */
         .overlay {
             position: fixed; 
@@ -84,8 +102,8 @@
         }
         .overlay.active { top: 35px; }
 
-        #article-overlay-train { background-color: #fce311; } /* Yellow */
-        #article-overlay-rock { background-color: #5b89f7; } /* Mid Blue */
+        #article-overlay-train { background-color: #fce311; } 
+        #article-overlay-rock { background-color: #5b89f7; } 
 
         .close-article { 
             position: absolute; top: 30px; right: 40px; font-size: 28px; 
@@ -119,31 +137,15 @@
         .selection-box select, .selection-box input { width: 100%; border: none; background: transparent; font-size: 16px; padding-top: 15px; outline: none; font-family: inherit; color: #000; }
         .btn-black { background: black; color: white; border: none; padding: 16px; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; }
         .btn-black:disabled { background: #cecece; }
-        .guide-card { display: flex; align-items: center; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 2px solid transparent; }
-        .active-guide { border: 2.5px solid #000; cursor: pointer; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #000; margin-right: 15px; }
+
         .nav-wrapper { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 7000; display: flex; flex-direction: column; align-items: center; }
-        .slide-up-menu { background-color: #bf5399; width: 100%; border-radius: 10px 10px 0 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; display: flex; flex-direction: column; padding: 0 20px; }
-        .slide-up-menu.active { max-height: 200px; padding: 15px 20px; margin-bottom: -5px; }
-        .menu-link { color: #ffdaeb; text-decoration: none; font-size: 14px; padding: 8px 0; display: block; }
         .bottom-nav { background-color: #c94091; display: flex; align-items: center; padding: 5px; border-radius: 10px; gap: 5px; }
         .nav-item { color: #ffdaeb; font-size: 15px; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 8px 15px; border-radius: 8px; }
         .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-        /* MAP OVERLAY */
         #map-overlay { position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%; background-color: #ffeef4; z-index: 6000; transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; }
         #map-overlay.active { bottom: 0; }
         .close-map { position: absolute; top: 40px; right: 40px; font-size: 32px; cursor: pointer; color: #bf5399; z-index: 10; }
-        .map-container { display: flex; height: 100%; width: 100%; padding: 100px 40px; }
-        .map-menu { width: 350px; padding-top: 50px; }
-        .map-menu ul { list-style: none; }
-        .map-menu li { font-size: 22px; padding: 15px 0; color: #bf5399; cursor: pointer; display: flex; align-items: center; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; }
-        .active-region { color: #000 !important; }
-        .arrow-circle { width: 30px; height: 30px; border: 2px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
-        .map-visual { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .world-svg { width: 100%; height: auto; max-width: 1000px; }
-        .land { fill: #f8c8d8; }
-        .highlight { fill: #f05a44; }
     </style>
 </head>
 <body>
@@ -180,11 +182,14 @@
                 </div>
 
                 <div class="rock-position">
-                    <img src="https://lh3.googleusercontent.com/d/1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9=w1200">
+                    <img src="https://images.unsplash.com/photo-1588598108425-06ec1231662a?q=80&w=1000&auto=format&fit=crop">
                 </div>
                 <div class="image-text title-rock">
                     Lion Rock, Sri Lanka<br><button class="read-more-btn" onclick="toggleArticle('rock', event)">read more</button> Escape Reality
                 </div>
+
+                <button class="extra-nav-btn btn-left-corner">More MicroTrips</button>
+                <button class="extra-nav-btn btn-right-corner">More MacroJourneys</button>
             </div>
         </div>
 
@@ -197,20 +202,6 @@
                 <div class="selection-box"><div class="dot"></div><label>City</label><select id="city" disabled><option value="" disabled selected>Select city</option></select></div>
                 <button id="goBtn" class="btn-black" disabled onclick="showAvailability()">See Availability</button>
             </div>
-            <div id="step-guides" class="panel-step">
-                <h2 style="margin-bottom: 20px;">Guides</h2>
-                <div class="guide-card active-guide" onclick="startMapSequence()"><div class="avatar"></div><div class="details"><b>Max ✓</b><br><small>★ 5.0 • Top Guide</small></div><div style="margin-left:auto; font-weight:800;">READY →</div></div>
-            </div>
-            <div id="step-route" class="panel-step">
-                <h2 style="margin-bottom: 15px;">Set Your Route</h2>
-                <div class="selection-box"><label>Point A</label><input type="text" id="pointA" readonly placeholder="Tap map..."></div>
-                <div class="selection-box"><label>Point B</label><input type="text" id="pointB" readonly placeholder="Tap map..."></div>
-                <button id="startTripBtn" class="btn-black" style="display:none;" onclick="finishTrip()">Start Trip</button>
-            </div>
-            <div id="step-finished" class="panel-step">
-                <h2 style="font-size: 32px;">Trip Started!</h2>
-                <button class="btn-black" onclick="resetAll()">End Session</button>
-            </div>
         </div>
     </div>
 
@@ -218,27 +209,11 @@
         <div class="close-article" onclick="toggleArticle('train')">✕</div>
         <div class="article-content">
             <div class="article-left">
-                <h1 class="article-title">The Bernina Express: A Masterpiece of Alpine Engineering</h1>
-                <div class="article-meta-row">
-                    <div class="meta-group">
-                        <label>FOLLOW</label>
-                        <div class="tags">
-                            <button class="tag-btn">SWITZERLAND +</button>
-                            <button class="tag-btn">TRAINS +</button>
-                        </div>
-                    </div>
-                    <div class="meta-group">
-                        <label>SHARE</label>
-                        <button class="tag-btn share">SHARE</button>
-                    </div>
-                </div>
-                <div class="article-credits">
-                    <b>WRITTEN BY</b> RENO VOET<br>
-                    <b>DATE</b> 2026.04.19
-                </div>
+                <h1 class="article-title">The Bernina Express</h1>
+                <div class="article-credits"><b>WRITTEN BY</b> RENO VOET</div>
             </div>
             <div class="article-right">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop" alt="Train Mockup">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop">
             </div>
         </div>
     </div>
@@ -247,141 +222,36 @@
         <div class="close-article" onclick="toggleArticle('rock')">✕</div>
         <div class="article-content">
             <div class="article-left">
-                <h1 class="article-title">Lion Rock: The Eighth Wonder of the World</h1>
-                <div class="article-meta-row">
-                    <div class="meta-group">
-                        <label>FOLLOW</label>
-                        <div class="tags">
-                            <button class="tag-btn">SRI LANKA +</button>
-                            <button class="tag-btn">HISTORY +</button>
-                        </div>
-                    </div>
-                    <div class="meta-group">
-                        <label>SHARE</label>
-                        <button class="tag-btn share">SHARE</button>
-                    </div>
-                </div>
-                <div class="article-credits">
-                    <b>WRITTEN BY</b> RENO VOET<br>
-                    <b>DATE</b> 2026.04.19
-                </div>
+                <h1 class="article-title">Lion Rock</h1>
+                <div class="article-credits"><b>WRITTEN BY</b> RENO VOET</div>
             </div>
             <div class="article-right">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop" alt="Lion Rock Mockup">
+                <img src="https://images.unsplash.com/photo-1580210407133-c2830f3a4799?q=80&w=2070&auto=format&fit=crop">
             </div>
         </div>
     </div>
 
     <div class="nav-wrapper">
-        <div id="mypage-menu" class="slide-up-menu"><a href="#" class="menu-link">Eyes</a><a href="#" class="menu-link">Proxies</a><a href="#" class="menu-link">Sensors</a></div>
-        <div id="community-menu" class="slide-up-menu"><a href="#" class="menu-link">Feed</a><a href="#" class="menu-link">Groups</a></div>
         <nav class="bottom-nav">
             <div class="nav-item" onclick="resetAll(); closeMap();"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
-            <div class="nav-item" onclick="toggleSubMenu('mypage')">My Page ︾</div>
-            <div class="nav-item" onclick="toggleSubMenu('community')">Community ︾</div>
-            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
+            <div class="nav-item">My Page ︾</div>
+            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line></svg></div>
         </nav>
     </div>
 
-    <div id="map-overlay">
-        <div class="close-map" onclick="toggleMap()">✕</div>
-        <div class="map-container">
-            <div class="map-menu">
-                <ul>
-                    <li>Africa</li>
-                    <li class="active-region"><div class="arrow-circle">›</div> Arab States</li>
-                    <li>Asia & the Pacific</li>
-                    <li>Europe & North America</li>
-                    <li>Latin America & the Caribbean</li>
-                </ul>
-            </div>
-            <div class="map-visual">
-                <svg class="world-svg" viewBox="0 0 1146 419">
-                    <path class="land" d="M120 40 L350 40 L400 120 L320 200 L150 210 L80 150 Z" />
-                    <path class="land" d="M480 160 L620 150 L680 220 L620 380 L540 380 L460 250 Z" />
-                    <path class="highlight" d="M630 145 L730 145 L760 190 L710 215 L640 200 Z" />
-                </svg>
-            </div>
-        </div>
-    </div>
+    <div id="map-overlay"><div class="close-map" onclick="toggleMap()">✕</div></div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         window.addEventListener('load', () => { setTimeout(() => { document.body.classList.add('loaded'); }, 300); });
-
-        let map, markers = [], polyline;
-        const cityCoords = { "paris": [48.8566, 2.3522], "marseille": [43.2965, 5.3698], "lyon": [45.7640, 4.8357], "new-york": [40.7128, -74.0060], "los-angeles": [34.0522, -118.2437], "chicago": [41.8781, -87.6298] };
-
-        function toggleArticle(target, e) { 
-            if(e) e.stopPropagation(); 
-            const id = target === 'train' ? 'article-overlay-train' : 'article-overlay-rock';
-            document.getElementById(id).classList.toggle('active'); 
-        }
-
+        function toggleArticle(target, e) { if(e) e.stopPropagation(); const id = target === 'train' ? 'article-overlay-train' : 'article-overlay-rock'; document.getElementById(id).classList.toggle('active'); }
         function toggleMap() { document.getElementById('map-overlay').classList.toggle('active'); }
         function closeMap() { document.getElementById('map-overlay').classList.remove('active'); }
-        function toggleSubMenu(type) { 
-            document.getElementById('mypage-menu').classList.remove('active');
-            document.getElementById('community-menu').classList.remove('active');
-            document.getElementById(type + '-menu').classList.toggle('active'); 
-        }
-
         function openPlanning(title) { document.getElementById('viewport').classList.add('shifted'); document.getElementById('panel-title').innerText = title; }
-        function closePanel() { if (document.getElementById('interactive-map').style.display !== 'block') document.getElementById('viewport').classList.remove('shifted'); }
-
-        function showAvailability() {
-            document.getElementById('step-form').classList.remove('active-step');
-            document.getElementById('step-guides').classList.add('active-step');
-        }
-
-        function startMapSequence() {
-            document.getElementById('stage-visuals').style.display = 'none';
-            document.getElementById('interactive-map').style.display = 'block';
-            document.getElementById('step-guides').classList.remove('active-step');
-            document.getElementById('step-route').classList.add('active-step');
-            initLeafletMap();
-        }
-
-        function initLeafletMap() {
-            if (map) map.remove();
-            const city = document.getElementById('city').value;
-            map = L.map('interactive-map').setView(cityCoords[city] || [48.8566, 2.3522], 14);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            map.on('click', (e) => {
-                if (markers.length >= 2) { markers.forEach(m => map.removeLayer(m)); if (polyline) map.removeLayer(polyline); markers = []; }
-                const marker = L.marker(e.latlng).addTo(map);
-                markers.push(marker);
-                if (markers.length === 1) document.getElementById('pointA').value = "Point A Set";
-                if (markers.length === 2) { 
-                    document.getElementById('pointB').value = "Point B Set"; 
-                    polyline = L.polyline([markers[0].getLatLng(), markers[1].getLatLng()], {color: 'black'}).addTo(map);
-                    document.getElementById('startTripBtn').style.display = 'block';
-                }
-            });
-        }
-
-        function finishTrip() {
-            document.getElementById('interactive-map').style.display = 'none';
-            document.getElementById('stage-visuals').style.display = 'block';
-            document.getElementById('step-route').classList.remove('active-step');
-            document.getElementById('step-finished').classList.add('active-step');
-        }
-
-        function resetAll() {
-            document.getElementById('viewport').classList.remove('shifted');
-            document.getElementById('mypage-menu').classList.remove('active');
-            document.getElementById('community-menu').classList.remove('active');
-            setTimeout(() => {
-                document.querySelectorAll('.panel-step').forEach(s => s.classList.remove('active-step'));
-                document.getElementById('step-form').classList.add('active-step');
-                document.getElementById('stage-visuals').style.display = 'block';
-                document.getElementById('interactive-map').style.display = 'none';
-            }, 600);
-        }
-
-        const data = { france: ["Paris", "Marseille", "Lyon"], usa: ["New-York", "Los-Angeles", "Chicago"] };
+        function closePanel() { document.getElementById('viewport').classList.remove('shifted'); }
+        function resetAll() { document.getElementById('viewport').classList.remove('shifted'); }
+        const data = { france: ["Paris"], usa: ["New-York"] };
         const countryEl = document.getElementById('country'), cityEl = document.getElementById('city'), goBtn = document.getElementById('goBtn');
-        countryEl.onchange = () => { cityEl.disabled = false; cityEl.innerHTML = '<option value="" disabled selected>Select city</option>'; data[countryEl.value].forEach(c => cityEl.innerHTML += `<option value="${c.toLowerCase()}">${c.replace('-',' ')}</option>`); };
+        countryEl.onchange = () => { cityEl.disabled = false; cityEl.innerHTML = '<option value="" disabled selected>Select city</option>'; data[countryEl.value].forEach(c => cityEl.innerHTML += `<option value="${c.toLowerCase()}">${c}</option>`); };
         cityEl.onchange = () => goBtn.disabled = false;
     </script>
 </body>
