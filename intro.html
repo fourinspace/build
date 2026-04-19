@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flat Intersecting Video Bars & Login</title>
+    <title>DTA - Travel Without Moving</title>
     <link href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -19,7 +19,7 @@
             align-items: center;
         }
 
-        /* Video Container - Flat and Stationary */
+        /* Video Container */
         .video-container {
             position: absolute;
             top: 50%;
@@ -27,10 +27,9 @@
             width: 100%;
             transform: translateY(-50%);
             z-index: 0;
-            border-radius: 0; 
             overflow: hidden;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
 
         .video-container iframe {
@@ -40,48 +39,30 @@
             display: block;
         }
 
-        /* State management for main content */
-        .content-active .video-container,
-        .content-active .overlay-content,
-        .content-active .bar {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .login-active .video-container,
-        .login-active .overlay-content,
-        .login-active .bar {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Centered Overlay Container (Typewriter/Sign In) */
+        /* Typewriter Overlay */
         .overlay-content {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 20;
+            z-index: 5;
             text-align: center;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
 
         #typewriter-text {
             color: #fff;
-            font-family: 'Krona One', sans-serif;
             font-weight: bold;
             font-size: 3rem;
             text-transform: lowercase;
             letter-spacing: -1px;
         }
 
-        /* Initial Sign-in Button Styling */
         .signin-btn {
             background-color: #4285f4;
             color: white;
@@ -92,176 +73,120 @@
             border-radius: 6px;
             cursor: pointer;
             pointer-events: auto;
-            transition: background-color 0.2s, transform 0.1s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             font-family: 'Arial', sans-serif;
         }
 
-        .signin-btn:hover { background-color: #357abd; }
-        .signin-btn:active { transform: scale(0.98); }
-
-        /* Blinking cursor effect */
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            background-color: #fff;
-            margin-left: 5px;
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* Colored Bars */
+        /* The Closing Pink Bars */
         .bar {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 120px;
+            height: 50vh; /* Meet in the middle */
             background-color: #c64c9f;
             z-index: 10;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        .top-bar { top: 0; }
-        .bottom-bar { bottom: 0; transform-origin: center bottom; }
+        .top-bar { 
+            top: 0; 
+            transform: translateY(-100%); /* Start off-screen */
+        }
+        .bottom-bar { 
+            bottom: 0; 
+            transform: translateY(100%); /* Start off-screen */
+        }
 
-        /* Trigger Zones for Bars */
+        /* Open state (Bars showing slightly as margins) */
+        body.content-active .top-bar { transform: translateY(-38vh); } /* Adjust based on bar height */
+        body.content-active .bottom-bar { transform: translateY(38vh); }
+
+        /* Closing state (Triggered on click) */
+        body.bars-closed .top-bar,
+        body.bars-closed .bottom-bar { transform: translateY(0); }
+
+        /* Trigger Zones */
         .trigger-zone {
             position: fixed;
             left: 0;
             width: 100%;
-            height: 20vh;
+            height: 15vh;
             z-index: 15;
         }
-
         .top-trigger { top: 0; }
         .bottom-trigger { bottom: 0; }
 
-        .content-active .top-trigger:hover ~ .top-bar { transform: translateY(-50px); }
-        .content-active .bottom-trigger:hover ~ .bottom-bar { transform: translateY(50px); }
-
-        /* --- Recreated Login Screen (based on image_1.png) --- */
+        /* Login Screen */
         .login-screen {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 600px;
-            height: 400px;
+            width: 450px;
             background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 30;
+            border-radius: 8px;
+            z-index: 20;
             padding: 40px;
-            box-sizing: border-box;
-            display: flex;
+            display: none; /* Hidden by default */
             flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            font-family: 'Arial', sans-serif; /* Login screen uses cleaner font */
+            font-family: 'Arial', sans-serif;
         }
 
-        .login-active .login-screen {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .logo-container { text-align: left; margin-bottom: 20px; }
+        .dta-logo { height: 35px; }
 
-        .logo-container {
-            margin-bottom: 25px;
-        }
+        .login-title { font-size: 24px; color: #202124; margin-bottom: 8px; font-weight: 400; }
+        .login-subtitle { font-size: 16px; color: #202124; margin-bottom: 30px; }
 
-        .dta-logo {
-            height: 40px;
-            width: auto;
-        }
-
-        /* Abstract skeletons from image */
-        .skeleton-bar-blue {
-            width: 200px;
-            height: 30px;
-            background-color: #7baaf1; /* light blue */
-            border-radius: 15px;
-            margin-bottom: 10px;
-        }
-
-        .skeleton-meta {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .skeleton-circle {
-            width: 25px;
-            height: 25px;
-            background-color: #ccc;
-            border-radius: 50%;
-        }
-
-        .skeleton-bar-grey {
-            width: 200px;
-            height: 20px;
-            background-color: #ccc;
-            border-radius: 10px;
-        }
-
-        /* Main input from image */
         .login-input {
             width: 100%;
-            height: 60px;
-            border: 2px solid #7baaf1; /* input blue border */
-            border-radius: 10px;
-            background: transparent;
-            margin-bottom: 30px;
+            padding: 13px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
 
-        /* Bottom section */
-        .login-bottom {
-            margin-top: auto;
+        .login-input:focus {
+            outline: none;
+            border: 2px solid #1a73e8;
+            padding: 12px 14px;
+        }
+
+        .login-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 20px;
         }
 
-        .skeleton-bar-blue-bottom {
-            width: 200px;
-            height: 20px;
-            background-color: #7baaf1;
-            border-radius: 10px;
-        }
+        .forgot-link { color: #1a73e8; font-weight: bold; text-decoration: none; font-size: 14px; }
 
         .next-btn {
-            background-color: #7baaf1;
+            background-color: #1a73e8;
             color: white;
             border: none;
-            padding: 10px 30px;
-            border-radius: 5px;
-            font-size: 1rem;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
 
-        .next-btn:hover {
-            background-color: #5d8edc;
-        }
+        .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 5px; animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     </style>
 </head>
 <body class="content-active">
 
-    <div class="video-container">
-        <iframe 
-            src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" 
-            allow="autoplay; fullscreen">
-        </iframe>
+    <div class="video-container" id="vid-bg">
+        <iframe src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" allow="autoplay; fullscreen"></iframe>
     </div>
 
-    <div class="overlay-content">
-        <div>
-            <span id="typewriter-text"></span><span class="cursor">&nbsp;</span>
-        </div>
-        <button class="signin-btn" id="show-login">Sign in</button>
+    <div class="overlay-content" id="main-ui">
+        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
+        <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
     <div class="trigger-zone top-trigger"></div>
@@ -270,81 +195,77 @@
     <div class="trigger-zone bottom-trigger"></div>
     <div class="bar bottom-bar"></div>
 
-    <div class="login-screen" id="login-screen">
+    <div class="login-screen" id="login-box">
         <div class="logo-container">
             <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-logo">
         </div>
-        
-        <div class="skeleton-bar-blue"></div>
-        <div class="skeleton-meta">
-            <div class="skeleton-circle"></div>
-            <div class="skeleton-bar-grey"></div>
-        </div>
+        <div class="login-title">Sign in</div>
+        <div class="login-subtitle">Use your DTA Account</div>
 
-        <div class="login-input"></div>
+        <input type="text" class="login-input" placeholder="Email or phone">
+        <input type="password" id="pass-field" class="login-input" placeholder="Enter your password">
 
-        <div class="login-bottom">
-            <div class="skeleton-bar-blue-bottom"></div>
-            <button class="next-btn">Next</button>
+        <div class="login-footer">
+            <a href="#" class="forgot-link">Forgot password?</a>
+            <button class="next-btn" id="next-action">Next</button>
         </div>
     </div>
 
     <script>
-        // --- Typewriter Logic ---
+        // TYPEWRITER
         const textElement = document.getElementById('typewriter-text');
-        const phrases = [
-            "best budget travel...",
-            "safest travel...",
-            "most relaxing...",
-            "travel without moving."
-        ];
-        
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typeSpeed = 100;
+        const phrases = ["best budget travel...", "safest travel...", "most relaxing...", "travel without moving."];
+        let pIdx = 0, cIdx = 0, isDel = false;
 
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
-            
-            if (isDeleting) {
-                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-                typeSpeed = 50; 
-            } else {
-                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-                typeSpeed = 100;
+        function typeEffect() {
+            const full = phrases[pIdx];
+            textElement.textContent = isDel ? full.substring(0, cIdx--) : full.substring(0, cIdx++);
+            let speed = isDel ? 50 : 100;
+
+            if (!isDel && cIdx > full.length) {
+                if (pIdx === phrases.length - 1) return;
+                isDel = true; speed = 1500;
+            } else if (isDel && cIdx < 0) {
+                isDel = false; pIdx++; cIdx = 0; speed = 500;
             }
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                if (phraseIndex === phrases.length - 1) {
-                    return; 
-                }
-                isDeleting = true;
-                typeSpeed = 1500; 
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex++;
-                typeSpeed = 500; 
-            }
-
-            setTimeout(type, typeSpeed);
+            setTimeout(typeEffect, speed);
         }
+        setTimeout(typeEffect, 1000);
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(type, 1000); 
+        // TRANSITION LOGIC
+        const signBtn = document.getElementById('trigger-signin');
+        const loginBox = document.getElementById('login-box');
+        const mainUI = document.getElementById('main-ui');
+        const vidBg = document.getElementById('vid-bg');
+        const nextBtn = document.getElementById('next-action');
+        const passField = document.getElementById('pass-field');
+
+        signBtn.addEventListener('click', () => {
+            // 1. Close bars
+            document.body.classList.remove('content-active');
+            document.body.classList.add('bars-closed');
+
+            // 2. Wait for bars to cover screen, then switch content
+            setTimeout(() => {
+                mainUI.style.display = 'none';
+                vidBg.style.display = 'none';
+                loginBox.style.display = 'flex';
+                
+                // 3. Open bars back up to reveal login
+                document.body.classList.remove('bars-closed');
+                document.body.style.backgroundColor = '#f0f2f5'; // Light grey like the image
+            }, 600);
         });
 
-        // --- Navigation Logic ---
-        const body = document.body;
-        const signInBtn = document.getElementById('show-login');
-
-        signInBtn.addEventListener('click', () => {
-            body.classList.remove('content-active');
-            body.classList.add('login-active');
+        // PASSWORD CHECK
+        nextBtn.addEventListener('click', () => {
+            if (passField.value === '123456789') {
+                alert('Access Granted');
+            } else {
+                alert('Wrong password. Try again.');
+                passField.value = '';
+            }
         });
     </script>
-
 </body>
 </html>
