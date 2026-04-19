@@ -17,10 +17,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background-color 0.3s ease;
         }
 
-        /* FULL WIDTH VIDEO BACKGROUND */
+        /* FULL WIDTH VIDEO - NO SIDE BARS */
         .video-container {
             position: fixed;
             top: 0;
@@ -37,22 +36,11 @@
             top: 50%;
             left: 50%;
             width: 100vw;
-            height: 100.25vh; /* Slight overflow to ensure no gaps */
+            height: 56.25vw; /* 16:9 ratio based on width */
+            min-height: 100vh;
+            min-width: 177.78vh; /* 16:9 ratio based on height */
             transform: translate(-50%, -50%);
-            object-fit: cover;
             border: none;
-        }
-
-        /* Responsive scaling for the video aspect ratio */
-        @media (min-aspect-ratio: 16/9) {
-            .video-container iframe {
-                height: 56.25vw;
-            }
-        }
-        @media (max-aspect-ratio: 16/9) {
-            .video-container iframe {
-                width: 177.78vh;
-            }
         }
 
         .overlay-content {
@@ -67,7 +55,6 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            transition: opacity 0.3s ease;
         }
 
         .main-logo {
@@ -100,7 +87,7 @@
             margin-top: 10px;
         }
 
-        /* PINK BARS */
+        /* PINK BARS - HIDDEN UNTIL CLICK */
         .bar {
             position: fixed;
             left: 0;
@@ -109,15 +96,15 @@
             background-color: #c64c9f;
             z-index: 10;
             transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            pointer-events: none;
         }
 
         .top-bar { top: 0; transform: translateY(-100%); }
         .bottom-bar { bottom: 0; transform: translateY(100%); }
 
-        /* Bars movement when active or closed */
-        body.content-active .top-bar { transform: translateY(-38vh); }
-        body.content-active .bottom-bar { transform: translateY(38vh); }
-        body.bars-closed .top-bar, body.bars-closed .bottom-bar { transform: translateY(0); }
+        /* Slide in animation */
+        body.bars-closed .top-bar { transform: translateY(0); }
+        body.bars-closed .bottom-bar { transform: translateY(0); }
 
         .login-screen {
             position: fixed;
@@ -154,8 +141,6 @@
         }
 
         .login-bottom { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
-        .skeleton-bar-blue-bottom { width: 150px; height: 15px; background-color: #8db5e9; border-radius: 8px; }
-
         .next-btn {
             background-color: #8db5e9; color: white; border: none; padding: 8px 25px;
             border-radius: 5px; font-size: 0.9rem; font-weight: bold; cursor: pointer; font-family: 'Arial', sans-serif;
@@ -177,7 +162,7 @@
 
     </style>
 </head>
-<body class="content-active">
+<body>
 
     <div class="video-container" id="vid-bg">
         <iframe src="https://player.vimeo.com/video/1182372586?background=1&autopause=0" allow="autoplay; fullscreen"></iframe>
@@ -185,7 +170,7 @@
 
     <div class="overlay-content" id="main-ui">
         <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky" alt="DTA Logo" class="main-logo">
-        <div><span id="typewriter-text"></span><span class="cursor"> </span></div>
+        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
         <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
@@ -204,7 +189,7 @@
             </div>
             <input type="password" id="pass-field" class="login-input" autocomplete="off">
             <div class="login-bottom">
-                <div class="skeleton-bar-blue-bottom"></div>
+                <div style="width: 150px; height: 15px; background-color: #8db5e9; border-radius: 8px;"></div>
                 <button class="next-btn" id="next-action">Next</button>
             </div>
         </div>
@@ -236,10 +221,8 @@
         const loader = document.getElementById('loader');
 
         signBtn.addEventListener('click', () => {
-            document.body.classList.remove('content-active');
             document.body.classList.add('bars-closed');
             setTimeout(() => {
-                document.body.style.backgroundColor = '#c64c9f'; 
                 mainUI.style.display = 'none';
                 vidBg.style.display = 'none';
                 loginBox.style.display = 'flex';
