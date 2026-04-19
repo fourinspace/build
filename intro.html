@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flat Intersecting Video Bars</title>
+    <title>Flat Intersecting Video Bars & Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -14,6 +14,9 @@
             overflow: hidden;
             background-color: #000;
             font-family: 'Krona+One', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Video Container - Flat and Stationary */
@@ -27,6 +30,7 @@
             border-radius: 0; 
             overflow: hidden;
             pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
         .video-container iframe {
@@ -36,7 +40,22 @@
             display: block;
         }
 
-        /* Centered Overlay Container */
+        /* State management for main content */
+        .content-active .video-container,
+        .content-active .overlay-content,
+        .content-active .bar {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .login-active .video-container,
+        .login-active .overlay-content,
+        .login-active .bar {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Centered Overlay Container (Typewriter/Sign In) */
         .overlay-content {
             position: fixed;
             top: 50%;
@@ -48,15 +67,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px; /* Reduced gap to accommodate the larger logo */
+            gap: 20px;
             pointer-events: none;
-        }
-
-        /* Profile Image Styling - Increased to full size (3/3) */
-        .profile-img {
-            width: 240px; /* Original 80px * 3 = 240px */
-            height: auto;
-            margin-bottom: 5px; /* Reduced margin to tighten the layout */
+            transition: opacity 0.5s ease;
         }
 
         #typewriter-text {
@@ -68,7 +81,7 @@
             letter-spacing: -1px;
         }
 
-        /* Sign-in Button Styling */
+        /* Initial Sign-in Button Styling */
         .signin-btn {
             background-color: #4285f4;
             color: white;
@@ -84,13 +97,8 @@
             font-family: 'Arial', sans-serif;
         }
 
-        .signin-btn:hover {
-            background-color: #357abd;
-        }
-
-        .signin-btn:active {
-            transform: scale(0.98);
-        }
+        .signin-btn:hover { background-color: #357abd; }
+        .signin-btn:active { transform: scale(0.98); }
 
         /* Blinking cursor effect */
         .cursor {
@@ -101,12 +109,9 @@
             animation: blink 0.7s infinite;
         }
 
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
+        /* Colored Bars */
         .bar {
             position: fixed;
             left: 0;
@@ -114,15 +119,13 @@
             height: 120px;
             background-color: #c64c9f;
             z-index: 10;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
         }
 
         .top-bar { top: 0; }
-        .bottom-bar { 
-            bottom: 0; 
-            transform-origin: center bottom; 
-        }
+        .bottom-bar { bottom: 0; transform-origin: center bottom; }
 
+        /* Trigger Zones for Bars */
         .trigger-zone {
             position: fixed;
             left: 0;
@@ -134,11 +137,118 @@
         .top-trigger { top: 0; }
         .bottom-trigger { bottom: 0; }
 
-        .top-trigger:hover ~ .top-bar { transform: translateY(-50px); }
-        .bottom-trigger:hover ~ .bottom-bar { transform: translateY(50px); }
+        .content-active .top-trigger:hover ~ .top-bar { transform: translateY(-50px); }
+        .content-active .bottom-trigger:hover ~ .bottom-bar { transform: translateY(50px); }
+
+        /* --- Recreated Login Screen (based on image_1.png) --- */
+        .login-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 400px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 30;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            font-family: 'Arial', sans-serif; /* Login screen uses cleaner font */
+        }
+
+        .login-active .login-screen {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .logo-container {
+            margin-bottom: 25px;
+        }
+
+        .dta-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Abstract skeletons from image */
+        .skeleton-bar-blue {
+            width: 200px;
+            height: 30px;
+            background-color: #7baaf1; /* light blue */
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .skeleton-circle {
+            width: 25px;
+            height: 25px;
+            background-color: #ccc;
+            border-radius: 50%;
+        }
+
+        .skeleton-bar-grey {
+            width: 200px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        /* Main input from image */
+        .login-input {
+            width: 100%;
+            height: 60px;
+            border: 2px solid #7baaf1; /* input blue border */
+            border-radius: 10px;
+            background: transparent;
+            margin-bottom: 30px;
+        }
+
+        /* Bottom section */
+        .login-bottom {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skeleton-bar-blue-bottom {
+            width: 200px;
+            height: 20px;
+            background-color: #7baaf1;
+            border-radius: 10px;
+        }
+
+        .next-btn {
+            background-color: #7baaf1;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: #5d8edc;
+        }
+
     </style>
 </head>
-<body>
+<body class="content-active">
 
     <div class="video-container">
         <iframe 
@@ -148,13 +258,10 @@
     </div>
 
     <div class="overlay-content">
-        <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky=w1200" alt="Profile" class="profile-img">
-        
         <div>
-            <span id="typewriter-text"></span><span class="cursor"> </span>
+            <span id="typewriter-text"></span><span class="cursor">&nbsp;</span>
         </div>
-        
-        <button class="signin-btn">Sign in</button>
+        <button class="signin-btn" id="show-login">Sign in</button>
     </div>
 
     <div class="trigger-zone top-trigger"></div>
@@ -163,7 +270,27 @@
     <div class="trigger-zone bottom-trigger"></div>
     <div class="bar bottom-bar"></div>
 
+    <div class="login-screen" id="login-screen">
+        <div class="logo-container">
+            <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-logo">
+        </div>
+        
+        <div class="skeleton-bar-blue"></div>
+        <div class="skeleton-meta">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-bar-grey"></div>
+        </div>
+
+        <div class="login-input"></div>
+
+        <div class="login-bottom">
+            <div class="skeleton-bar-blue-bottom"></div>
+            <button class="next-btn">Next</button>
+        </div>
+    </div>
+
     <script>
+        // --- Typewriter Logic ---
         const textElement = document.getElementById('typewriter-text');
         const phrases = [
             "best budget travel...",
@@ -207,6 +334,15 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(type, 1000); 
+        });
+
+        // --- Navigation Logic ---
+        const body = document.body;
+        const signInBtn = document.getElementById('show-login');
+
+        signInBtn.addEventListener('click', () => {
+            body.classList.remove('content-active');
+            body.classList.add('login-active');
         });
     </script>
 
