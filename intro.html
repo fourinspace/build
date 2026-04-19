@@ -40,7 +40,7 @@
             display: block;
         }
 
-        /* Typewriter Overlay */
+        /* Centered Overlay Container */
         .overlay-content {
             position: fixed;
             top: 50%;
@@ -52,8 +52,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
             transition: opacity 0.3s ease;
+        }
+
+        /* The White Logo on Main Page */
+        .main-logo {
+            width: 240px;
+            height: auto;
+            margin-bottom: 5px;
+            pointer-events: none;
         }
 
         #typewriter-text {
@@ -76,6 +84,7 @@
             pointer-events: auto;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             font-family: 'Arial', sans-serif;
+            margin-top: 10px;
         }
 
         /* The Closing Pink Bars */
@@ -95,11 +104,10 @@
         body.content-active .top-bar { transform: translateY(-38vh); }
         body.content-active .bottom-bar { transform: translateY(38vh); }
 
-        /* Bars closed state */
         body.bars-closed .top-bar,
         body.bars-closed .bottom-bar { transform: translateY(0); }
 
-        /* Recreated Login Screen from Example Image */
+        /* Login Screen Box */
         .login-screen {
             position: fixed;
             top: 50%;
@@ -112,15 +120,15 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 20;
             padding: 50px;
-            display: none; /* Hidden until triggered */
+            display: none; 
             flex-direction: column;
             box-sizing: border-box;
         }
 
         .logo-container { margin-bottom: 30px; }
-        .dta-logo { height: 45px; width: auto; }
+        .dta-orange-logo { height: 45px; width: auto; }
 
-        /* Abstract skeleton UI elements */
+        /* Skeleton UI Elements */
         .skeleton-bar-blue {
             width: 220px;
             height: 35px;
@@ -201,7 +209,8 @@
     </div>
 
     <div class="overlay-content" id="main-ui">
-        <div><span id="typewriter-text"></span><span class="cursor">&nbsp;</span></div>
+        <img src="https://lh3.googleusercontent.com/d/1gIAQNHJNIqHBch8W2kXdI6MCsCulznky=w1200" alt="DTA Logo" class="main-logo">
+        <div><span id="typewriter-text"></span><span class="cursor"> </span></div>
         <button class="signin-btn" id="trigger-signin">Sign in</button>
     </div>
 
@@ -210,7 +219,7 @@
 
     <div class="login-screen" id="login-box">
         <div class="logo-container">
-            <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-logo">
+            <img src="https://lh3.googleusercontent.com/d/1IoX441g-72AXxBkgREDu5YLqEaHwEinS=w1200" alt="DTA Logo" class="dta-orange-logo">
         </div>
         
         <div class="skeleton-bar-blue"></div>
@@ -258,22 +267,18 @@
         const passField = document.getElementById('pass-field');
 
         signBtn.addEventListener('click', () => {
-            // 1. Close bars to meeting point
             document.body.classList.remove('content-active');
             document.body.classList.add('bars-closed');
 
-            // 2. Switch background to pink and swap content
             setTimeout(() => {
-                document.body.style.backgroundColor = '#c64c9f'; // Keep background pink
+                document.body.style.backgroundColor = '#c64c9f'; 
                 mainUI.style.display = 'none';
                 vidBg.style.display = 'none';
                 loginBox.style.display = 'flex';
-                
-                // 3. Keep bars in closed (flat pink) state while login shows
             }, 600);
         });
 
-        // PASSWORD CHECK (123456789)
+        // PASSWORD CHECK
         nextBtn.addEventListener('click', () => {
             if (passField.value === '123456789') {
                 alert('Success');
