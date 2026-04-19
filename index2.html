@@ -54,14 +54,14 @@
         .frame { position: absolute; bottom: 0; height: 85vh; }
         .frame img { height: 100%; width: auto; display: block; }
         
-        /* Train Frame (Front) */
-        .train-position { left: 11%; z-index: 25; }
-        
-        /* Secondary Frame (Behind) */
-        .background-frame { left: 45%; z-index: 20; }
+        /* New Background Frame (Now 1/3 - Positioned first) */
+        .background-frame { left: 5%; z-index: 20; }
 
+        /* Train Frame (Now 2/3 - Overlapping slightly) */
+        .train-position { left: 40%; z-index: 25; }
+        
         .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
-        .title-train { top: 10%; left: 2%; font-size: 4vw; width: 45%; }
+        .title-train { top: 10%; left: 35%; font-size: 4vw; width: 45%; }
         .title-rock { bottom: 12%; right: 4%; font-size: 4vw; text-align: right; width: 45%; }
 
         /* SIDE PANEL */
@@ -133,12 +133,12 @@
                 <div class="image-text title-train">Riding The Bernina<br>Orange Train</div>
                 <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
                 
-                <div class="frame train-position">
-                    <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000">
-                </div>
-                
                 <div class="frame background-frame">
                     <img src="https://lh3.googleusercontent.com/d/1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9=w1200">
+                </div>
+
+                <div class="frame train-position">
+                    <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000">
                 </div>
             </div>
         </div>
