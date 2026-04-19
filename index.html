@@ -19,24 +19,24 @@
             align-items: center;
         }
 
-        /* FORCE 100% WIDTH - NO SIDE BARS */
         .video-container {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            width: 100vw; /* Strict viewport width */
-            transform: translateY(-50%);
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
 
-        .video-container iframe {
-            width: 100vw; /* Forces video to hit left and right edges */
-            height: 56.25vw; /* Maintains 16:9 ratio based on width */
-            border: none;
-            display: block;
-        }
+/* The trick */
+.video-container iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 177.78vh;   /* 16:9 ratio based on height */
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    border: none;
+}
 
         .overlay-content {
             position: fixed;
