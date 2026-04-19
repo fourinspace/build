@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; width: 100%; font-family: 'Andale Mono', 'Courier New', monospace; background-color: #f05a44; overflow: hidden; }
 
-        /* TRANSITION BARS (Set to open completely) */
+        /* TRANSITION BARS */
         .bar {
             position: fixed;
             left: 0;
@@ -19,24 +19,12 @@
             background-color: #c64c9f;
             z-index: 9999;
             transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-            pointer-events: none; /* Allows clicking through bars once they move */
+            pointer-events: none;
         }
-        .top-bar { 
-            top: 0; 
-            transform: translateY(0); 
-        }
-        .bottom-bar { 
-            bottom: 0; 
-            transform: translateY(0); 
-        }
-
-        /* Fully Open State: Moved entirely out of view */
-        body.loaded .top-bar { 
-            transform: translateY(-100%); 
-        }
-        body.loaded .bottom-bar { 
-            transform: translateY(100%); 
-        }
+        .top-bar { top: 0; transform: translateY(0); }
+        .bottom-bar { bottom: 0; transform: translateY(0); }
+        body.loaded .top-bar { transform: translateY(-100%); }
+        body.loaded .bottom-bar { transform: translateY(100%); }
 
         /* TOP BLUE BAR */
         .top-bar-blue { 
@@ -50,7 +38,10 @@
 
         /* HEADER */
         header { position: fixed; top: 35px; left: 0; width: 100%; height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; z-index: 4500; }
-        .logo img { height: 45px; display: block; }
+        
+        /* Logo size maintained at 45px */
+        .logo img { height: 45px; width: auto; display: block; }
+        
         .nav-buttons { display: flex; gap: 12px; }
         .nav-btn { background-color: #c94091; color: #ffdaeb; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-size: 14px; cursor: pointer; border: none; font-family: inherit; }
 
@@ -114,8 +105,8 @@
 
     <div class="top-bar-blue">
         <div class="marquee-container">
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;</span>
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;</span>
+            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
+            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
         </div>
     </div>
 
@@ -200,11 +191,10 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Trigger the bars to slide completely out of view on load
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.body.classList.add('loaded');
-            }, 300); // 300ms delay to ensure DOM is ready
+            }, 300);
         });
 
         let map, markers = [], polyline;
