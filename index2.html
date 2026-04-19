@@ -48,21 +48,27 @@
         .stage-container { position: relative; width: 100vw; height: 100vh; background-color: #f05a44; z-index: 10; overflow: hidden; }
         
         #interactive-map { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); z-index: 50; display: none; }
-        .stage-content { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); }
+        .stage-content { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); display: flex; align-items: flex-end; padding-bottom: 0; }
 
-        /* FRAMES */
-        .frame { position: absolute; bottom: 0; height: 85vh; }
+        /* FRAMES - NO INTERFERENCE */
+        .frame { position: relative; height: 85vh; flex-shrink: 0; }
         .frame img { height: 100%; width: auto; display: block; }
         
-        /* New Background Frame (Now 1/3 - Positioned first) */
-        .background-frame { left: 5%; z-index: 20; }
-
-        /* Train Frame (Now 2/3 - Overlapping slightly) */
-        .train-position { left: 40%; z-index: 25; }
+        /* Train Frame (Left Side - Static) */
+        .train-position { margin-left: 5%; z-index: 25; }
         
+        /* Secondary Frame (Right Side - Smaller) */
+        .background-frame { 
+            height: 60vh; 
+            margin-left: 10%; 
+            margin-right: 5%;
+            z-index: 20; 
+            align-self: center; /* Centers vertically relative to the content area */
+        }
+
         .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
-        .title-train { top: 10%; left: 35%; font-size: 4vw; width: 45%; }
-        .title-rock { bottom: 12%; right: 4%; font-size: 4vw; text-align: right; width: 45%; }
+        .title-train { top: 10%; left: 5%; font-size: 4vw; width: 40%; }
+        .title-rock { bottom: 12%; right: 5%; font-size: 3vw; text-align: right; width: 40%; }
 
         /* SIDE PANEL */
         .side-panel { width: 450px; height: 100vh; background-color: #ffffff; padding: 130px 30px 40px 30px; border-left: 1px solid #eee; overflow-y: auto; font-family: 'Inter', sans-serif; }
@@ -111,8 +117,8 @@
 
     <div class="top-bar-blue">
         <div class="marquee-container">
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
-            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now   +   Enter the Puerto Rica Raffle Right Now   +  </span>
+            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;</span>
+            <span class="marquee-text">Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp; Enter the Puerto Rica Raffle Right Now &nbsp; + &nbsp;</span>
         </div>
     </div>
 
@@ -133,12 +139,12 @@
                 <div class="image-text title-train">Riding The Bernina<br>Orange Train</div>
                 <div class="image-text title-rock">Lion Rock, Sri Lanka<br>Escape Reality</div>
                 
-                <div class="frame background-frame">
-                    <img src="https://lh3.googleusercontent.com/d/1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9=w1200">
-                </div>
-
                 <div class="frame train-position">
                     <img src="https://drive.google.com/thumbnail?id=1e5Ixuq09yfXhyf1ihMmsJU8Yg0VYj8bS&sz=w1000">
+                </div>
+
+                <div class="frame background-frame">
+                    <img src="https://lh3.googleusercontent.com/d/1lMSRT0xzkFEoGdTSlIB6WIWi-2zBs3B9=w1200">
                 </div>
             </div>
         </div>
