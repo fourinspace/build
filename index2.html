@@ -25,7 +25,7 @@
         /* TOP BLUE BAR */
         .top-bar-blue { 
             position: fixed; top: 0; left: 0; width: 100%; height: 35px; 
-            background-color: #83b0e1; z-index: 8000; 
+            background-color: #83b0e1; z-index: 9500; 
             display: flex; align-items: center; overflow: hidden; 
         }
         .marquee-container { display: flex; white-space: nowrap; animation: marquee-loop 20s linear infinite; }
@@ -34,6 +34,7 @@
 
         /* HEADER */
         header { position: fixed; top: 35px; left: 0; width: 100%; height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; z-index: 8500; }
+        .logo { z-index: 9000; } /* Keep logo above overlay */
         .logo img { height: 45px; width: auto; display: block; }
         .nav-buttons { display: flex; gap: 12px; }
         .nav-btn { background-color: #c94091; color: #ffdaeb; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-size: 14px; cursor: pointer; border: none; font-family: inherit; }
@@ -46,14 +47,12 @@
         #interactive-map { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); z-index: 50; display: none; }
         .stage-content { position: absolute; top: 115px; left: 0; width: 100%; height: calc(100vh - 115px); }
         
-        /* FRAMES */
         .train-position { position: absolute; left: 11%; bottom: 0; height: 85vh; z-index: 20; }
         .train-position img { height: 100%; width: auto; display: block; }
         
         .rock-position { position: absolute; right: 5%; top: 50%; transform: translateY(-40%); height: 60vh; z-index: 20; }
         .rock-position img { height: 100%; width: auto; display: block; }
 
-        /* TEXT & BUTTON STYLING */
         .image-text { position: absolute; color: white; z-index: 35; font-family: "Helvetica", Arial, sans-serif; font-weight: bold; line-height: 0.95; letter-spacing: -1px; }
         .title-train { top: 15%; left: 2%; font-size: 4.4vw; width: 50%; }
         .title-rock { bottom: 15%; right: 5%; font-size: 4.4vw; text-align: right; width: 50%; }
@@ -65,37 +64,52 @@
             border-radius: 8px;
             font-size: 16px;
             font-weight: 800;
-            text-decoration: none;
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 10px;
-            font-family: Arial, sans-serif;
             border: none;
             cursor: pointer;
-            text-transform: none;
-            letter-spacing: normal;
-            line-height: normal;
+            margin: 0 10px;
+            vertical-align: middle;
         }
 
         /* YELLOW ARTICLE OVERLAY */
         #article-overlay {
-            position: fixed; top: 100%; left: 0; width: 100%; height: calc(100vh - 35px);
-            background-color: #fce311; z-index: 8200;
+            position: fixed; 
+            top: 100%; 
+            left: 0; 
+            width: 100%; 
+            height: calc(100vh - 35px);
+            background-color: #fce311; 
+            z-index: 8700; /* Higher than nav-buttons (8500) but lower than logo (9000) */
             transition: top 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; overflow: hidden;
+            display: flex; 
+            overflow: hidden;
         }
         #article-overlay.active { top: 35px; }
-        .close-article { position: absolute; top: 30px; right: 40px; font-size: 24px; cursor: pointer; color: black; z-index: 8300; border: 1px solid black; padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+
+        /* CLOSE 'X' BUTTON */
+        .close-article { 
+            position: absolute; 
+            top: 30px; 
+            right: 40px; 
+            font-size: 28px; 
+            cursor: pointer; 
+            color: black; 
+            z-index: 8800; 
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
         .article-content { display: flex; width: 100%; height: 100%; }
         .article-left { width: 45%; padding: 120px 60px 40px 60px; display: flex; flex-direction: column; justify-content: flex-start; }
         .article-right { width: 55%; height: 100%; overflow: hidden; }
         .article-right img { width: 100%; height: 100%; object-fit: cover; }
+
         .article-title { font-family: "Helvetica", Arial, sans-serif; font-size: 3.5vw; font-weight: 900; line-height: 1.1; color: black; margin-bottom: 40px; }
         .article-meta-row { display: flex; gap: 40px; margin-bottom: 30px; font-family: 'Andale Mono', monospace; font-size: 12px; text-transform: uppercase; }
         .meta-group label { display: block; color: #666; margin-bottom: 8px; font-weight: bold; }
         .meta-group .tags { display: flex; gap: 8px; }
         .tag-btn { border: 1px solid black; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; background: transparent; }
         .tag-btn.share::after { content: ' ⌵'; }
+
         .article-credits { margin-top: auto; font-family: 'Andale Mono', monospace; font-size: 12px; color: black; line-height: 1.8; text-transform: uppercase; }
         .article-credits b { font-weight: bold; margin-right: 20px; }
 
@@ -208,7 +222,7 @@
     </div>
 
     <div id="article-overlay">
-        <div class="close-article" onclick="toggleArticle()">CLOSE</div>
+        <div class="close-article" onclick="toggleArticle()">✕</div>
         <div class="article-content">
             <div class="article-left">
                 <h1 class="article-title">The Bernina Express: A Masterpiece of Alpine Engineering</h1>
@@ -243,7 +257,7 @@
             <div class="nav-item" onclick="resetAll(); closeMap();"><svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
             <div class="nav-item" onclick="toggleSubMenu('mypage')">My Page ︾</div>
             <div class="nav-item" onclick="toggleSubMenu('community')">Community ︾</div>
-            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
+            <div class="nav-item" onclick="toggleMap()"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"></path></svg></div>
         </nav>
     </div>
 
